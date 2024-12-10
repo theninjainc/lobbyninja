@@ -1,0 +1,37 @@
+:root{
+    --bg-color:#02061E;
+}
+
+body{
+background-color: var(--bg-color);
+}
+
+.main{
+    padding: 15px 22px 0px 29px;
+    width: 100%;
+}
+
+.title{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #ffff;
+    font-size: 200%;
+    font-weight: bold;
+}
+
+.navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    top: 0;
+    width: 100%;
+}
+
+.navbar ul{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+}
+
+.navbar ul>li{
+    padding-left: 10px;
+}

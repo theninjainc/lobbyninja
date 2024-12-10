@@ -2,3 +2,7 @@
   margin: 0 auto;
 }
 
+.app-container {
+  display: flex;
+  height: 100vh;
+}
