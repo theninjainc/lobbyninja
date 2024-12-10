@@ -7,11 +7,10 @@ const Sidebar = () => {
         <img src="../../assets/logo-temporary.png" alt="temporary" />
       </div>
 
-    
       <ul className="">
-          <li>
-            <a href="#section1">1</a>
-          </li>
+        <li>
+          <a href="#section1">1</a>
+        </li>
         <li>
           <a href="#section2">2</a>
         </li>
