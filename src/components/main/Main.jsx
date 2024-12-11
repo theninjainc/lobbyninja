@@ -4,7 +4,7 @@ const Main = () => {
   return (
     <div className={styles.main}>
       <div className={styles.navbar}>
-        <div className={styles.title}>Tournament List</div>
+        <h1 className={styles.title}>Tournament List</h1>
         <div className={styles.btns}>
           <ul>
             <li>
@@ -50,7 +50,7 @@ const Main = () => {
             </label>
           </div>
           <div className={styles.maxMinSearch}>
-            <label htmlFor="min-value" className={styles.labelMaxMinValue}>
+            <label htmlFor="max-value" className={styles.labelMaxMinValue}>
               <div>Max $</div>
               <input
                 type="number"
@@ -78,7 +78,20 @@ const Main = () => {
           <button className={styles.searchBtn}></button>
           <button className={styles.saveBtn}></button>
         </div>
-        <div className={styles.searchright}></div>
+        <div className={styles.searchRight}>
+          <button className={styles.manageColumnsBtn}>
+            <div>
+              <i className="fas fa-search"></i>
+            </div>
+            Manage Columns
+          </button>
+          <button className={styles.moreFiltersBtn}>
+            <div>
+              <i className="fas fa-search"></i>
+            </div>
+            More Filters
+          </button>
+        </div>
       </div>
     </div>
   );

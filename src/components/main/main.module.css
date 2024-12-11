@@ -8,7 +8,7 @@ body {
 }
 
 .main {
-  padding: 15px 22px 0px 29px;
+  padding: 0px 22px 0px 29px;
   width: 100%;
 }
 
@@ -17,11 +17,14 @@ body {
   color: #ffff;
   font-size: 28px;
   font-weight: bold;
+  margin: 0;
 }
 
 .navbar {
+  margin-top: 30px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   top: 0;
   width: 100%;
@@ -41,6 +44,7 @@ body {
   padding-top: 30px;
   display: flex;
   width: 100%;
+  justify-content: space-between;
 }
 
 .label {
@@ -124,57 +128,94 @@ body {
   width: 50px;
   display: flex;
   align-items: center;
-  
 }
 
 .labelSelectSpeed {
-    width: 85px;
-    height: 44px;
-    border-radius: 50px;
-    background-color: var(--bg-inputs);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
+  width: 85px;
+  height: 44px;
+  border-radius: 50px;
+  background-color: var(--bg-inputs);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
 
-  .selectSpeed {
-    background-color: var(--bg-inputs);
-    color: rgba(255, 255, 255, 0.4);
-    outline: none;
-    border: none;
-  }
+.selectSpeed {
+  background-color: var(--bg-inputs);
+  color: rgba(255, 255, 255, 0.4);
+  outline: none;
+  border: none;
+}
 
 .labelSelectSize {
-    width: 70px;
-    height: 44px;
-    border-radius: 50px;
-    background-color: var(--bg-inputs);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
+  width: 70px;
+  height: 44px;
+  border-radius: 50px;
+  background-color: var(--bg-inputs);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
 
-  .selectSize {
-    background-color: var(--bg-inputs);
-    color: rgba(255, 255, 255, 0.4);
-    outline: none;
-    border: none;
-  }
-  
-  .searchBtn{
-    width: 44px;
-    height: 44px;
-    background: radial-gradient(circle, #FFDEAD, #FA6E49, #C314D4);
-    border-radius: 50px;
-    border: none;
-  }
+.selectSize {
+  background-color: var(--bg-inputs);
+  color: rgba(255, 255, 255, 0.4);
+  outline: none;
+  border: none;
+}
 
-  .saveBtn{
-    width: 44px;
-    height: 44px;
-    background-color: #191934;
-    border-radius: 50px;
-    border: none;
-  }
+.searchBtn {
+  width: 44px;
+  height: 44px;
+  background: radial-gradient(circle, #ffdead, #fa6e49, #c314d4);
+  border-radius: 50px;
+  border: none;
+}
+
+.saveBtn {
+  width: 44px;
+  height: 44px;
+  background-color: #191934;
+  border-radius: 50px;
+  border: none;
+}
+
+.searchRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 13px;
+}
+
+.manageColumnsBtn {
+  width: 156px;
+  height: 44px;
+  border-radius: 50px;
+  background-color: var(--bg-inputs);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 12px;
+  gap: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.moreFiltersBtn {
+  width: 123px;
+  height: 44px;
+  border-radius: 50px;
+  background-color: var(--bg-inputs);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 12px;
+  gap: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
