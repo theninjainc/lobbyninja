@@ -1,5 +1,6 @@
 import styles from "./main.module.css";
 
+
 const Main = () => {
   return (
     <div className={styles.main}>
@@ -92,6 +93,22 @@ const Main = () => {
             More Filters
           </button>
         </div>
+      </div>
+      <div className={styles.filterbar}>
+        <input type="checkbox" className={styles.filterCheckbox}/>
+        <button className={styles.filterSiteBtn}>Site</button>
+        <button className={styles.filterStartBtn}>Start</button>
+        <button className={styles.filterBuyInBtn}>Buy In</button>
+        <button className={styles.filterNameBtn}>Name</button>
+        <button className={styles.filterPrizePoolBtn}>Prize Pool</button>
+        <button className={styles.filterMaxReentryBtn}>Max Reentry</button>
+        <button className={styles.filterBlindsBtn}>Blinds</button>
+        <button className={styles.filterSpeedBtn}>Speed</button>
+        <button className={styles.filterFieldBtn}>Field</button>
+        <button className={styles.filterEndBtn}>End</button>
+        <button className={styles.filterMlrBtn}>Mlr</button>
+        <button className={styles.filterTableSizeBtn}>TableSize</button>
+        <button className={styles.filterPriorityBtn}>Priority</button>
       </div>
     </div>
   );

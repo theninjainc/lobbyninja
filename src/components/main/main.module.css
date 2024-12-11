@@ -1,10 +1,12 @@
 :root {
   --bg-color: #02061e;
   --bg-inputs: #070b2b;
+  --bg-filterbar: #1e234d;
 }
 
 body {
   background-color: var(--bg-color);
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .main {
@@ -13,10 +15,9 @@ body {
 }
 
 .title {
-  font-family: "Plus Jakarta Sans", sans-serif;
   color: #ffff;
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 800;
   margin: 0;
 }
 
@@ -108,7 +109,6 @@ body {
 }
 
 .labelMaxMinValue > div {
-  font-family: "Plus Jakarta Sans", sans-serif;
   width: 50px;
   height: 44px;
   font-size: 12px;
@@ -172,6 +172,7 @@ body {
   background: radial-gradient(circle, #ffdead, #fa6e49, #c314d4);
   border-radius: 50px;
   border: none;
+  cursor: pointer;
 }
 
 .saveBtn {
@@ -180,6 +181,7 @@ body {
   background-color: #191934;
   border-radius: 50px;
   border: none;
+  cursor: pointer;
 }
 
 .searchRight {
@@ -218,4 +220,245 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.filterbar {
+  margin-top: 43px;
+  background-color: var(--bg-filterbar);
+  width: 100%;
+  height: 38px;
+  border-radius: 46px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yygg_vb.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.filterCheckbox {
+  margin: 0px 10px 0px 40px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #070b2b;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+}
+
+.filterCheckbox:checked::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: #5f33d6;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.2l-4.2-4.2L3.5 13l5.5 5.5 11-11L18.3 6l-9.3 9.2z"/></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: block;
+
+  border-radius: 2px;
+}
+
+.filterCheckbox:hover {
+  box-shadow: 0 0 3px 2px rgba(255, 255, 255, 0.3);
+}
+
+.filterSiteBtn {
+  height: 38px;
+  width: 72px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterStartBtn {
+  
+  height: 38px;
+  width: 72px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterBuyInBtn {
+  height: 38px;
+  width: 72px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterNameBtn {
+  height: 38px;
+  width: 220px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filterPrizePoolBtn {
+  height: 38px;
+  width: 95px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: radial-gradient(
+    ellipse at 30% 30%,
+    #ffdead 0%,
+    #fa6e49 27%,
+    #c314d4 90%
+  );
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  cursor: pointer;
+}
+.filterMaxReentryBtn {
+  height: 38px;
+  width: 112px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: radial-gradient(
+    ellipse at 30% 30%,
+    #ffdead 0%,
+    #fa6e49 27%,
+    #c314d4 90%
+  );
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  cursor: pointer;
+}
+.filterBlindsBtn {
+  height: 38px;
+  width: 75px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterSpeedBtn {
+  height: 38px;
+  width: 78px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterFieldBtn {
+  height: 38px;
+  width: 83px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterEndBtn {
+  height: 38px;
+  width: 62px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterMlrBtn {
+  height: 38px;
+  width: 80px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+.filterTableSizeBtn {
+  height: 38px;
+  width: 97px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filterPriorityBtn {
+  height: 38px;
+  width: 87px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+button, input, option, select{
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
