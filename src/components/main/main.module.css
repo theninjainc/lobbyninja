@@ -92,10 +92,11 @@ body {
 .selectSite {
   background-color: var(--bg-inputs);
   background-image: url("../../assets/selectSite.svg");
-  background-position: right 10px center; /* Posiciona a seta à direita */
-  background-repeat: no-repeat; /* Evita repetir a seta */
+  background-position: right 10px center;
+  background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 100px;
+  width: 118px;
+  border-radius: 50px;
   color: rgba(255, 255, 255, 0.4);
   outline: none;
   border: none;
@@ -140,6 +141,18 @@ body {
   align-items: center;
 }
 
+input[type="number"] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .labelSelectSpeed {
   width: 85px;
   height: 44px;
@@ -157,10 +170,11 @@ body {
   outline: none;
   border: none;
   background-image: url("../../assets/selectSite.svg");
-  background-position: right 1px center; /* Posiciona a seta à direita */
-  background-repeat: no-repeat; /* Evita repetir a seta */
+  background-position: right 9px center;
+  background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 66px;
+  width: 85px;
+  border-radius: 50px;
   outline: none;
   border: none;
   -webkit-appearance: none;
@@ -176,7 +190,7 @@ body {
   border-radius: 50px;
   background-color: var(--bg-inputs);
   display: flex;
-  justify-content:first;
+  justify-content: first;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -189,7 +203,7 @@ body {
   background-image: url("../../assets/selectSite.svg");
   background-position: right 7px center;
   background-repeat: no-repeat;
-  background-size: 8px 8px;
+  background-size: 12px 12px;
   border-radius: 50px;
   width: 70px;
   outline: none;
@@ -271,11 +285,14 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-family: 'Plus Jakarta Sans';
+  font-family: "Plus Jakarta Sans";
   font-style: normal;
   font-weight: 200 800;
-  src: url(https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yygg_vb.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yygg_vb.woff2)
+    format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215,  U + FEFF,  U + FFFD;
 }
 
 .filterCheckbox {
@@ -324,7 +341,6 @@ body {
   cursor: pointer;
 }
 .filterStartBtn {
-  
   height: 38px;
   width: 72px;
   border: none;
@@ -499,6 +515,9 @@ body {
   cursor: pointer;
 }
 
-button, input, option, select{
+button,
+input,
+option,
+select {
   font-family: "Plus Jakarta Sans", sans-serif;
 }

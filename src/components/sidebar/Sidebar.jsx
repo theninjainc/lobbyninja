@@ -1,12 +1,12 @@
 import styles from "./sidebar.module.css";
-
+import lobbyNinjaLogo from "../../assets/lobbyNinjaLogo.svg";
 import favourites from "../../assets/favourites.svg";
 
 const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.logo}>
-        <img src="../../assets/logo-temporary.png" alt="temporary" />
+        <img src={lobbyNinjaLogo} />
       </div>
 
 
