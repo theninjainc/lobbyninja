@@ -1,5 +1,7 @@
 import styles from "./sidebar.module.css";
 
+import favourites from "../../assets/favourites.svg";
+
 const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
@@ -7,15 +9,22 @@ const Sidebar = () => {
         <img src="../../assets/logo-temporary.png" alt="temporary" />
       </div>
 
+
+      <div className={styles.bgFirstLi}>
+          <a href="#section1">
+           
+            
+          </a>
+        </div>
+
       <ul className="">
         <li>
-          <a href="#section1">1</a>
+          <a href="#section2" className={styles.marginCorrection}>2</a>
         </li>
         <li>
-          <a href="#section2">2</a>
-        </li>
-        <li>
-          <a href="#section3">3</a>
+          <a href="#section3">
+            <img src={favourites} alt="" />
+          </a>
         </li>
         <li>
           <a href="#section4">4</a>

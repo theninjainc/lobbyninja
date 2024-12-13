@@ -1,4 +1,10 @@
 import styles from "./main.module.css";
+import lupa from "../../assets/Lupa.svg"
+import save from "../../assets/save.svg";
+import manageColumns from "../../assets/manageColumns.svg";
+import moreFilters from "../../assets/moreFilters.svg"
+import searchTournaments from "../../assets/searchTournaments.svg";
+import selectSite from "../../assets/selectSite.svg";
 
 
 const Main = () => {
@@ -23,7 +29,7 @@ const Main = () => {
       <div className={styles.searchbar}>
         <div className={styles.searchleft}>
           <label htmlFor="search" className={styles.label}>
-            <i className="fas fa-search"></i>
+            <img src={searchTournaments} alt="Search Tournaments" />
             <input
               type="search"
               className={styles.search}
@@ -76,19 +82,19 @@ const Main = () => {
               <option value="size 2">Size 2</option>
             </select>
           </label>
-          <button className={styles.searchBtn}></button>
-          <button className={styles.saveBtn}></button>
+          <button className={styles.searchBtn}> <img src={lupa} alt="Lupa icon"/> </button>
+          <button className={styles.saveBtn}><img src={save} alt="Save icon" /></button>
         </div>
         <div className={styles.searchRight}>
           <button className={styles.manageColumnsBtn}>
             <div>
-              <i className="fas fa-search"></i>
+              <img src={manageColumns} alt="Manage Columns" />
             </div>
             Manage Columns
           </button>
           <button className={styles.moreFiltersBtn}>
             <div>
-              <i className="fas fa-search"></i>
+              <img src={moreFilters} alt="More Filters" />
             </div>
             More Filters
           </button>

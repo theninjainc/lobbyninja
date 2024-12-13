@@ -91,9 +91,19 @@ body {
 
 .selectSite {
   background-color: var(--bg-inputs);
+  background-image: url("../../assets/selectSite.svg");
+  background-position: right 10px center; /* Posiciona a seta à direita */
+  background-repeat: no-repeat; /* Evita repetir a seta */
+  background-size: 12px 12px;
+  width: 100px;
   color: rgba(255, 255, 255, 0.4);
   outline: none;
   border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 10px;
+  text-indent: 0.01px;
 }
 
 .labelMaxMinValue {
@@ -146,6 +156,18 @@ body {
   color: rgba(255, 255, 255, 0.4);
   outline: none;
   border: none;
+  background-image: url("../../assets/selectSite.svg");
+  background-position: right 1px center; /* Posiciona a seta à direita */
+  background-repeat: no-repeat; /* Evita repetir a seta */
+  background-size: 12px 12px;
+  width: 66px;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 10px;
+  text-indent: 0.01px;
 }
 
 .labelSelectSize {
@@ -154,7 +176,7 @@ body {
   border-radius: 50px;
   background-color: var(--bg-inputs);
   display: flex;
-  justify-content: center;
+  justify-content:first;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -164,12 +186,30 @@ body {
   color: rgba(255, 255, 255, 0.4);
   outline: none;
   border: none;
+  background-image: url("../../assets/selectSite.svg");
+  background-position: right 7px center;
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
+  border-radius: 50px;
+  width: 70px;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 10px;
+  text-indent: 0.01px;
 }
 
 .searchBtn {
   width: 44px;
   height: 44px;
-  background: radial-gradient(circle, #ffdead, #fa6e49, #c314d4);
+  background: radial-gradient(
+    ellipse at 60% 10%,
+    #ffdead -10%,
+    #fa6e49 40%,
+    #c314d4 110%
+  );
   border-radius: 50px;
   border: none;
   cursor: pointer;
