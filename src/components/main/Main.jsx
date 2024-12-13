@@ -4,7 +4,7 @@ import save from "../../assets/save.svg";
 import manageColumns from "../../assets/manageColumns.svg";
 import moreFilters from "../../assets/moreFilters.svg"
 import searchTournaments from "../../assets/searchTournaments.svg";
-import selectSite from "../../assets/selectSite.svg";
+
 
 
 const Main = () => {

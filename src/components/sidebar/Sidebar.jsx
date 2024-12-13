@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import styles from "./sidebar.module.css";
 import lobbyNinjaLogo from "../../assets/lobbyNinjaLogo.svg";
 import favourites from "../../assets/favourites.svg";
@@ -9,16 +11,24 @@ import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className={styles.sidebar}>
-      <div className={styles.logo}>
+    <div
+      className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <div className={styles.logo} >
         <img src={lobbyNinjaLogo} />
       </div>
 
       <ul className="">
-        <li className={styles.bgFirstLi}>
+        <li>
           <a href="#section1">
-            <img src={tornauments} alt="Tournaments" />
+            <div>
+              <img src={tornauments} alt="Tournaments" />
+            </div>
           </a>
         </li>
         <li>

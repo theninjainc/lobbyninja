@@ -3,30 +3,46 @@
 }
 
 .sidebar {
-  top: 0;
-  left: 0;
+  position: fixed;
   width: 89px;
   height: 100vh;
   background-color: var(--bg-sidebar);
   color: white;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  transition: 0.3s;
+  z-index: 1000;
 }
 
+.sidebar.open{
+  width: 206px;
+  display: flex;
+  align-items: baseline;
+}
+
+
+
 .sidebar ul {
+  margin-top: 216px;
+  margin-left: 28px ;
+  position: fixed;
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-
   align-items: center;
 }
 
 li {
   margin: 38px 0px 0px 0px;
 
+}
+
+.sidebar a{
+  display: flex;
+  flex-direction: row;
+  left: 100px;
+  gap: 13px;
 }
 
 .sidebar ul li a {
@@ -38,7 +54,7 @@ li {
 
 
 .logo {
-  position: relative; 
+  position: fixed; 
   display: inline-block; 
   margin-right: 20px;
 }
@@ -58,26 +74,26 @@ li {
   transform: translate(-50%, -50%); 
   width: 55px; 
   height: 55px;
-  background: linear-gradient(to right, #FC9518, #F510C2, #6B1CF6); /* Gradiente da bola */
+  background: linear-gradient(to right, #FC9518, #F510C2, #6B1CF6);
   border-radius: 50%; 
   z-index: 1; 
 }
 
 
 .bgFirstLi {
-margin-top: 146px;
+
   background: radial-gradient(
     ellipse at 50% 1%,
     #BBA5F4 -30%,
     #5F33D6 50%
   );
-  border-radius: 9px;
+  border-radius: 12px;
   width: 38px;
   height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 252, 252, 0.3);
+  border: 2px solid rgba(255, 252, 252, 0.3);
 
 }
 
