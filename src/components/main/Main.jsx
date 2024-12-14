@@ -1,13 +1,16 @@
 import styles from "./main.module.css";
-import lupa from "../../assets/Lupa.svg"
+import lupa from "../../assets/Lupa.svg";
 import save from "../../assets/save.svg";
 import manageColumns from "../../assets/manageColumns.svg";
-import moreFilters from "../../assets/moreFilters.svg"
+import moreFilters from "../../assets/moreFilters.svg";
 import searchTournaments from "../../assets/searchTournaments.svg";
 
-
-
 const Main = () => {
+  const data = [
+    { site: "Site 1", start: "12:30", buyIn: "$100", name: "Tournament A", prizePool: "$1000", maxReentry: "2", blinds: "5/10", speed: "1", field: "100", end: "2024-01-02", mlr: "Yes", tableSize: "10", priority: "High" },
+    { site: "Site 2", start: "12:30", buyIn: "$200", name: "Tournament B", prizePool: "$2000", maxReentry: "3", blinds: "10/20", speed: "2", field: "200", end: "2024-02-02", mlr: "No", tableSize: "9", priority: "Medium" },
+  ]
+
   return (
     <div className={styles.main}>
       <div className={styles.navbar}>
@@ -82,8 +85,13 @@ const Main = () => {
               <option value="size 2">Size 2</option>
             </select>
           </label>
-          <button className={styles.searchBtn}> <img src={lupa} alt="Lupa icon"/> </button>
-          <button className={styles.saveBtn}><img src={save} alt="Save icon" /></button>
+          <button className={styles.searchBtn}>
+            {" "}
+            <img src={lupa} alt="Lupa icon" />{" "}
+          </button>
+          <button className={styles.saveBtn}>
+            <img src={save} alt="Save icon" />
+          </button>
         </div>
         <div className={styles.searchRight}>
           <button className={styles.manageColumnsBtn}>
@@ -101,7 +109,7 @@ const Main = () => {
         </div>
       </div>
       <div className={styles.filterbar}>
-        <input type="checkbox" className={styles.filterCheckbox}/>
+        <input type="checkbox" className={styles.filterCheckbox} />
         <button className={styles.filterSiteBtn}>Site</button>
         <button className={styles.filterStartBtn}>Start</button>
         <button className={styles.filterBuyInBtn}>Buy In</button>
@@ -116,6 +124,42 @@ const Main = () => {
         <button className={styles.filterTableSizeBtn}>TableSize</button>
         <button className={styles.filterPriorityBtn}>Priority</button>
       </div>
+      <table>
+        <tbody>
+          <tr>
+            {data.map((item, index) => (
+              <div
+                key={item.id}
+                style={{
+                  backgroundColor:
+                    index % 2 === 0
+                      ? "transparent"
+                      : "rgba(255, 255, 255, 0.05)",
+                }}
+              >
+                <td>
+                  
+                  <input type="checkbox"  className={styles.checkBoxTable}/>
+                  <input type="checkbox"  className={styles.checkBoxTable}/>
+                </td>
+                <td className={styles.siteTable}>{item.site}</td>
+                <td className={styles.startTable}>{item.start}</td>
+                <td className={styles.buyTable}>{item.buyIn}</td>
+                <td className={styles.nameTable}>{item.name}</td>
+                <td>{item.prizePool}</td>
+                <td>{item.maxReentry}</td>
+                <td>{item.blinds}</td>
+                <td>{item.speed}</td>
+                <td>{item.field}</td>
+                <td>{item.end}</td>
+                <td>{item.mlr}</td>
+                <td>{item.tableSize}</td>
+                <td>{item.priority}</td>
+              </div>
+            ))}
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };

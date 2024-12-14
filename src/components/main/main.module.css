@@ -13,7 +13,6 @@ body {
   padding: 0px 22px 0px 29px;
   width: 100%;
   margin-left: 89px;
-  
 }
 
 .title {
@@ -290,7 +289,6 @@ input[type="number"]::-webkit-inner-spin-button {
   font-style: normal;
   font-weight: 200 800;
 
-   
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
     U+2212, U+2215,  U + FEFF,  U + FFFD;
@@ -514,7 +512,7 @@ input[type="number"]::-webkit-inner-spin-button {
   justify-content: first baseline;
   font-size: 12px;
   cursor: pointer;
- border-radius: 50px;
+  border-radius: 50px;
 }
 
 button,
@@ -524,8 +522,44 @@ select {
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
-thead{
-  width: 100%;
+table {
+width: 100%;
 }
 
+tr {
+  display: flex;
+  flex-direction: column;
+}
 
+.siteTable {
+  height: 38px;
+  width: 72px;
+}
+
+.startTable, .buyTable {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: white;
+  height: 38px;
+  width: 72px;
+}
+
+.checkBoxTable {
+  margin: 10px 20px 0px 15px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #070b2b;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+}
+
+.nameTable{
+  height: 38px;
+  width: 220px;
+  color: #ffff;
+}
