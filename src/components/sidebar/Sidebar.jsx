@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import styles from "./sidebar.module.css";
 import lobbyNinjaLogo from "../../assets/lobbyNinjaLogo.svg";
+import lobbyNinjaFinal from "../../assets/lobyNinjaFinal.svg";
 import favourites from "../../assets/favourites.svg";
 import tornauments from "../../assets/tournaments.svg";
 import planner from "../../assets/planner.svg";
@@ -19,46 +20,66 @@ const Sidebar = () => {
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <div className={styles.logo} >
-        <img src={lobbyNinjaLogo} />
+      <div className={`${isOpen ? styles.logoOpened : styles.logo}`}>
+        <img src={`${isOpen ? lobbyNinjaFinal : lobbyNinjaLogo}`} />
       </div>
 
       <ul className="">
         <li>
-          <a href="#section1">
-            <div>
+          <a href="#section1" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
               <img src={tornauments} alt="Tournaments" />
             </div>
+
+            {isOpen && <span>Tournaments</span>}
           </a>
         </li>
         <li>
-          <a href="#section2">
-            <img src={planner} alt="Planner" />
+          <a href="#section2" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
+              <img src={planner} alt="Planner" />
+            </div>
+            {isOpen && <span>Planner</span>}
           </a>
         </li>
         <li>
-          <a href="#section3">
-            <img src={favourites} alt="" />
+          <a href="#section3" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
+              <img src={favourites} alt="Favourites" />
+            </div>
+            {isOpen && <span>Favourites</span>}
           </a>
         </li>
         <li>
-          <a href="#section4">
-            <img src={registered} alt="Registered" />
+          <a href="#section4" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
+              <img src={registered} alt="Registered" />
+            </div>
+            {isOpen && <span>Registered</span>}
           </a>
         </li>
         <li>
-          <a href="#section5">
-            <img src={skipped} alt="Skipped" />
+          <a href="#section5" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
+              <img src={skipped} alt="Skipped" />
+            </div>
+            {isOpen && <span>Skipped</span>}
           </a>
         </li>
         <li>
-          <a href="#section6">
-            <img src={alarm} alt="Alarm" />
+          <a href="#section6" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
+              <img src={alarm} alt="Alarm" />
+            </div>
+            {isOpen && <span>Alarm</span>}
           </a>
         </li>
         <li>
-          <a href="#section7">
-            <img src={deleted} alt="Deleted" />
+          <a href="#section7" className={styles.bgHover}>
+            <div className={styles.bgHoverIcon}>
+              <img src={deleted} alt="Deleted" />
+            </div>
+            {isOpen && <span>Deleted</span>}
           </a>
         </li>
       </ul>
