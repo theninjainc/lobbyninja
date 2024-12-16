@@ -4,12 +4,16 @@ import save from "../../assets/save.svg";
 import manageColumns from "../../assets/manageColumns.svg";
 import moreFilters from "../../assets/moreFilters.svg";
 import searchTournaments from "../../assets/searchTournaments.svg";
-
+import teste from "../../assets/siteRed.svg";
+import teste2 from "../../assets/image 8.svg";
 const Main = () => {
   const data = [
-    { site: "Site 1", start: "12:30", buyIn: "$100", name: "Tournament A", prizePool: "$1000", maxReentry: "2", blinds: "5/10", speed: "1", field: "100", end: "2024-01-02", mlr: "Yes", tableSize: "10", priority: "High" },
-    { site: "Site 2", start: "12:30", buyIn: "$200", name: "Tournament B", prizePool: "$2000", maxReentry: "3", blinds: "10/20", speed: "2", field: "200", end: "2024-02-02", mlr: "No", tableSize: "9", priority: "Medium" },
+    { site: teste, start: "12:30", buyIn: "$32", name: "Tournament A", prizePool: "$15k", maxReentry: "$123", blinds: "50", speed: "slow", field: "100", end: "14:00", mlr: "02:59", tableSize: "5", priority: "1" },
+    { site: teste2, start: "12:30", buyIn: "$32", name: "Tournament B", prizePool: "$15k", maxReentry: "-", blinds: "50", speed: "fast", field: "100", end: "14:00", mlr: "02:59", tableSize: "9", priority: "3" },
   ]
+
+
+
 
   return (
     <div className={styles.main}>
@@ -137,24 +141,23 @@ const Main = () => {
                       : "rgba(255, 255, 255, 0.05)",
                 }}
               >
-                <td>
-                  
-                  <input type="checkbox"  className={styles.checkBoxTable}/>
+                <td className={styles.stylesCheckboxTable}>
+                  <input type="checkbox"  className={styles.starCheckBoxTable}/>
                   <input type="checkbox"  className={styles.checkBoxTable}/>
                 </td>
-                <td className={styles.siteTable}>{item.site}</td>
+                <td className={styles.siteTable}><img src={item.site} alt="svg" /></td>
                 <td className={styles.startTable}>{item.start}</td>
-                <td className={styles.buyTable}>{item.buyIn}</td>
+                <td className={styles.buyInTable}>{item.buyIn}</td>
                 <td className={styles.nameTable}>{item.name}</td>
-                <td>{item.prizePool}</td>
-                <td>{item.maxReentry}</td>
-                <td>{item.blinds}</td>
-                <td>{item.speed}</td>
-                <td>{item.field}</td>
-                <td>{item.end}</td>
-                <td>{item.mlr}</td>
-                <td>{item.tableSize}</td>
-                <td>{item.priority}</td>
+                <td className={styles.prizePoolTable}>{item.prizePool}</td>
+                <td className={styles.maxReentryTable}>{item.maxReentry}</td>
+                <td className={styles.blindsTable}>{item.blinds}</td>
+                <td className={styles.speedTable}>{item.speed}</td>
+                <td className={styles.fieldTable}>{item.field}</td>
+                <td className={styles.endTable}>{item.end}</td>
+                <td className={ styles.mlrTable}>{item.mlr}</td>
+                <td className={styles.tableSizeTable}>{item.tableSize}</td>
+                <td className={styles.priorityTable}>{item.priority}</td>
               </div>
             ))}
           </tr>
