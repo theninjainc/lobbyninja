@@ -21,6 +21,12 @@
  margin-right: 16px;
 }
 
+.card:hover{
+    background: #0b0b21;
+    border-radius: 3px;
+
+}
+
 .card img{
     max-width: 18px;
     margin-left: 5px;
@@ -32,3 +38,11 @@
     padding-bottom: 10px;
   }
   
+  .card:last-child{
+    
+    height: 46.5px;
+}
+
+.card:last-child img{
+    margin-bottom: 8px;
+}
