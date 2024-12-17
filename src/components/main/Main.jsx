@@ -17,6 +17,7 @@ import teste9 from "../../assets/image 8.svg"
 import teste10 from "../../assets/image 9.svg"
 import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
+import Speed from "../../utils/Speed/Speed";
 
  
 const Main = () => {
@@ -189,9 +190,14 @@ const Main = () => {
   ];
   
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenSpeed, setIsOpenSpeed] = useState(false);
+
 
   const toggleOpen = () =>{
     setIsOpen((prevState)=> !prevState);
+  }
+  const toggleOpenSpeed = () =>{
+    setIsOpenSpeed((prevState)=> !prevState);
   }
 
 
@@ -269,10 +275,11 @@ const Main = () => {
             </label>
           </div>
           <label htmlFor="speed" className={styles.labelSelectSpeed}>
-            <button name="speed" id="speed" className={styles.selectSpeed}>
+            <button name="speed" id="speed" className={styles.selectSpeed} onClick={()=>toggleOpenSpeed(true)}>
             Speed
             </button>
           </label>
+          <Speed isOpenSpeed={isOpenSpeed}/>
           <label htmlFor="size" className={styles.labelSelectSize}>
             <button name="size" id="size" className={styles.selectSize}>
               Size
