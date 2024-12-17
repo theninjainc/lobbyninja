@@ -1,0 +1,49 @@
+.size{
+    width: 199px;
+    height: 94px;
+    background-color: #191934;
+    position: fixed;
+    z-index: 1000;
+    left: 837px;
+    top: 165px;
+    border-radius: 10px;
+}
+
+.size button{
+    border-radius: 44px;
+    border: 1px solid rgb(255, 255, 255, 0.21);
+    background-color: transparent;
+    color: white;
+    margin: 5px 0px 0px 5px;
+    
+}
+
+.size button:hover{
+    background: radial-gradient(circle at top,#BBA5F4, #5F33D6);
+
+}
+
+.firstButton{
+    width: 43px;
+    height: 32px;
+}
+
+.secondButton{
+    width: 49px;
+    height: 32px;
+}
+
+.thirdButton{
+    width: 43px;
+    height: 32px;
+}
+
+.fourthButton{
+    width: 64px;
+    height: 32px;
+}
+
+.size div{
+    margin: 10px 16px 10px 16px;
+
+}

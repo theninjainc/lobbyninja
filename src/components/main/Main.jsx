@@ -18,8 +18,11 @@ import teste10 from "../../assets/image 9.svg"
 import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import Speed from "../../utils/Speed/Speed";
+import Size from "../../utils/Size/Size";
+import notification from "../../assets/notification.svg";
+import engine from "../../assets/engine.svg"; 
+import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
 
- 
 const Main = () => {
   const data = [
     {
@@ -191,6 +194,7 @@ const Main = () => {
   
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
+  const [isOpenSize, setIsOpenSize] = useState(false);
 
 
   const toggleOpen = () =>{
@@ -198,6 +202,9 @@ const Main = () => {
   }
   const toggleOpenSpeed = () =>{
     setIsOpenSpeed((prevState)=> !prevState);
+  }
+  const toggleOpenSize = () =>{
+    setIsOpenSize((prevState)=> !prevState);
   }
 
 
@@ -218,17 +225,17 @@ const Main = () => {
   return (
     <div className={styles.main}>
       <div className={styles.navbar}>
-        <h1 className={styles.title}>Tournament List</h1>
+        <p className={styles.title}>Tournament List</p>
         <div className={styles.btns}>
           <ul>
             <li>
-              <button>Button1</button>
+              <ToggleThemeBtn />
             </li>
             <li>
-              <button>Button2</button>
+              <button className={styles.navNotificationBtn}><img src={notification} alt="" /></button>
             </li>
             <li>
-              <button>Button3</button>
+              <button className={styles.navEngineBtn}><img src={engine} alt="" /></button>
             </li>
           </ul>
         </div>
@@ -281,10 +288,11 @@ const Main = () => {
           </label>
           <Speed isOpenSpeed={isOpenSpeed}/>
           <label htmlFor="size" className={styles.labelSelectSize}>
-            <button name="size" id="size" className={styles.selectSize}>
+            <button name="size" id="size" className={styles.selectSize} onClick={()=>toggleOpenSize(true)}>
               Size
             </button>
           </label>
+          <Size isOpenSize={isOpenSize}/>
           <button className={styles.searchBtn}>
             {" "}
             <img src={lupa} alt="Lupa icon" />{" "}
