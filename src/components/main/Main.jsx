@@ -15,6 +15,10 @@ import teste7 from "../../assets/image 6.svg";
 import teste8 from "../../assets/image 7.svg"
 import teste9 from "../../assets/image 8.svg"
 import teste10 from "../../assets/image 9.svg"
+import SelectSite from "../../utils/SelectSite/SelectSite";
+import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
+
+ 
 const Main = () => {
   const data = [
     {
@@ -184,6 +188,12 @@ const Main = () => {
     },
   ];
   
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOpen = () =>{
+    setIsOpen((prevState)=> !prevState);
+  }
+
 
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
   const [orderList, setOrderList] = useState(data);
@@ -229,12 +239,11 @@ const Main = () => {
             />
           </label>
           <label htmlFor="site" className={styles.labelSelectSite}>
-            <select name="site" id="site" className={styles.selectSite}>
-              <option value="">Select site</option>
-              <option value="site 1">Site 1</option>
-              <option value="site 2">Site 2</option>
-            </select>
+            <button name="site" id="site" className={styles.selectSite} onClick={() => toggleOpen(true)}>
+              Select Site
+            </button>
           </label>
+          <SelectSite isOpen={isOpen}/>
           <div className={styles.maxMinSearch}>
             <label htmlFor="min-value" className={styles.labelMaxMinValue}>
               <div>Min $</div>
@@ -260,18 +269,14 @@ const Main = () => {
             </label>
           </div>
           <label htmlFor="speed" className={styles.labelSelectSpeed}>
-            <select name="speed" id="speed" className={styles.selectSpeed}>
-              <option value="">Speed</option>
-              <option value="site 1">1</option>
-              <option value="site 2">2</option>
-            </select>
+            <button name="speed" id="speed" className={styles.selectSpeed}>
+            Speed
+            </button>
           </label>
           <label htmlFor="size" className={styles.labelSelectSize}>
-            <select name="size" id="size" className={styles.selectSize}>
-              <option value="">Size</option>
-              <option value="size 1">Size 1</option>
-              <option value="size 2">Size 2</option>
-            </select>
+            <button name="size" id="size" className={styles.selectSize}>
+              Size
+            </button>
           </label>
           <button className={styles.searchBtn}>
             {" "}
@@ -328,7 +333,7 @@ const Main = () => {
                 }}
               >
                 <td className={styles.stylesCheckboxTable}>
-                  <input type="checkbox" className={styles.starCheckBoxTable} />
+                <FavouriteStar className={styles.favouriteStar}/>
                   <input type="checkbox" className={styles.checkBoxTable} />
                 </td>
                 <td className={styles.siteTable}>
