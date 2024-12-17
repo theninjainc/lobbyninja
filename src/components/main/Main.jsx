@@ -12,9 +12,6 @@ const Main = () => {
     { site: teste2, start: "12:30", buyIn: "$32", name: "Tournament B", prizePool: "$15k", maxReentry: "-", blinds: "50", speed: "fast", field: "100", end: "14:00", mlr: "02:59", tableSize: "9", priority: "3" },
   ]
 
-
-
-
   return (
     <div className={styles.main}>
       <div className={styles.navbar}>
@@ -130,7 +127,7 @@ const Main = () => {
       </div>
       <table>
         <tbody>
-          <tr>
+          <tr className="tableTr">
             {data.map((item, index) => (
               <div
                 key={item.id}

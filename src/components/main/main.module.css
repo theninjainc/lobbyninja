@@ -526,7 +526,7 @@ table {
   width: 100%;
 }
 
-tr {
+.tableTr {
   display: flex;
   flex-direction: column;
 }

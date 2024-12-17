@@ -1,0 +1,100 @@
+/* App */
+.App {
+  width: 100%;
+  background-color: var(--bg-color);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.reminderContainer {
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding-left: 5%;
+}
+
+.heading {
+  font-size: 2rem;
+  align-self: flex-start;
+  margin-bottom: 20px;
+  margin-left: 5%;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.alarmTable {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.alarmTable th,
+.alarmTable td {
+  text-align: center;
+  padding: 12px;
+}
+
+.alarmTable th {
+  background-color: var(--primary-light);
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.alarmTable td {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.alarmTable tr.active {
+  background-color: var(--active-bg);
+}
+
+.alarmTable tr.inactive {
+  background-color: var(--inactive-bg);
+}
+
+/* Botões */
+.toggleButton {
+  background-color: var(--toggle-btn-active);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: none;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.toggleButton.inactive {
+  background-color: var(--toggle-btn-inactive);
+}
+
+.deleteButton {
+  background-color: var(--delete-btn);
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background-color: var(--delete-btn-hover);
+}
+
+/* Cores Personalizadas */
+:root {
+  --primary-light: #1E234D;
+  --text-light: #ffffff;
+  --bg-light: #ffffff;
+  --bg-light-alt: #f9f9f9;
+  --active-bg: #e9f7ef;
+  --inactive-bg: #f8d7da;
+  --toggle-btn-active: #e74c3c;
+  --toggle-btn-inactive: #00a685;
+  --delete-btn: #e74c3c;
+  --delete-btn-hover: #c0392b;
+  --border-color: #ddd;
+}
