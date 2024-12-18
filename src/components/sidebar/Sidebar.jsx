@@ -26,12 +26,12 @@ const Sidebar = () => {
 
       <ul className="">
         <li>
-          <a href="#section1" className={styles.bgHover}>
-            <div className={styles.bgHoverIcon}>
+          <a href="#section1" className={styles.bgHoverFirst}>
+            <div className={styles.bgHoverIconFirst}>
               <img src={tornauments} alt="Tournaments" />
             </div>
 
-            {isOpen && <span>Tournaments</span>}
+            {isOpen && <span className={styles.bgHoverTextFirst}>Tournaments</span>}
           </a>
         </li>
         <li>
