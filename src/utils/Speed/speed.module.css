@@ -1,0 +1,34 @@
+.speed{
+    width: 191px;
+    height: 220px;
+    position: fixed;
+    z-index: 1000;
+    font-size: 14px;
+    color: #ffff;
+    background: #191934;
+    border-radius: 10px;
+    left: 638px;
+    top: 165px;
+}
+
+.cardSpeed{
+ width: 155px;
+ height: 36px;
+ margin-top: 5px;
+ gap: 10px;
+ display: inline-flex;
+ margin-left: 16px;
+ margin-right: 16px;
+}
+
+.cardSpeed img{
+    max-height: 14px;
+    margin-left: 5px;
+    margin-top: 18px;
+}
+
+.cardSpeed:not(:last-child) {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.10);
+    padding-bottom: 10px;
+  }
+  

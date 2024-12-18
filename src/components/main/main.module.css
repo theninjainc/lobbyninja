@@ -19,7 +19,9 @@ body {
   color: #ffff;
   font-size: 28px;
   font-weight: 800;
-  margin: 0;
+  text-align: center;
+  margin-top: 60px;
+  
 }
 
 .navbar {
@@ -29,6 +31,8 @@ body {
   justify-content: space-between;
   top: 0;
   width: 100%;
+  height: 53px;
+  margin-bottom: 30px;
 }
 
 .navbar ul {
@@ -40,6 +44,15 @@ body {
 .navbar ul > li {
   padding-left: 10px;
 }
+
+.navNotificationBtn, .navEngineBtn{
+  background-color: #191934;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 
 .searchbar {
   padding-top: 30px;
@@ -84,18 +97,18 @@ body {
   border-radius: 50px;
   background-color: var(--bg-inputs);
   display: flex;
-  justify-content: center;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
 }
 
 .selectSite {
   background-color: var(--bg-inputs);
   background-image: url("../../assets/selectSite.svg");
-  background-position: right 10px center;
+  background-position: right 3px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 118px;
+  width: 105px;
   border-radius: 50px;
   color: rgba(255, 255, 255, 0.4);
   outline: none;
@@ -105,6 +118,9 @@ body {
   appearance: none;
   padding: 10px;
   text-indent: 0.01px;
+  cursor: pointer;
+  padding-right: 10px;
+  
 }
 
 .labelMaxMinValue {
@@ -159,8 +175,7 @@ input[type="number"]::-webkit-inner-spin-button {
   border-radius: 50px;
   background-color: var(--bg-inputs);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -170,10 +185,10 @@ input[type="number"]::-webkit-inner-spin-button {
   outline: none;
   border: none;
   background-image: url("../../assets/selectSite.svg");
-  background-position: right 9px center;
+  background-position: right 0px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 85px;
+  width: 75px;
   border-radius: 50px;
   outline: none;
   border: none;
@@ -182,6 +197,7 @@ input[type="number"]::-webkit-inner-spin-button {
   appearance: none;
   padding: 10px;
   text-indent: 0.01px;
+  cursor: pointer;
 }
 
 .labelSelectSize {
@@ -193,6 +209,7 @@ input[type="number"]::-webkit-inner-spin-button {
   justify-content: first;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
 }
 
 .selectSize {
@@ -201,11 +218,11 @@ input[type="number"]::-webkit-inner-spin-button {
   outline: none;
   border: none;
   background-image: url("../../assets/selectSite.svg");
-  background-position: right 7px center;
+  background-position: right 2px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
   border-radius: 50px;
-  width: 70px;
+  width: 60px;
   outline: none;
   border: none;
   -webkit-appearance: none;
@@ -213,6 +230,7 @@ input[type="number"]::-webkit-inner-spin-button {
   appearance: none;
   padding: 10px;
   text-indent: 0.01px;
+  cursor: pointer;
 }
 
 .searchBtn {
@@ -531,43 +549,22 @@ table {
   flex-direction: column;
 }
 
-.stylesCheckboxTable{
+.stylesCheckboxTable {
   position: relative;
-  top: -4px;
-  
+  top: -3.5px;
+  left: 7.7px;
+  width: 75px;
 }
 
-.starCheckBoxTable {
-  margin-left: 7.5px;
-  margin-top: 15px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 16px;
-  height: 16px;
-  background-color: #070b2b;
-  border: none;
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  border-radius: 3px;
+
+.favouriteStar{
+  cursor: pointer;  
 }
 
-.starCheckBoxTable:checked::before {
-  content: "";
-  width: 16px;
-  height: 16px;
-  background-color: #5f33d6;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.2l-4.2-4.2L3.5 13l5.5 5.5 11-11L18.3 6l-9.3 9.2z"/></svg>');
-  background-size: cover;
-  background-repeat: no-repeat;
-  display: block;
-  border-radius: 2px;
+.checked{
+  fill: #FFF600
 }
 
-.starCheckBoxTable:hover {
-  box-shadow: 0 0 3px 2px rgba(255, 255, 255, 0.3);
-}
 
 
 .checkBoxTable {
@@ -608,16 +605,16 @@ table {
 }
 
 .siteTable {
+  
   height: 38px;
   width: 69px;
   color: #ffff;
 }
 
-.startTable{
+.startTable {
   color: white;
   height: 38px;
   width: 68px;
-
 }
 .buyInTable {
   color: white;
@@ -667,7 +664,6 @@ table {
   color: #ffff;
 }
 
-
 .mlrTable {
   height: 38px;
   width: 81px;
@@ -686,8 +682,21 @@ table {
   color: #ffff;
 }
 
- .siteTable, .startTable, .buyInTable, .nameTable, .prizePoolTable, .maxReentryTable, .blindsTable, .speedTable, .fieldTable, .endTable, .mlrTable, .tableSizeTable, .priorityTable{
+.siteTable,
+.startTable,
+.buyInTable,
+.nameTable,
+.prizePoolTable,
+.maxReentryTable,
+.blindsTable,
+.speedTable,
+.fieldTable,
+.endTable,
+.mlrTable,
+.tableSizeTable,
+.priorityTable {
   font-size: 12px;
   vertical-align: middle;
 }
+
 
