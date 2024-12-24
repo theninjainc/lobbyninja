@@ -193,6 +193,7 @@ const Main = () => {
       priority: 4,
     },
   ];
+
   //Modals
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
@@ -212,7 +213,6 @@ const Main = () => {
     setIsOpenNotifications((prevState) => !prevState);
   };
 
-
   //Filter Buttons
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
   const [orderBuyInFilter, setOrderBuyInFilter] = useState("asc");
@@ -224,25 +224,9 @@ const Main = () => {
   const [orderSiteFilter, setOrderSiteFilter] = useState("asc");
   const [orderStartFilter, setOrderStartFilter] = useState("asc");
   const [orderEndFilter, setOrderEndFilter] = useState("asc");
-  const [orderMlrFilter, setOrderMlrFilter] = useState("asc");
   const [orderList, setOrderList] = useState(data);
 
-  const orderedListMlr = () => {
-    const newListMlr = [...orderList];
-    const newOrderMlrFilter = orderMlrFilter === "asc" ? "desc" : "asc";  
-  
-    newListMlr.sort((a, b) => {
-      const secondsA = a.mlr;
-      const secondsB = b.mlr;
-  
-      return newOrderMlrFilter === "asc"
-        ? secondsA - secondsB
-        : secondsB - secondsA;
-    });
-  
-    setOrderList(newListMlr);
-    setOrderMlrFilter(newOrderMlrFilter);
-  };
+
 
   const orderedListEnd = () => {
     const newListEnd = [...orderList];
@@ -288,8 +272,8 @@ const Main = () => {
     const newListSite = [...orderList];
     newListSite.sort((a, b) =>
       orderSiteFilter === "asc"
-        ? a.site.localeCompare - b.site.localeCompare
-        : b.site.localeCompare - a.site.localeCompare
+        ? a.site.localeCompare(b.site)
+        : b.site.localeCompare(a.site)
     );
     setOrderList(newListSite);
     setOrderSiteFilter(orderSiteFilter === "asc" ? "desc" : "asc");
@@ -517,7 +501,9 @@ const Main = () => {
         <button className={styles.filterEndBtn} onClick={orderedListEnd}>
           End
         </button>
-        <button className={styles.filterMlrBtn} onClick={orderedListMlr}>Mlr</button>
+        <button className={styles.filterMlrBtn} onClick={orderedListStart}>
+          Mlr
+        </button>
         <button
           className={styles.filterTableSizeBtn}
           onClick={orderedListTableSize}
@@ -565,7 +551,9 @@ const Main = () => {
                 <td className={styles.speedTable}>{item.speed}</td>
                 <td className={styles.fieldTable}>{item.field}</td>
                 <td className={styles.endTable}>{item.end}</td>
-                <td className={styles.mlrTable}><Timer mlr={item.mlr} /></td>
+                <td className={styles.mlrTable}>
+                  <Timer startEvent={item.start} />
+                </td>
                 <td className={styles.tableSizeTable}>{item.tableSize}</td>
                 <td className={styles.priorityTable}>{item.priority}</td>
               </div>
