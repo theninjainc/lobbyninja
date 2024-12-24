@@ -8,7 +8,7 @@ const FavouriteStar = () => {
   const toggleClick = () => {
     setIsClicked((prevState) => !prevState);
   };
-
+  
   return (
     <svg
       width="18"
@@ -22,7 +22,7 @@ const FavouriteStar = () => {
       </mask>
       <path
         className={`${styles.favouriteStar} ${isClicked ? styles.checked : ""}`}
-        onClick={toggleClick} // Alterna o estado ao clicar
+        onClick={toggleClick}
         d="M8.56 0.155365L6.21 5.91537L0 6.37537L4.76 10.3954L3.27 16.4354L8.56 13.1554M8.56 0.155365L10.91 5.91537L17.12 6.37537L12.36 10.3954L13.85 16.4354L8.56 13.1554"
         fill="#070B2B"
       />

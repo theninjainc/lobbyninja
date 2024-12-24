@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Timer from "../../utils/Timer/Timer";
 import styles from "./main.module.css";
 import lupa from "../../assets/Lupa.svg";
 import save from "../../assets/save.svg";
@@ -6,218 +7,337 @@ import manageColumns from "../../assets/manageColumns.svg";
 import moreFilters from "../../assets/moreFilters.svg";
 import searchTournaments from "../../assets/searchTournaments.svg";
 import teste from "../../assets/siteRed.svg";
-import teste2 from "../../assets/image 1.svg";
-import teste3 from "../../assets/image 2.svg"
-import teste4 from "../../assets/image 3.svg"
-import teste5 from "../../assets/image 4.svg"
-import teste6 from "../../assets/image 5.svg";
-import teste7 from "../../assets/image 6.svg";
-import teste8 from "../../assets/image 7.svg"
-import teste9 from "../../assets/image 8.svg"
-import teste10 from "../../assets/image 9.svg"
+import b from "../../assets/image 1.svg";
+import c from "../../assets/image 2.svg";
+import d from "../../assets/image 3.svg";
+import e from "../../assets/image 4.svg";
+import f from "../../assets/image 5.svg";
+import g from "../../assets/image 6.svg";
+import h from "../../assets/image 7.svg";
+import i from "../../assets/image 8.svg";
+import j from "../../assets/image 9.svg";
 import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import Speed from "../../utils/Speed/Speed";
 import Size from "../../utils/Size/Size";
 import notification from "../../assets/notification.svg";
-import engine from "../../assets/engine.svg"; 
+import engine from "../../assets/engine.svg";
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
 import Notifications from "../../utils/Notifications/Notifications";
-
 
 const Main = () => {
   const data = [
     {
       site: teste,
       start: "16:30",
-      buyIn: "$35",
+      buyIn: 350,
       name: "I Tournament",
       prizePool: "$17k",
-      maxReentry: "$125",
+      maxReentry: 125,
       blinds: "70",
       speed: "medium",
-      field: "105",
+      field: 105,
       end: "18:30",
-      mlr: "03:20",
-      tableSize: "5",
-      priority: "9",
+      mlr: 200,
+      tableSize: 5,
+      priority: 9,
     },
     {
-      site: teste2,
+      site: b,
       start: "12:30",
-      buyIn: "$32",
+      buyIn: 320,
       name: "B Tournament",
       prizePool: "$15k",
-      maxReentry: "-",
+      maxReentry: null,
       blinds: "50",
       speed: "fast",
-      field: "100",
+      field: 100,
       end: "14:00",
-      mlr: "02:59",
-      tableSize: "9",
-      priority: "3",
+      mlr: 120,
+      tableSize: 9,
+      priority: 3,
     },
     {
-      site: teste3,
+      site: c,
       start: "16:00",
-      buyIn: "$45",
+      buyIn: 450,
       name: "H Tournament",
       prizePool: "$18k",
-      maxReentry: "$150",
+      maxReentry: 150,
       blinds: "60",
       speed: "fast",
-      field: "110",
+      field: 110,
       end: "18:00",
-      mlr: "03:45",
-      tableSize: "6",
-      priority: "8",
+      mlr: 1000,
+      tableSize: 6,
+      priority: 8,
     },
     {
-      site: teste4,
+      site: d,
       start: "13:00",
-      buyIn: "$40",
+      buyIn: 422,
       name: "C Tournament",
       prizePool: "$20k",
-      maxReentry: "$200",
+      maxReentry: 200,
       blinds: "100",
       speed: "medium",
-      field: "120",
-      end: "15:30",
-      mlr: "03:10",
-      tableSize: "6",
-      priority: "2",
+      field: 120,
+      end: "15:59",
+      mlr: 850,
+      tableSize: 6,
+      priority: 2,
     },
     {
-      site: teste5,
+      site: e,
       start: "17:30",
-      buyIn: "$30",
+      buyIn: 30,
       name: "K Tournament",
       prizePool: "$13k",
-      maxReentry: "$90",
+      maxReentry: 90,
       blinds: "40",
       speed: "fast",
-      field: "95",
+      field: 95,
       end: "19:30",
-      mlr: "02:55",
-      tableSize: "4",
-      priority: "11",
+      mlr: 320,
+      tableSize: 4,
+      priority: 10,
     },
     {
-      site: teste6,
+      site: f,
       start: "12:30",
-      buyIn: "$32",
+      buyIn: 32,
       name: "A Tournament",
       prizePool: "$15k",
-      maxReentry: "$123",
+      maxReentry: 123,
       blinds: "50",
       speed: "slow",
-      field: "100",
+      field: 100,
       end: "14:00",
-      mlr: "02:59",
-      tableSize: "5",
-      priority: "1",
+      mlr: 540,
+      tableSize: 5,
+      priority: 1,
     },
     {
-      site: teste7,
+      site: g,
       start: "15:00",
-      buyIn: "$60",
+      buyIn: 60,
       name: "F Tournament",
       prizePool: "$30k",
-      maxReentry: "$500",
+      maxReentry: 500,
       blinds: "200",
       speed: "medium",
-      field: "200",
+      field: 200,
       end: "17:00",
-      mlr: "04:00",
-      tableSize: "10",
-      priority: "6",
+      mlr: 200,
+      tableSize: 10,
+      priority: 6,
     },
     {
-      site: teste8,
+      site: h,
       start: "17:00",
-      buyIn: "$55",
+      buyIn: 55,
       name: "J Tournament",
       prizePool: "$22k",
-      maxReentry: "$250",
+      maxReentry: 250,
       blinds: "80",
       speed: "slow",
-      field: "130",
+      field: 130,
       end: "19:00",
-      mlr: "03:50",
-      tableSize: "8",
-      priority: "10",
+      mlr: 100,
+      tableSize: 8,
+      priority: 9,
     },
     {
-      site: teste9,
+      site: i,
       start: "15:30",
-      buyIn: "$25",
+      buyIn: 25,
       name: "G Tournament",
       prizePool: "$12k",
-      maxReentry: "$100",
+      maxReentry: 100,
       blinds: "50",
       speed: "slow",
-      field: "90",
+      field: 90,
       end: "17:30",
-      mlr: "03:15",
-      tableSize: "7",
-      priority: "7",
+      mlr: 450,
+      tableSize: 7,
+      priority: 7,
     },
     {
-      site: teste10,
+      site: j,
       start: "14:30",
-      buyIn: "$20",
+      buyIn: 20,
       name: "E Tournament",
       prizePool: "$10k",
-      maxReentry: "$50",
+      maxReentry: 50,
       blinds: "25",
       speed: "slow",
-      field: "80",
+      field: 80,
       end: "16:30",
-      mlr: "02:45",
-      tableSize: "4",
-      priority: "5",
+      mlr: 150,
+      tableSize: 4,
+      priority: 5,
     },
     {
-      site: teste2,
+      site: b,
       start: "14:00",
-      buyIn: "$50",
+      buyIn: 50,
       name: "D Tournament",
       prizePool: "$25k",
-      maxReentry: "$300",
+      maxReentry: 300,
       blinds: "75",
       speed: "fast",
-      field: "150",
-      end: "16:00",
-      mlr: "03:30",
-      tableSize: "8",
-      priority: "4",
+      field: 150,
+      end: "00:10",
+      mlr: 340,
+      tableSize: 8,
+      priority: 4,
     },
   ];
-  
+  //Modals
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
   const [isOpenSize, setIsOpenSize] = useState(false);
   const [isOpenNotifications, setIsOpenNotifications] = useState(false);
 
+  const toggleOpen = () => {
+    setIsOpen((prevState) => !prevState);
+  };
+  const toggleOpenSpeed = () => {
+    setIsOpenSpeed((prevState) => !prevState);
+  };
+  const toggleOpenSize = () => {
+    setIsOpenSize((prevState) => !prevState);
+  };
+  const toggleOpenNotifications = () => {
+    setIsOpenNotifications((prevState) => !prevState);
+  };
 
-  const toggleOpen = () =>{
-    setIsOpen((prevState)=> !prevState);
-  }
-  const toggleOpenSpeed = () =>{
-    setIsOpenSpeed((prevState)=> !prevState);
-  }
-  const toggleOpenSize = () =>{
-    setIsOpenSize((prevState)=> !prevState);
-  }
-  const toggleOpenNotifications = () =>{
-    setIsOpenNotifications((prevState)=> !prevState);
-  }
 
-
+  //Filter Buttons
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
+  const [orderBuyInFilter, setOrderBuyInFilter] = useState("asc");
+  const [orderBlindsFilter, setOrderBlindsFilter] = useState("asc");
+  const [orderMaxReentryFilter, setOrderMaxReentryFilter] = useState("asc");
+  const [orderPriorityFilter, setOrderPriorityFiter] = useState("asc");
+  const [orderTableSizeFilter, setOrderTableSizeFilter] = useState("asc");
+  const [orderFieldFilter, setOrderFieldFilter] = useState("asc");
+  const [orderSiteFilter, setOrderSiteFilter] = useState("asc");
+  const [orderStartFilter, setOrderStartFilter] = useState("asc");
+  const [orderEndFilter, setOrderEndFilter] = useState("asc");
+  const [orderMlrFilter, setOrderMlrFilter] = useState("asc");
   const [orderList, setOrderList] = useState(data);
 
-  const orderedList = () => {
+  const orderedListMlr = () => {
+    const newListMlr = [...orderList];
+    const newOrderMlrFilter = orderMlrFilter === "asc" ? "desc" : "asc";  
+  
+    newListMlr.sort((a, b) => {
+      const secondsA = a.mlr;
+      const secondsB = b.mlr;
+  
+      return newOrderMlrFilter === "asc"
+        ? secondsA - secondsB
+        : secondsB - secondsA;
+    });
+  
+    setOrderList(newListMlr);
+    setOrderMlrFilter(newOrderMlrFilter);
+  };
+
+  const orderedListEnd = () => {
+    const newListEnd = [...orderList];
+    const newOrderEndFilter = orderEndFilter === "asc" ? "desc" : "asc";
+
+    newListEnd.sort((a, b) => {
+      const hoursA = a.end.split(":").map(Number);
+      const hoursB = b.end.split(":").map(Number);
+
+      const minutesA = hoursA[0] * 60 + hoursA[1];
+      const minutesB = hoursB[0] * 60 + hoursB[1];
+
+      return newOrderEndFilter === "asc"
+        ? minutesA - minutesB
+        : minutesB - minutesA;
+    });
+
+    setOrderEndFilter(newOrderEndFilter);
+    setOrderList(newListEnd);
+  };
+
+  const orderedListStart = () => {
+    const newListStart = [...orderList];
+    const newOrderStartFilter = orderStartFilter === "asc" ? "desc" : "asc";
+
+    newListStart.sort((a, b) => {
+      const hoursA = a.start.split(":").map(Number);
+      const hoursB = b.start.split(":").map(Number);
+
+      const minutesA = hoursA[0] * 60 + hoursA[1];
+      const minutesB = hoursB[0] * 60 + hoursB[1];
+
+      return newOrderStartFilter === "asc"
+        ? minutesA - minutesB
+        : minutesB - minutesA;
+    });
+
+    setOrderStartFilter(newOrderStartFilter);
+    setOrderList(newListStart);
+  };
+
+  const orderedListSite = () => {
+    const newListSite = [...orderList];
+    newListSite.sort((a, b) =>
+      orderSiteFilter === "asc"
+        ? a.site.localeCompare - b.site.localeCompare
+        : b.site.localeCompare - a.site.localeCompare
+    );
+    setOrderList(newListSite);
+    setOrderSiteFilter(orderSiteFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListField = () => {
+    const newListField = [...orderList];
+    newListField.sort((a, b) =>
+      orderFieldFilter === "asc" ? a.field - b.field : b.field - a.field
+    );
+    setOrderList(newListField);
+    setOrderFieldFilter(orderFieldFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListTableSize = () => {
+    const newListTableSize = [...orderList];
+    newListTableSize.sort((a, b) =>
+      orderTableSizeFilter === "asc"
+        ? a.tableSize - b.tableSize
+        : b.tableSize - a.tableSize
+    );
+    setOrderList(newListTableSize);
+    setOrderTableSizeFilter(orderTableSizeFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListPriority = () => {
+    const newListPriority = [...orderList];
+    newListPriority.sort((a, b) =>
+      orderPriorityFilter === "asc"
+        ? a.priority - b.priority
+        : b.priority - a.priority
+    );
+    setOrderList(newListPriority);
+    setOrderPriorityFiter(orderPriorityFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListMaxReentry = () => {
+    const newListMaxReentry = [...orderList];
+    newListMaxReentry.sort((a, b) =>
+      orderMaxReentryFilter === "asc"
+        ? a.maxReentry - b.maxReentry
+        : b.maxReentry - a.maxReentry
+    );
+    setOrderList(newListMaxReentry);
+    setOrderMaxReentryFilter(orderMaxReentryFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListName = () => {
     const newList = [...orderList];
     newList.sort((a, b) =>
       orderNameFilter === "asc"
@@ -226,6 +346,24 @@ const Main = () => {
     );
     setOrderList(newList);
     setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListBuyIn = () => {
+    const newListBuyIn = [...orderList];
+    newListBuyIn.sort((a, b) =>
+      orderBuyInFilter === "asc" ? a.buyIn - b.buyIn : b.buyIn - a.buyIn
+    );
+    setOrderList(newListBuyIn);
+    setOrderBuyInFilter(orderBuyInFilter === "asc" ? "desc" : "asc");
+  };
+
+  const orderedBlinds = () => {
+    const newListBlinds = [...orderList];
+    newListBlinds.sort((a, b) =>
+      orderBlindsFilter === "asc" ? a.blinds - b.blinds : b.blinds - a.blinds
+    );
+    setOrderList(newListBlinds);
+    setOrderBlindsFilter(orderBlindsFilter === "asc" ? "desc" : "asc");
   };
 
   return (
@@ -238,11 +376,18 @@ const Main = () => {
               <ToggleThemeBtn />
             </li>
             <li>
-              <button className={styles.navNotificationBtn} onClick={()=> toggleOpenNotifications(true)}><img src={notification} alt="" /></button>
+              <button
+                className={styles.navNotificationBtn}
+                onClick={() => toggleOpenNotifications(true)}
+              >
+                <img src={notification} alt="" />
+              </button>
             </li>
-            <Notifications isOpenNotifications={isOpenNotifications}/>
+            <Notifications isOpenNotifications={isOpenNotifications} />
             <li>
-              <button className={styles.navEngineBtn}><img src={engine} alt="" /></button>
+              <button className={styles.navEngineBtn}>
+                <img src={engine} alt="" />
+              </button>
             </li>
           </ul>
         </div>
@@ -259,11 +404,16 @@ const Main = () => {
             />
           </label>
           <label htmlFor="site" className={styles.labelSelectSite}>
-            <button name="site" id="site" className={styles.selectSite} onClick={() => toggleOpen(true)}>
+            <button
+              name="site"
+              id="site"
+              className={styles.selectSite}
+              onClick={() => toggleOpen(true)}
+            >
               Select Site
             </button>
           </label>
-          <SelectSite isOpen={isOpen}/>
+          <SelectSite isOpen={isOpen} />
           <div className={styles.maxMinSearch}>
             <label htmlFor="min-value" className={styles.labelMaxMinValue}>
               <div>Min $</div>
@@ -289,17 +439,27 @@ const Main = () => {
             </label>
           </div>
           <label htmlFor="speed" className={styles.labelSelectSpeed}>
-            <button name="speed" id="speed" className={styles.selectSpeed} onClick={()=>toggleOpenSpeed(true)}>
-            Speed
+            <button
+              name="speed"
+              id="speed"
+              className={styles.selectSpeed}
+              onClick={() => toggleOpenSpeed(true)}
+            >
+              Speed
             </button>
           </label>
-          <Speed isOpenSpeed={isOpenSpeed}/>
+          <Speed isOpenSpeed={isOpenSpeed} />
           <label htmlFor="size" className={styles.labelSelectSize}>
-            <button name="size" id="size" className={styles.selectSize} onClick={()=>toggleOpenSize(true)}>
+            <button
+              name="size"
+              id="size"
+              className={styles.selectSize}
+              onClick={() => toggleOpenSize(true)}
+            >
               Size
             </button>
           </label>
-          <Size isOpenSize={isOpenSize}/>
+          <Size isOpenSize={isOpenSize} />
           <button className={styles.searchBtn}>
             {" "}
             <img src={lupa} alt="Lupa icon" />{" "}
@@ -325,21 +485,51 @@ const Main = () => {
       </div>
       <div className={styles.filterbar}>
         <input type="checkbox" className={styles.filterCheckbox} />
-        <button className={styles.filterSiteBtn}>Site</button>
-        <button className={styles.filterStartBtn}>Start</button>
-        <button className={styles.filterBuyInBtn}>Buy In</button>
-        <button className={styles.filterNameBtn} onClick={orderedList}>
+        <button className={styles.filterSiteBtn} onClick={orderedListSite}>
+          Site
+        </button>
+        <button className={styles.filterStartBtn} onClick={orderedListStart}>
+          Start
+        </button>
+        <button
+          className={styles.filterBuyInBtn}
+          onClick={() => orderedListBuyIn()}
+        >
+          Buy In
+        </button>
+        <button className={styles.filterNameBtn} onClick={orderedListName}>
           Name
         </button>
         <button className={styles.filterPrizePoolBtn}>Prize Pool</button>
-        <button className={styles.filterMaxReentryBtn}>Max Reentry</button>
-        <button className={styles.filterBlindsBtn}>Blinds</button>
+        <button
+          className={styles.filterMaxReentryBtn}
+          onClick={orderedListMaxReentry}
+        >
+          Max Reentry
+        </button>
+        <button className={styles.filterBlindsBtn} onClick={orderedBlinds}>
+          Blinds
+        </button>
         <button className={styles.filterSpeedBtn}>Speed</button>
-        <button className={styles.filterFieldBtn}>Field</button>
-        <button className={styles.filterEndBtn}>End</button>
-        <button className={styles.filterMlrBtn}>Mlr</button>
-        <button className={styles.filterTableSizeBtn}>TableSize</button>
-        <button className={styles.filterPriorityBtn}>Priority</button>
+        <button className={styles.filterFieldBtn} onClick={orderedListField}>
+          Field
+        </button>
+        <button className={styles.filterEndBtn} onClick={orderedListEnd}>
+          End
+        </button>
+        <button className={styles.filterMlrBtn} onClick={orderedListMlr}>Mlr</button>
+        <button
+          className={styles.filterTableSizeBtn}
+          onClick={orderedListTableSize}
+        >
+          TableSize
+        </button>
+        <button
+          className={styles.filterPriorityBtn}
+          onClick={orderedListPriority}
+        >
+          Priority
+        </button>
       </div>
       <table>
         <tbody>
@@ -355,22 +545,27 @@ const Main = () => {
                 }}
               >
                 <td className={styles.stylesCheckboxTable}>
-                <FavouriteStar className={styles.favouriteStar}/>
+                  <FavouriteStar className={styles.favouriteStar} />
                   <input type="checkbox" className={styles.checkBoxTable} />
                 </td>
                 <td className={styles.siteTable}>
                   <img src={item.site} alt="svg" />
                 </td>
                 <td className={styles.startTable}>{item.start}</td>
-                <td className={styles.buyInTable}>{item.buyIn}</td>
+                <td className={styles.buyInTable}>${item.buyIn}</td>
                 <td className={styles.nameTable}>{item.name}</td>
                 <td className={styles.prizePoolTable}>{item.prizePool}</td>
-                <td className={styles.maxReentryTable}>{item.maxReentry}</td>
+                <td
+                  className={styles.maxReentryTable}
+                  onClick={orderedListMaxReentry}
+                >
+                  {item.maxReentry}
+                </td>
                 <td className={styles.blindsTable}>{item.blinds}</td>
                 <td className={styles.speedTable}>{item.speed}</td>
                 <td className={styles.fieldTable}>{item.field}</td>
                 <td className={styles.endTable}>{item.end}</td>
-                <td className={styles.mlrTable}>{item.mlr}</td>
+                <td className={styles.mlrTable}><Timer mlr={item.mlr} /></td>
                 <td className={styles.tableSizeTable}>{item.tableSize}</td>
                 <td className={styles.priorityTable}>{item.priority}</td>
               </div>
