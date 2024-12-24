@@ -6,7 +6,7 @@ import lobbyNinjaFinal from "../../assets/lobyNinjaFinal.svg";
 import favourites from "../../assets/favourites.svg";
 import tornauments from "../../assets/tournaments.svg";
 import planner from "../../assets/planner.svg";
-import registered from "../../assets/registered.svg";
+import registered from "../../assets/Frame.png";
 import skipped from "../../assets/skipped.svg";
 import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
