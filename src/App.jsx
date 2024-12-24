@@ -4,18 +4,18 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Main from "./components/main/Main";
 import Alarm from "./components/alarm/Alarm";
 import "./App.css";
+import Registered from "./components/registered/registered";
 
 function App() {
   return (
     <div className="app-container">
-      {/* Sidebar fixa em todas as páginas */}
       <Sidebar />
 
-      {/* Configuração das Rotas */}
       <div className="main-content">
         <Routes>
-          <Route path="/" element={<Main />} /> {/* Página principal */}
-          <Route path="/alarm" element={<Alarm />} /> {/* Página do Alarme */}
+          <Route path="/" element={<Main />} />
+          <Route path="/alarm" element={<Alarm />} />
+          <Route path="/registered" element={<Registered />} />
         </Routes>
       </div>
     </div>

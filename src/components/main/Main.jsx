@@ -22,6 +22,8 @@ import Size from "../../utils/Size/Size";
 import notification from "../../assets/notification.svg";
 import engine from "../../assets/engine.svg"; 
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
+import Notifications from "../../utils/Notifications/Notifications";
+
 
 const Main = () => {
   const data = [
@@ -195,6 +197,7 @@ const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
   const [isOpenSize, setIsOpenSize] = useState(false);
+  const [isOpenNotifications, setIsOpenNotifications] = useState(false);
 
 
   const toggleOpen = () =>{
@@ -205,6 +208,9 @@ const Main = () => {
   }
   const toggleOpenSize = () =>{
     setIsOpenSize((prevState)=> !prevState);
+  }
+  const toggleOpenNotifications = () =>{
+    setIsOpenNotifications((prevState)=> !prevState);
   }
 
 
@@ -232,8 +238,9 @@ const Main = () => {
               <ToggleThemeBtn />
             </li>
             <li>
-              <button className={styles.navNotificationBtn}><img src={notification} alt="" /></button>
+              <button className={styles.navNotificationBtn} onClick={()=> toggleOpenNotifications(true)}><img src={notification} alt="" /></button>
             </li>
+            <Notifications isOpenNotifications={isOpenNotifications}/>
             <li>
               <button className={styles.navEngineBtn}><img src={engine} alt="" /></button>
             </li>

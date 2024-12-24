@@ -1,169 +1,148 @@
-import React, { useEffect, useState, useRef } from 'react';
-import Mp3 from "../../assets/alarm.mp3";
-import styles from "./alarm.module.css"; // Agora importando o CSS
+import React, { useEffect, useState } from 'react';
+import AudioAlarm from "../../assets/alarm.mp3";
+import iconAlarm from "../../assets/alarm.svg";
+import styles from "./alarm.module.css"
 
-const alarmsData = [
-    { id: 1, time: "02:31", date: "2024-12-17", active: true },
-    { id: 2, time: "16:00", date: "2024-12-16", active: false },
-];
+const NotificationWithSound = () => {
+    const [orderNameFilter, setOrderNameFilter] = useState("asc");
+    const [alarms, setAlarms] = useState([
+        {
+            time: "10:09",
+            message: "⏰ Hora de agir!",
+            body: "Seu alarme está tocando agora!",
+            site: "Site A",
+            name: "Alarme 1",
+            championship: "Campeonato X"
+        },
+        {
+            time: "10:08",
+            message: "Alarme 2",
+            body: "Outro horário",
+            site: "Site B",
+            name: "Alarme 2",
+            championship: "Campeonato Y"
+        }
+    ]);
 
-function App() {
-    const [hasInteracted, setHasInteracted] = useState(false);
-    const [showModal, setShowModal] = useState(true);
-    const [alarms, setAlarms] = useState(alarmsData);
-    const [triggeredAlarms, setTriggeredAlarms] = useState([]);
-    const [activeAlarmModal, setActiveAlarmModal] = useState(null);
-    const audioRef = useRef(null); // Referência ao áudio
-
-    // Função para tocar o som
-    const playAlarmSound = () => {
-        audioRef.current = new Audio(Mp3);
-        audioRef.current.loop = true; // Loop até o usuário fechar o modal
-        audioRef.current.play().catch(error => console.error('Erro ao tocar o som:', error));
+    const removeAlarm = (index) => {
+        const updatedAlarms = alarms.filter((_, i) => i !== index);
+        setAlarms(updatedAlarms);
     };
 
-    // Função para parar o som
-    const stopAlarmSound = () => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0; // Reseta o som
+    const orderedList = (key) => {
+        const newList = [...alarms];
+        newList.sort((a, b) =>
+            orderNameFilter === "asc"
+                ? a[key].localeCompare(b[key])
+                : b[key].localeCompare(a[key])
+        );
+        setAlarms(newList);
+        setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
+    };
+
+    const requestNotificationPermission = () => {
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then((permission) => {
+                if (permission !== 'granted') {
+                    console.warn("Permissão de notificação negada.");
+                }
+            });
         }
     };
 
-    // Verifica os alarmes
+    const triggerNotification = (alarm) => {
+        if (Notification.permission === 'granted') {
+            const notification = new Notification(alarm.message, {
+                body: alarm.body,
+                icon: iconAlarm,
+            });
+
+            notification.onclick = () => {
+                window.focus();
+                stopAlarmSound();
+                notification.close();
+            };
+
+            const alarmAudio = new Audio(AudioAlarm);
+            alarmAudio.play();
+
+            const stopAlarmSound = () => {
+                alarmAudio.pause();
+                alarmAudio.currentTime = 0;
+            };
+        } else {
+            console.warn("Permissão de notificação negada ou indisponível.");
+        }
+    };
+
     const checkAlarms = () => {
         const now = new Date();
-        const currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const currentDate = now.toLocaleDateString("en-CA");
+        const currentTime = now.toTimeString().slice(0, 5);
 
         alarms.forEach((alarm) => {
-            if (alarm.active && alarm.time === currentTime && alarm.date === currentDate) {
-                if (!triggeredAlarms.includes(alarm.id)) {
-                    playAlarmSound();
-                    setTriggeredAlarms((prev) => [...prev, alarm.id]);
-                    setActiveAlarmModal(alarm); // Abre o modal com os detalhes do alarme
-                }
+            if (alarm.time === currentTime) {
+                triggerNotification(alarm);
             }
         });
     };
 
     useEffect(() => {
-        const handleInteraction = () => {
-            if (!hasInteracted) {
-                setHasInteracted(true);
-                setShowModal(false);
-                window.removeEventListener('click', handleInteraction);
-            }
-        };
-
-        window.addEventListener('click', handleInteraction);
+        requestNotificationPermission();
 
         const interval = setInterval(() => {
-            if (hasInteracted) {
-                checkAlarms();
-            }
-        }, 1000);
+            checkAlarms();
+        }, 60000);
 
         return () => clearInterval(interval);
-    }, [hasInteracted, alarms, triggeredAlarms]);
-
-    const toggleAlarm = (id) => {
-        setAlarms((prevAlarms) =>
-            prevAlarms.map((alarm) =>
-                alarm.id === id ? { ...alarm, active: !alarm.active } : alarm
-            )
-        );
-        setTriggeredAlarms((prev) => prev.filter((alarmId) => alarmId !== id));
-    };
-
-    const deleteAlarm = (id) => {
-        setAlarms((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
-        setTriggeredAlarms((prev) => prev.filter((alarmId) => alarmId !== id));
-    };
+    }, [alarms]);
 
     return (
-        <div className={styles.App}>
-            {/* Modal inicial */}
-            {showModal && (
-                <div className="modal" style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)', position: 'absolute', top: '0', left: '0', right: '0', bottom: '0',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999
-                }}>
-                    <div className="modal-content" style={{ backgroundColor: '#02061e', padding: '20px', borderRadius: '10px', color: '#fff' }}>
-                        <p style={{ fontSize: '18px', textAlign: 'center' }}>Clique em "Confirmar" para liberar o alarme.</p>
-                        <button onClick={() => setHasInteracted(true)} style={{
-                            backgroundColor: '#fa6e49', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '50px', cursor: 'pointer'
-                        }}>
-                            Confirmar
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal do Alarme Disparado */}
-            {activeAlarmModal && (
-                <div className="modal" style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)', position: 'absolute', top: '0', left: '0', right: '0', bottom: '0',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000
-                }}>
-                    <div className="modal-content" style={{
-                        backgroundColor: '#02061e', padding: '20px', borderRadius: '10px', color: '#fff', textAlign: 'center'
-                    }}>
-                        <h2>⏰ Alarme Disparado!</h2>
-                        <p><strong>Hora:</strong> {activeAlarmModal.time}</p>
-                        <p><strong>Data:</strong> {activeAlarmModal.date}</p>
-                        <button onClick={() => { stopAlarmSound(); setActiveAlarmModal(null); }} style={{
-                            backgroundColor: '#fa6e49', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '50px', cursor: 'pointer', marginTop: '10px'
-                        }}>
-                            Fechar
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Conteúdo Principal */}
-            <div className={styles.reminderContainer}>
-                <h1 className={styles.heading}>Meu Alarme com Som</h1>
-                <div className={styles.main}>
-                    <h2 className={styles.title}>Alarmes Agendados</h2>
-                    <p>Aqui ficará os alarmes que você tem agendado e o horário e data que eles irão tocar.</p>
-                    <table className={styles.alarmTable}>
-                        <thead>
-                            <tr>
-                                <th>Hora</th>
-                                <th>Data</th>
-                                <th>Ativo</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {alarms.map((alarm) => (
-                                <tr key={alarm.id} className={alarm.active ? styles.activeRow : styles.inactiveRow}>
-                                    <td>{alarm.time}</td>
-                                    <td>{alarm.date}</td>
-                                    <td>{alarm.active ? 'Sim' : 'Não'}</td>
-                                    <td>
-                                        <button
-                                            className={`${styles.toggleButton} ${alarm.active ? styles.active : styles.inactive}`}
-                                            onClick={() => toggleAlarm(alarm.id)}
-                                        >
-                                            {alarm.active ? 'Desativar' : 'Ativar'}
-                                        </button>
-                                        <button
-                                            className={styles.deleteButton}
-                                            onClick={() => deleteAlarm(alarm.id)}
-                                        >
-                                            🗑️
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+        <div className={styles.main}>
+            <h1>Notificação com Alarme</h1>
+            <p>Alarme configurado para: {alarms.map((a) => a.time).join(", ")}</p>
+            <button onClick={() => triggerNotification(alarms[0])} style={{ fontSize: '16px' }}>
+                Testar Notificação
+            </button>
+            <div className={styles.filterbar}>
+                <button className={styles.filterSiteBtn} onClick={() => orderedList('site')}>Site</button>
+                <button className={styles.filterStartBtn} onClick={() => orderedList('name')}>Nome do alarme</button>
+                <button className={styles.filterBuyInBtn} onClick={() => orderedList('championship')}>Nome do campeonato</button>
+                <button className={styles.filterNameBtn} onClick={() => orderedList('time')}>Horário</button>
             </div>
+            <table>
+                <tbody>
+                    <tr>
+                        {alarms.map((item, index) => (
+                            <div
+                                key={index}
+                                className={styles.linha}
+                                style={{
+                                    backgroundColor:
+                                        index % 2 === 0
+                                            ? "transparent"
+                                            : "rgba(255, 255, 255, 0.05)",
+                                }}
+                            >
+                                <td className={styles.SiteBtn}>{item.site}</td>
+                                <td className={styles.StartBtn}>{item.name}</td>
+                                <td className={styles.BuyInBtn}>{item.championship}</td>
+                                <td className={styles.NameBtn}>{item.time}</td>
+                                <td className={styles.deleteLinha}>
+                                    <button
+                                        className={styles.deleteButton}
+                                        onClick={() => removeAlarm(index)}
+                                    >
+                                        <i className="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        ))}
+                    </tr>
+                </tbody>
+            </table>
         </div>
     );
-}
+};
 
-export default App;
+export default NotificationWithSound;
+

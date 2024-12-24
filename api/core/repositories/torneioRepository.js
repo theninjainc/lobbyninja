@@ -1,7 +1,7 @@
 const { databases } = require('../config/appwriteClient');
 
-const DATABASE_ID = '6759f9f40015f31d86bb'; // Substitua pelo ID do seu banco de dados
-const COLLECTION_ID = 'lobby'; // Substitua pelo ID da coleção
+const DATABASE_ID = '6759f9f40015f31d86bb';
+const COLLECTION_ID = 'lobby';
 
 const getAllTorneios = async () => {
     try {
