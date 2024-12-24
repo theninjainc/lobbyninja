@@ -10,6 +10,7 @@ import registered from "../../assets/Frame.png";
 import skipped from "../../assets/skipped.svg";
 import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,13 +27,13 @@ const Sidebar = () => {
 
       <ul className="">
         <li>
-          <a href="#section1" className={styles.bgHoverFirst}>
-            <div className={styles.bgHoverIconFirst}>
+          <Link to="/">
+            <div className={styles.bgHoverIcon}>
               <img src={tornauments} alt="Tournaments" />
             </div>
 
-            {isOpen && <span className={styles.bgHoverTextFirst}>Tournaments</span>}
-          </a>
+            {isOpen && <span>Tournaments</span>}
+          </Link>
         </li>
         <li>
           <a href="#section2" className={styles.bgHover}>
@@ -43,7 +44,7 @@ const Sidebar = () => {
           </a>
         </li>
         <li>
-          <a href="#section3" className={styles.bgHover}>
+          <a href="" className={styles.bgHover}>
             <div className={styles.bgHoverIcon}>
               <img src={favourites} alt="Favourites" />
             </div>
@@ -67,12 +68,12 @@ const Sidebar = () => {
           </a>
         </li>
         <li>
-          <a href="#section6" className={styles.bgHover}>
+          <Link to="/alarm">
             <div className={styles.bgHoverIcon}>
               <img src={alarm} alt="Alarm" />
             </div>
             {isOpen && <span>Alarm</span>}
-          </a>
+          </Link>
         </li>
         <li>
           <a href="#section7" className={styles.bgHover}>

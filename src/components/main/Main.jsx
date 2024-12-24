@@ -226,8 +226,6 @@ const Main = () => {
   const [orderEndFilter, setOrderEndFilter] = useState("asc");
   const [orderList, setOrderList] = useState(data);
 
-
-
   const orderedListEnd = () => {
     const newListEnd = [...orderList];
     const newOrderEndFilter = orderEndFilter === "asc" ? "desc" : "asc";
