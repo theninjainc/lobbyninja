@@ -24,6 +24,8 @@ import notification from "../../assets/notification.svg";
 import engine from "../../assets/engine.svg";
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
 import Notifications from "../../utils/Notifications/Notifications";
+import SpeedMap from "../../utils/SpeedMap/SpeedMap";
+import FormatNumber from "../../utils/FormatNumber/FormatValue";
 
 const Main = () => {
   const data = [
@@ -32,10 +34,10 @@ const Main = () => {
       start: "16:30",
       buyIn: 350,
       name: "I Tournament",
-      prizePool: "$17k",
+      prizePool: 12348,
       maxReentry: 125,
       blinds: "70",
-      speed: "medium",
+      speed: 2,
       field: 105,
       end: "18:30",
       mlr: 200,
@@ -47,10 +49,10 @@ const Main = () => {
       start: "12:30",
       buyIn: 320,
       name: "B Tournament",
-      prizePool: "$15k",
+      prizePool: 500,
       maxReentry: null,
       blinds: "50",
-      speed: "fast",
+      speed: 3,
       field: 100,
       end: "14:00",
       mlr: 120,
@@ -62,10 +64,10 @@ const Main = () => {
       start: "16:00",
       buyIn: 450,
       name: "H Tournament",
-      prizePool: "$18k",
+      prizePool: 1000,
       maxReentry: 150,
       blinds: "60",
-      speed: "fast",
+      speed: 3,
       field: 110,
       end: "18:00",
       mlr: 1000,
@@ -77,10 +79,10 @@ const Main = () => {
       start: "13:00",
       buyIn: 422,
       name: "C Tournament",
-      prizePool: "$20k",
+      prizePool: 15000,
       maxReentry: 200,
       blinds: "100",
-      speed: "medium",
+      speed: 2,
       field: 120,
       end: "15:59",
       mlr: 850,
@@ -92,10 +94,10 @@ const Main = () => {
       start: "17:30",
       buyIn: 30,
       name: "K Tournament",
-      prizePool: "$13k",
+      prizePool: 50000,
       maxReentry: 90,
       blinds: "40",
-      speed: "fast",
+      speed: 3,
       field: 95,
       end: "19:30",
       mlr: 320,
@@ -107,10 +109,10 @@ const Main = () => {
       start: "12:30",
       buyIn: 32,
       name: "A Tournament",
-      prizePool: "$15k",
+      prizePool: 7000,
       maxReentry: 123,
       blinds: "50",
-      speed: "slow",
+      speed: 1,
       field: 100,
       end: "14:00",
       mlr: 540,
@@ -122,10 +124,10 @@ const Main = () => {
       start: "15:00",
       buyIn: 60,
       name: "F Tournament",
-      prizePool: "$30k",
+      prizePool: 9000,
       maxReentry: 500,
       blinds: "200",
-      speed: "medium",
+      speed: 2,
       field: 200,
       end: "17:00",
       mlr: 200,
@@ -134,13 +136,13 @@ const Main = () => {
     },
     {
       site: h,
-      start: "17:00",
+      start: "23:00",
       buyIn: 55,
       name: "J Tournament",
-      prizePool: "$22k",
+      prizePool: 15000,
       maxReentry: 250,
       blinds: "80",
-      speed: "slow",
+      speed: 1,
       field: 130,
       end: "19:00",
       mlr: 100,
@@ -152,10 +154,10 @@ const Main = () => {
       start: "15:30",
       buyIn: 25,
       name: "G Tournament",
-      prizePool: "$12k",
+      prizePool: 250000,
       maxReentry: 100,
       blinds: "50",
-      speed: "slow",
+      speed: 1,
       field: 90,
       end: "17:30",
       mlr: 450,
@@ -167,10 +169,10 @@ const Main = () => {
       start: "14:30",
       buyIn: 20,
       name: "E Tournament",
-      prizePool: "$10k",
+      prizePool: 14500,
       maxReentry: 50,
       blinds: "25",
-      speed: "slow",
+      speed: 4,
       field: 80,
       end: "16:30",
       mlr: 150,
@@ -182,10 +184,10 @@ const Main = () => {
       start: "14:00",
       buyIn: 50,
       name: "D Tournament",
-      prizePool: "$25k",
+      prizePool: 40000,
       maxReentry: 300,
       blinds: "75",
-      speed: "fast",
+      speed: 4,
       field: 150,
       end: "00:10",
       mlr: 340,
@@ -224,7 +226,32 @@ const Main = () => {
   const [orderSiteFilter, setOrderSiteFilter] = useState("asc");
   const [orderStartFilter, setOrderStartFilter] = useState("asc");
   const [orderEndFilter, setOrderEndFilter] = useState("asc");
+  const [orderSpeedFilter, setOrderSpeedFilter] = useState("asc");
+  const [orderPrizePool, setOrderPrizePool] = useState("asc");
   const [orderList, setOrderList] = useState(data);
+
+  const orderedListPrizePool = () => {
+    const newListPrizePool = [...orderList];
+    newListPrizePool.sort((a, b) =>
+      orderPrizePool === "asc"
+        ? a.prizePool - b.prizePool
+        : b.prizePool - a.prizePool
+    );
+
+    setOrderList(newListPrizePool);
+    setOrderPrizePool(orderPrizePool === "asc" ? "desc" : "asc");
+  };
+
+  const orderedListSpeed = () => {
+    const newListSpeed = [...orderList];
+
+    newListSpeed.sort((a, b) =>
+      orderSpeedFilter === "asc" ? a.speed - b.speed : b.speed - a.speed
+    );
+
+    setOrderList(newListSpeed);
+    setOrderSpeedFilter(orderSpeedFilter === "asc" ? "desc" : "asc");
+  };
 
   const orderedListEnd = () => {
     const newListEnd = [...orderList];
@@ -348,30 +375,38 @@ const Main = () => {
     setOrderBlindsFilter(orderBlindsFilter === "asc" ? "desc" : "asc");
   };
 
+  //SelecionedFilters
+  const [activeFilter, setActiveFilter] = useState(null);
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+  };
+
+  //orderArrowFilters
+
   return (
     <div className={styles.main}>
       <div className={styles.navbar}>
-        <p className={styles.title}>Tournament List</p>
+        <div className={styles.titlef}>Tournament List</div>
         <div className={styles.btns}>
-          <ul>
-            <li>
+          <div className={styles.btns}>
+            <div>
               <ToggleThemeBtn />
-            </li>
-            <li>
+            </div>
+            <div>
               <button
                 className={styles.navNotificationBtn}
                 onClick={() => toggleOpenNotifications(true)}
               >
                 <img src={notification} alt="" />
               </button>
-            </li>
+            </div>
             <Notifications isOpenNotifications={isOpenNotifications} />
-            <li>
+            <div>
               <button className={styles.navEngineBtn}>
                 <img src={engine} alt="" />
               </button>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.searchbar}>
@@ -443,7 +478,6 @@ const Main = () => {
           </label>
           <Size isOpenSize={isOpenSize} />
           <button className={styles.searchBtn}>
-            {" "}
             <img src={lupa} alt="Lupa icon" />{" "}
           </button>
           <button className={styles.saveBtn}>
@@ -467,50 +501,154 @@ const Main = () => {
       </div>
       <div className={styles.filterbar}>
         <input type="checkbox" className={styles.filterCheckbox} />
-        <button className={styles.filterSiteBtn} onClick={orderedListSite}>
+        <button
+          className={`${styles.filterSiteBtn} ${
+            activeFilter === "filterSiteBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListSite();
+            handleFilterClick("filterSiteBtn");
+          }}
+        >
           Site
         </button>
-        <button className={styles.filterStartBtn} onClick={orderedListStart}>
+
+        <button
+          className={`${styles.filterStartBtn} ${
+            activeFilter === "filterStartBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListStart();
+            handleFilterClick("filterStartBtn");
+          }}
+        >
           Start
         </button>
+
         <button
-          className={styles.filterBuyInBtn}
-          onClick={() => orderedListBuyIn()}
+          className={`${styles.filterBuyInBtn} ${
+            activeFilter === "filterBuyInBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListBuyIn();
+            handleFilterClick("filterBuyInBtn");
+          }}
         >
           Buy In
         </button>
-        <button className={styles.filterNameBtn} onClick={orderedListName}>
+
+        <button
+          className={`${styles.filterNameBtn} ${
+            activeFilter === "filterNameBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListName();
+            handleFilterClick("filterNameBtn");
+          }}
+        >
           Name
         </button>
-        <button className={styles.filterPrizePoolBtn}>Prize Pool</button>
+
         <button
-          className={styles.filterMaxReentryBtn}
-          onClick={orderedListMaxReentry}
+          className={`${styles.filterPrizePoolBtn} ${
+            activeFilter === "filterPrizePoolBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListPrizePool();
+            handleFilterClick("filterPrizePoolBtn");
+          }}
+        >
+          Prize Pool
+        </button>
+
+        <button
+          className={`${styles.filterMaxReentryBtn} ${
+            activeFilter === "filterMaxReentryBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListMaxReentry();
+            handleFilterClick("filterMaxReentryBtn");
+          }}
         >
           Max Reentry
         </button>
-        <button className={styles.filterBlindsBtn} onClick={orderedBlinds}>
+
+        <button
+          className={`${styles.filterBlindsBtn} ${
+            activeFilter === "filterBlindsBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedBlinds();
+            handleFilterClick("filterBlindsBtn");
+          }}
+        >
           Blinds
         </button>
-        <button className={styles.filterSpeedBtn}>Speed</button>
-        <button className={styles.filterFieldBtn} onClick={orderedListField}>
+
+        <button
+          className={`${styles.filterSpeedBtn} ${
+            activeFilter === "filterSpeedBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListSpeed();
+            handleFilterClick("filterSpeedBtn");
+          }}
+        >
+          Speed
+        </button>
+
+        <button
+          className={`${styles.filterFieldBtn} ${
+            activeFilter === "filterFieldBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListField();
+            handleFilterClick("filterFieldBtn");
+          }}
+        >
           Field
         </button>
-        <button className={styles.filterEndBtn} onClick={orderedListEnd}>
+        <button
+          className={`${styles.filterEndBtn} ${
+            activeFilter === "filterEndBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListEnd();
+            handleFilterClick("filterEndBtn");
+          }}
+        >
           End
         </button>
-        <button className={styles.filterMlrBtn} onClick={orderedListStart}>
+        <button
+          className={`${styles.filterMlrBtn} ${
+            activeFilter === "filterMlrBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListStart();
+            handleFilterClick("filterMlrBtn");
+          }}
+        >
           Mlr
         </button>
         <button
-          className={styles.filterTableSizeBtn}
-          onClick={orderedListTableSize}
+          className={`${styles.filterTableSizeBtn} ${
+            activeFilter === "filterTableSizeBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListTableSize();
+            handleFilterClick("filterTableSizeBtn");
+          }}
         >
           TableSize
         </button>
         <button
-          className={styles.filterPriorityBtn}
-          onClick={orderedListPriority}
+          className={`${styles.filterPriorityBtn} ${
+            activeFilter === "filterPriorityBtn" ? styles.active : ""
+          }`}
+          onClick={() => {
+            orderedListPriority();
+            handleFilterClick("filterPriorityBtn");
+          }}
         >
           Priority
         </button>
@@ -538,15 +676,17 @@ const Main = () => {
                 <td className={styles.startTable}>{item.start}</td>
                 <td className={styles.buyInTable}>${item.buyIn}</td>
                 <td className={styles.nameTable}>{item.name}</td>
-                <td className={styles.prizePoolTable}>{item.prizePool}</td>
-                <td
-                  className={styles.maxReentryTable}
-                  onClick={orderedListMaxReentry}
-                >
-                  {item.maxReentry}
+                <td className={styles.prizePoolTable}>
+                  $
+                  <FormatNumber value={item.prizePool} />
+                </td>
+                <td className={styles.maxReentryTable}>
+                  {item.maxReentry === null ? "-" : item.maxReentry}
                 </td>
                 <td className={styles.blindsTable}>{item.blinds}</td>
-                <td className={styles.speedTable}>{item.speed}</td>
+                <td className={styles.speedTable}>
+                  <SpeedMap speed={item.speed} />
+                </td>
                 <td className={styles.fieldTable}>{item.field}</td>
                 <td className={styles.endTable}>{item.end}</td>
                 <td className={styles.mlrTable}>
