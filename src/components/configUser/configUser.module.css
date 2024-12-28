@@ -1,0 +1,111 @@
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #070b2b;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin: 0 auto;
+}
+
+.profileSection {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userInfo h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.userInfo p {
+    margin: 0;
+    font-size: 14px;
+    color: #fff;
+}
+
+.settingsSection {
+    width: 100%;
+}
+
+.settingsSection h3 {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.settingItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.select {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    /* Borda mais suave */
+    background-color: #f7f7f7;
+    /* Fundo mais claro */
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.select:focus {
+    border-color: #007bff;
+    background-color: #e6f2ff;
+}
+
+.select option {
+    font-size: 14px;
+    color: #333;
+    padding: 8px;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.select option:hover {
+    background-color: #f1f1f1;
+}
+
+.select::-ms-expand {
+    display: none;
+}
+
+.select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('../../assets/selectSite.svg');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}

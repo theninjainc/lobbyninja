@@ -2,7 +2,6 @@
   padding: 0px 22px 0px 29px;
   width: 100%;
   margin-left: 89px;
-  text-align: center;
   color: #fff;
 }
 
@@ -21,7 +20,7 @@
 
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215,  U + FEFF,  U + FFFD;
+    U+2212, U+2215, U + FEFF, U + FFFD;
 }
 
 .filterCheckbox {
@@ -70,6 +69,7 @@
   cursor: pointer;
   margin-left: 35px;
 }
+
 .filterStartBtn {
   width: 95px;
   height: 38px;
@@ -83,6 +83,7 @@
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterBuyInBtn {
   width: 115px;
   height: 38px;
@@ -97,6 +98,7 @@
   cursor: pointer;
   margin-left: 1%;
 }
+
 .filterNameBtn {
   height: 38px;
   border: none;
@@ -110,7 +112,10 @@
   cursor: pointer;
 }
 
-.NameBtn, .BuyInBtn, .SiteBtn, .StartBtn{
+.NameBtn,
+.BuyInBtn,
+.SiteBtn,
+.StartBtn {
   width: 95px;
   height: 38px;
   font-size: 12px;
@@ -125,7 +130,7 @@
   border: none;
   cursor: pointer;
   color: #ff5555;
-  font-size: 18px; /* Ajuste o tamanho do ícone */
+  font-size: 18px;
   padding: 5px;
   transition: transform 0.2s ease-in-out;
   display: flex;
@@ -134,10 +139,10 @@
 }
 
 .deleteButton i {
-  margin-right: 5px; /* Espaçamento entre o ícone e o texto */
+  margin-right: 5px;
 }
 
 .deleteButton:hover {
   transform: scale(1.1);
-  color: #ff0000; /* Cor vermelha mais intensa quando hover */
+  color: #ff0000;
 }

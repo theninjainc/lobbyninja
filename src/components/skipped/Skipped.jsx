@@ -6,7 +6,7 @@ import teste10 from "../../assets/image 9.svg"
 import teste2 from "../../assets/image 1.svg";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 
-const Registered = () => {
+const Skipped = () => {
     const [orderNameFilter, setOrderNameFilter] = useState("asc");
     const [orderList, setOrderList] = useState([
         {
@@ -60,7 +60,7 @@ const Registered = () => {
     return (
         <div className={styles.main}>
             <div className={styles.navbar}>
-                <p className={styles.title}>Tournament registered</p>
+                <p className={styles.title}>Tournament skipped</p>
             </div>
             <div className={styles.filterbar}>
                 <input type="checkbox" className={styles.filterCheckbox} />
@@ -113,12 +113,12 @@ const Registered = () => {
                                 <td className={styles.tableSizeTableRegistered}>{item.tableSize}</td>
                                 <td className={styles.priorityTableRegistered}>{item.priority}</td>
                                 <td className={styles.deleteLinha}>
-                                    <div
+                                    <button
                                         className={styles.deleteButton}
                                         onClick={() => removeAlarm(index)}
                                     >
                                         <i className="fas fa-trash-alt"></i>
-                                    </div>
+                                    </button>
                                 </td>
                             </div>
                         ))}
@@ -129,5 +129,5 @@ const Registered = () => {
     );
 };
 
-export default Registered;
+export default Skipped;
 

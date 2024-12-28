@@ -529,7 +529,7 @@ const Main = () => {
                 }}
               >
                 <td className={styles.stylesCheckboxTable}>
-                  <FavouriteStar className={styles.favouriteStar} />
+                  <FavouriteStar className={styles.favouriteStar} favourites={false}/>
                   <input type="checkbox" className={styles.checkBoxTable} />
                 </td>
                 <td className={styles.siteTable}>

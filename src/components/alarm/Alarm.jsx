@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import AudioAlarm from "../../assets/alarm.mp3";
 import iconAlarm from "../../assets/alarm.svg";
-import styles from "./alarm.module.css"
+import styles from "./alarm.module.css";
 
 const NotificationWithSound = () => {
     const [orderNameFilter, setOrderNameFilter] = useState("asc");
-    const [alarms, setAlarms] = useState([
-        {
-            time: "10:09",
-            message: "⏰ Hora de agir!",
-            body: "Seu alarme está tocando agora!",
-            site: "Site A",
-            name: "Alarme 1",
-            championship: "Campeonato X"
-        },
-        {
-            time: "10:08",
-            message: "Alarme 2",
-            body: "Outro horário",
-            site: "Site B",
-            name: "Alarme 2",
-            championship: "Campeonato Y"
+    const [alarms, setAlarms] = useState([]);
+
+    const fetchAlarms = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/alarmes");
+            if (!response.ok) {
+                throw new Error("Erro ao buscar os alarmes.");
+            }
+            const data = await response.json();
+
+            console.log(data)
+            setAlarms(data);
+        } catch (error) {
+            console.error("Erro ao carregar alarmes:", error);
         }
-    ]);
+    };
 
     const removeAlarm = (index) => {
         const updatedAlarms = alarms.filter((_, i) => i !== index);
@@ -41,9 +39,9 @@ const NotificationWithSound = () => {
     };
 
     const requestNotificationPermission = () => {
-        if (Notification.permission !== 'granted') {
+        if (Notification.permission !== "granted") {
             Notification.requestPermission().then((permission) => {
-                if (permission !== 'granted') {
+                if (permission !== "granted") {
                     console.warn("Permissão de notificação negada.");
                 }
             });
@@ -51,7 +49,7 @@ const NotificationWithSound = () => {
     };
 
     const triggerNotification = (alarm) => {
-        if (Notification.permission === 'granted') {
+        if (Notification.permission === "granted") {
             const notification = new Notification(alarm.message, {
                 body: alarm.body,
                 icon: iconAlarm,
@@ -88,26 +86,37 @@ const NotificationWithSound = () => {
 
     useEffect(() => {
         requestNotificationPermission();
+        fetchAlarms(); // Executa apenas uma vez para carregar os alarmes iniciais
 
         const interval = setInterval(() => {
-            checkAlarms();
-        }, 60000);
+            checkAlarms(); // Apenas verifica alarmes já carregados
+        }, 60000); // Executa a cada minuto
 
         return () => clearInterval(interval);
-    }, [alarms]);
+    }, []);
 
     return (
         <div className={styles.main}>
             <h1>Notificação com Alarme</h1>
-            <p>Alarme configurado para: {alarms.map((a) => a.time).join(", ")}</p>
-            <button onClick={() => triggerNotification(alarms[0])} style={{ fontSize: '16px' }}>
-                Testar Notificação
-            </button>
             <div className={styles.filterbar}>
-                <button className={styles.filterSiteBtn} onClick={() => orderedList('site')}>Site</button>
-                <button className={styles.filterStartBtn} onClick={() => orderedList('name')}>Nome do alarme</button>
-                <button className={styles.filterBuyInBtn} onClick={() => orderedList('championship')}>Nome do campeonato</button>
-                <button className={styles.filterNameBtn} onClick={() => orderedList('time')}>Horário</button>
+                <button
+                    className={styles.filterSiteBtn}
+                    onClick={() => orderedList("site")}
+                >
+                    Site
+                </button>
+                <button
+                    className={styles.filterStartBtn}
+                    onClick={() => orderedList("name")}
+                >
+                    Nome do campeonato
+                </button>
+                <button
+                    className={styles.filterNameBtn}
+                    onClick={() => orderedList("time")}
+                >
+                    Horário
+                </button>
             </div>
             <table>
                 <tbody>
@@ -124,9 +133,8 @@ const NotificationWithSound = () => {
                                 }}
                             >
                                 <td className={styles.SiteBtn}>{item.site}</td>
-                                <td className={styles.StartBtn}>{item.name}</td>
-                                <td className={styles.BuyInBtn}>{item.championship}</td>
-                                <td className={styles.NameBtn}>{item.time}</td>
+                                <td className={styles.StartBtn}>{item.nome}</td>
+                                <td className={styles.NameBtn}>{item.horaAlarme}</td>
                                 <td className={styles.deleteLinha}>
                                     <button
                                         className={styles.deleteButton}
@@ -145,4 +153,3 @@ const NotificationWithSound = () => {
 };
 
 export default NotificationWithSound;
-

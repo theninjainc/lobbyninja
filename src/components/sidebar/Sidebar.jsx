@@ -27,45 +27,45 @@ const Sidebar = () => {
 
       <ul className="">
         <li>
-          <a href="#section1" className={styles.bgHoverFirst}>
+          <Link to="/">
             <div className={styles.bgHoverIconFirst}>
               <img src={tornauments} alt="Tournaments" />
             </div>
 
             {isOpen && <span className={styles.bgHoverTextFirst}>Tournaments</span>}
-          </a>
+          </Link>
         </li>
-        <li>
+        {/* <li>
           <a href="#section2" className={styles.bgHover}>
             <div className={styles.bgHoverIcon}>
               <img src={planner} alt="Planner" />
             </div>
             {isOpen && <span>Planner</span>}
           </a>
-        </li>
+        </li> */}
         <li>
-          <a href="" className={styles.bgHover}>
+          <Link to="/favourites">
             <div className={styles.bgHoverIcon}>
               <img src={favourites} alt="Favourites" />
             </div>
             {isOpen && <span>Favourites</span>}
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="#section4" className={styles.bgHover}>
+          <Link to="/registered">
             <div className={styles.bgHoverIcon}>
               <img src={registered} alt="Registered" />
             </div>
             {isOpen && <span>Registered</span>}
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="#section5" className={styles.bgHover}>
+          <Link to="/skipped">
             <div className={styles.bgHoverIcon}>
               <img src={skipped} alt="Skipped" />
             </div>
             {isOpen && <span>Skipped</span>}
-          </a>
+          </Link>
         </li>
         <li>
           <Link to="/alarm">
