@@ -57,7 +57,19 @@ body {
   justify-content: space-between;
 }
 
+.searchleft {
+  display: flex;
+  gap: 10px;
+}
+
+.searchRight {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
 .label {
+  
   width: 228px;
   height: 44px;
   border-radius: 50px;
@@ -81,11 +93,7 @@ body {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.searchleft {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
+
 
 .labelSelectSite {
   width: 118px;
@@ -251,12 +259,7 @@ input[type="number"]::-webkit-inner-spin-button {
   cursor: pointer;
 }
 
-.searchRight {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 13px;
-}
+
 
 .manageColumnsBtn {
   width: 156px;

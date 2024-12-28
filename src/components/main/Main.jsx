@@ -683,6 +683,7 @@ const Main = () => {
       <CostumizeColumns
           isOpen={isOpenCostumizeColumns}
           closeModal={() => setIsOpenCostumizeColumns(false)}
+         
         />
     </div>
   );
