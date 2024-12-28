@@ -26,6 +26,7 @@ import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
 import Notifications from "../../utils/Notifications/Notifications";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
 import FormatNumber from "../../utils/FormatNumber/FormatValue";
+import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 
 const Main = () => {
   const data = [
@@ -201,6 +202,7 @@ const Main = () => {
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
   const [isOpenSize, setIsOpenSize] = useState(false);
   const [isOpenNotifications, setIsOpenNotifications] = useState(false);
+  const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
 
   const toggleOpen = () => {
     setIsOpen((prevState) => !prevState);
@@ -381,7 +383,126 @@ const Main = () => {
     setActiveFilter(filter);
   };
 
-  //orderArrowFilters
+  //FilterBar Btns
+  const filterButtons = [
+    {
+      label: "Site",
+      className: styles.filterSiteBtn,
+      isActive: activeFilter === "filterSiteBtn",
+      onClick: () => {
+        orderedListSite();
+        handleFilterClick("filterSiteBtn");
+      },
+    },
+    {
+      label: "Start",
+      className: styles.filterStartBtn,
+      isActive: activeFilter === "filterStartBtn",
+      onClick: () => {
+        orderedListStart();
+        handleFilterClick("filterStartBtn");
+      },
+    },
+    {
+      label: "Buy In",
+      className: styles.filterBuyInBtn,
+      isActive: activeFilter === "filterBuyInBtn",
+      onClick: () => {
+        orderedListBuyIn();
+        handleFilterClick("filterBuyInBtn");
+      },
+    },
+    {
+      label: "Name",
+      className: styles.filterNameBtn,
+      isActive: activeFilter === "filterNameBtn",
+      onClick: () => {
+        orderedListName();
+        handleFilterClick("filterNameBtn");
+      },
+    },
+    {
+      label: "Prize Pool",
+      className: styles.filterPrizePoolBtn,
+      isActive: activeFilter === "filterPrizePoolBtn",
+      onClick: () => {
+        orderedListPrizePool();
+        handleFilterClick("filterPrizePoolBtn");
+      },
+    },
+    {
+      label: "Max Reentry",
+      className: styles.filterMaxReentryBtn,
+      isActive: activeFilter === "filterMaxReentryBtn",
+      onClick: () => {
+        orderedListMaxReentry();
+        handleFilterClick("filterMaxReentryBtn");
+      },
+    },
+    {
+      label: "Blinds",
+      className: styles.filterBlindsBtn,
+      isActive: activeFilter === "filterBlindsBtn",
+      onClick: () => {
+        orderedBlinds();
+        handleFilterClick("filterBlindsBtn");
+      },
+    },
+    {
+      label: "Speed",
+      className: styles.filterSpeedBtn,
+      isActive: activeFilter === "filterSpeedBtn",
+      onClick: () => {
+        orderedListSpeed();
+        handleFilterClick("filterSpeedBtn");
+      },
+    },
+    {
+      label: "Field",
+      className: styles.filterFieldBtn,
+      isActive: activeFilter === "filterFieldBtn",
+      onClick: () => {
+        orderedListField();
+        handleFilterClick("filterFieldBtn");
+      },
+    },
+    {
+      label: "End",
+      className: styles.filterEndBtn,
+      isActive: activeFilter === "filterEndBtn",
+      onClick: () => {
+        orderedListEnd();
+        handleFilterClick("filterEndBtn");
+      },
+    },
+    {
+      label: "Mlr",
+      className: styles.filterMlrBtn,
+      isActive: activeFilter === "filterMlrBtn",
+      onClick: () => {
+        orderedListStart();
+        handleFilterClick("filterMlrBtn");
+      },
+    },
+    {
+      label: "TableSize",
+      className: styles.filterTableSizeBtn,
+      isActive: activeFilter === "filterTableSizeBtn",
+      onClick: () => {
+        orderedListTableSize();
+        handleFilterClick("filterTableSizeBtn");
+      },
+    },
+    {
+      label: "Priority",
+      className: styles.filterPriorityBtn,
+      isActive: activeFilter === "filterPriorityBtn",
+      onClick: () => {
+        orderedListPriority();
+        handleFilterClick("filterPriorityBtn");
+      },
+    },
+  ];
 
   return (
     <div className={styles.main}>
@@ -485,13 +606,13 @@ const Main = () => {
           </button>
         </div>
         <div className={styles.searchRight}>
-          <button className={styles.manageColumnsBtn}>
+          <button className={styles.manageColumnsBtn}  onClick={() =>setIsOpenCostumizeColumns(true)}>
             <div>
               <img src={manageColumns} alt="Manage Columns" />
             </div>
             Manage Columns
           </button>
-          <button className={styles.moreFiltersBtn}>
+          <button className={styles.moreFiltersBtn} >
             <div>
               <img src={moreFilters} alt="More Filters" />
             </div>
@@ -501,157 +622,17 @@ const Main = () => {
       </div>
       <div className={styles.filterbar}>
         <input type="checkbox" className={styles.filterCheckbox} />
-        <button
-          className={`${styles.filterSiteBtn} ${
-            activeFilter === "filterSiteBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListSite();
-            handleFilterClick("filterSiteBtn");
-          }}
-        >
-          Site
-        </button>
-
-        <button
-          className={`${styles.filterStartBtn} ${
-            activeFilter === "filterStartBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListStart();
-            handleFilterClick("filterStartBtn");
-          }}
-        >
-          Start
-        </button>
-
-        <button
-          className={`${styles.filterBuyInBtn} ${
-            activeFilter === "filterBuyInBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListBuyIn();
-            handleFilterClick("filterBuyInBtn");
-          }}
-        >
-          Buy In
-        </button>
-
-        <button
-          className={`${styles.filterNameBtn} ${
-            activeFilter === "filterNameBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListName();
-            handleFilterClick("filterNameBtn");
-          }}
-        >
-          Name
-        </button>
-
-        <button
-          className={`${styles.filterPrizePoolBtn} ${
-            activeFilter === "filterPrizePoolBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListPrizePool();
-            handleFilterClick("filterPrizePoolBtn");
-          }}
-        >
-          Prize Pool
-        </button>
-
-        <button
-          className={`${styles.filterMaxReentryBtn} ${
-            activeFilter === "filterMaxReentryBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListMaxReentry();
-            handleFilterClick("filterMaxReentryBtn");
-          }}
-        >
-          Max Reentry
-        </button>
-
-        <button
-          className={`${styles.filterBlindsBtn} ${
-            activeFilter === "filterBlindsBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedBlinds();
-            handleFilterClick("filterBlindsBtn");
-          }}
-        >
-          Blinds
-        </button>
-
-        <button
-          className={`${styles.filterSpeedBtn} ${
-            activeFilter === "filterSpeedBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListSpeed();
-            handleFilterClick("filterSpeedBtn");
-          }}
-        >
-          Speed
-        </button>
-
-        <button
-          className={`${styles.filterFieldBtn} ${
-            activeFilter === "filterFieldBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListField();
-            handleFilterClick("filterFieldBtn");
-          }}
-        >
-          Field
-        </button>
-        <button
-          className={`${styles.filterEndBtn} ${
-            activeFilter === "filterEndBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListEnd();
-            handleFilterClick("filterEndBtn");
-          }}
-        >
-          End
-        </button>
-        <button
-          className={`${styles.filterMlrBtn} ${
-            activeFilter === "filterMlrBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListStart();
-            handleFilterClick("filterMlrBtn");
-          }}
-        >
-          Mlr
-        </button>
-        <button
-          className={`${styles.filterTableSizeBtn} ${
-            activeFilter === "filterTableSizeBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListTableSize();
-            handleFilterClick("filterTableSizeBtn");
-          }}
-        >
-          TableSize
-        </button>
-        <button
-          className={`${styles.filterPriorityBtn} ${
-            activeFilter === "filterPriorityBtn" ? styles.active : ""
-          }`}
-          onClick={() => {
-            orderedListPriority();
-            handleFilterClick("filterPriorityBtn");
-          }}
-        >
-          Priority
-        </button>
+        {filterButtons.map((button, index) => (
+          <button
+            key={index}
+            className={`${button.className} ${
+              button.isActive ? styles.active : ""
+            }`}
+            onClick={button.onClick}
+          >
+            {button.label}
+          </button>
+        ))}
       </div>
       <table>
         <tbody>
@@ -699,6 +680,10 @@ const Main = () => {
           </tr>
         </tbody>
       </table>
+      <CostumizeColumns
+          isOpen={isOpenCostumizeColumns}
+          closeModal={() => setIsOpenCostumizeColumns(false)}
+        />
     </div>
   );
 };
