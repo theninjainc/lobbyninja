@@ -27,6 +27,8 @@ import Notifications from "../../utils/Notifications/Notifications";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
 import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
+import MoreFilters from "../../utils/MoreFilters/MoreFilters";
+import NewAlarm from "../../utils/NewAlarm/NewAlarm";
 
 const Main = () => {
   const data = [
@@ -154,7 +156,7 @@ const Main = () => {
       site: i,
       start: "15:30",
       buyIn: 25,
-      name: "G Tournament",
+      name: "B Tournament",
       prizePool: 250000,
       maxReentry: 100,
       blinds: "50",
@@ -169,7 +171,7 @@ const Main = () => {
       site: j,
       start: "14:30",
       buyIn: 20,
-      name: "E Tournament",
+      name: "B Tournament",
       prizePool: 14500,
       maxReentry: 50,
       blinds: "25",
@@ -203,6 +205,16 @@ const Main = () => {
   const [isOpenSize, setIsOpenSize] = useState(false);
   const [isOpenNotifications, setIsOpenNotifications] = useState(false);
   const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
+  const [moreFiltersisOpen, setMoreFiltersisOpen] = useState(false);
+  const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
+
+  const openNewAlarm = () => {
+    setIsOpenNewAlarm(true); 
+  };
+
+  const closeNewAlarm = () => {
+    setIsOpenNewAlarm(false); 
+  };
 
   const toggleOpen = () => {
     setIsOpen((prevState) => !prevState);
@@ -504,188 +516,229 @@ const Main = () => {
     },
   ];
 
+  //form Logics
+  const [searchNameTournaments, setSearchNameTournaments] = useState("");
+  const [minBuyIn, setMinBuyIn] = useState();
+
+  const handleFilter = () => {
+    const filteredByName = data.filter((item) =>
+      item.name.toLowerCase().includes(searchNameTournaments.toLowerCase())
+    );
+
+    const filteredByBuyIn = filteredByName.filter(
+      (item) => item.buyIn >= Number(minBuyIn)
+    );
+    setOrderList(filteredByBuyIn);
+  };
+
   return (
-    <div className={styles.main}>
-      <div className={styles.navbar}>
-        <div className={styles.titlef}>Tournament List</div>
-        <div className={styles.btns}>
-          <div className={styles.btns}>
-            <div>
-              <ToggleThemeBtn />
-            </div>
-            <div>
-              <button
-                className={styles.navNotificationBtn}
-                onClick={() => toggleOpenNotifications(true)}
-              >
-                <img src={notification} alt="" />
-              </button>
-            </div>
-            <Notifications isOpenNotifications={isOpenNotifications} />
-            <div>
-              <button className={styles.navEngineBtn}>
-                <img src={engine} alt="" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.searchbar}>
-        <div className={styles.searchleft}>
-          <label htmlFor="search" className={styles.label}>
-            <img src={searchTournaments} alt="Search Tournaments" />
-            <input
-              type="search"
-              className={styles.search}
-              placeholder="Search tournaments..."
-              id="search"
-            />
-          </label>
-          <label htmlFor="site" className={styles.labelSelectSite}>
-            <button
-              name="site"
-              id="site"
-              className={styles.selectSite}
-              onClick={() => toggleOpen(true)}
-            >
-              Select Site
-            </button>
-          </label>
-          <SelectSite isOpen={isOpen} />
-          <div className={styles.maxMinSearch}>
-            <label htmlFor="min-value" className={styles.labelMaxMinValue}>
-              <div>Min $</div>
-              <input
-                type="number"
-                id="min-value"
-                name="min-value"
-                placeholder="Type..."
-                className={styles.searchMaxMin}
-              />
-            </label>
-          </div>
-          <div className={styles.maxMinSearch}>
-            <label htmlFor="max-value" className={styles.labelMaxMinValue}>
-              <div>Max $</div>
-              <input
-                type="number"
-                id="max-value"
-                name="max-value"
-                placeholder="Type..."
-                className={styles.searchMaxMin}
-              />
-            </label>
-          </div>
-          <label htmlFor="speed" className={styles.labelSelectSpeed}>
-            <button
-              name="speed"
-              id="speed"
-              className={styles.selectSpeed}
-              onClick={() => toggleOpenSpeed(true)}
-            >
-              Speed
-            </button>
-          </label>
-          <Speed isOpenSpeed={isOpenSpeed} />
-          <label htmlFor="size" className={styles.labelSelectSize}>
-            <button
-              name="size"
-              id="size"
-              className={styles.selectSize}
-              onClick={() => toggleOpenSize(true)}
-            >
-              Size
-            </button>
-          </label>
-          <Size isOpenSize={isOpenSize} />
-          <button className={styles.searchBtn}>
-            <img src={lupa} alt="Lupa icon" />{" "}
-          </button>
-          <button className={styles.saveBtn}>
-            <img src={save} alt="Save icon" />
-          </button>
-        </div>
-        <div className={styles.searchRight}>
-          <button className={styles.manageColumnsBtn}  onClick={() =>setIsOpenCostumizeColumns(true)}>
-            <div>
-              <img src={manageColumns} alt="Manage Columns" />
-            </div>
-            Manage Columns
-          </button>
-          <button className={styles.moreFiltersBtn} >
-            <div>
-              <img src={moreFilters} alt="More Filters" />
-            </div>
-            More Filters
-          </button>
-        </div>
-      </div>
-      <div className={styles.filterbar}>
-        <input type="checkbox" className={styles.filterCheckbox} />
-        {filterButtons.map((button, index) => (
-          <button
-            key={index}
-            className={`${button.className} ${
-              button.isActive ? styles.active : ""
-            }`}
-            onClick={button.onClick}
-          >
-            {button.label}
-          </button>
-        ))}
-      </div>
-      <table>
-        <tbody>
-          <tr>
-            {orderList.map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundColor:
-                    index % 2 === 0
-                      ? "transparent"
-                      : "rgba(255, 255, 255, 0.05)",
-                }}
-              >
-                <td className={styles.stylesCheckboxTable}>
-                  <FavouriteStar className={styles.favouriteStar} />
-                  <input type="checkbox" className={styles.checkBoxTable} />
-                </td>
-                <td className={styles.siteTable}>
-                  <img src={item.site} alt="svg" />
-                </td>
-                <td className={styles.startTable}>{item.start}</td>
-                <td className={styles.buyInTable}>${item.buyIn}</td>
-                <td className={styles.nameTable}>{item.name}</td>
-                <td className={styles.prizePoolTable}>
-                  $
-                  <FormatNumber value={item.prizePool} />
-                </td>
-                <td className={styles.maxReentryTable}>
-                  {item.maxReentry === null ? "-" : item.maxReentry}
-                </td>
-                <td className={styles.blindsTable}>{item.blinds}</td>
-                <td className={styles.speedTable}>
-                  <SpeedMap speed={item.speed} />
-                </td>
-                <td className={styles.fieldTable}>{item.field}</td>
-                <td className={styles.endTable}>{item.end}</td>
-                <td className={styles.mlrTable}>
-                  <Timer startEvent={item.start} />
-                </td>
-                <td className={styles.tableSizeTable}>{item.tableSize}</td>
-                <td className={styles.priorityTable}>{item.priority}</td>
-              </div>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+    <>
+      {moreFiltersisOpen && (
+        <MoreFilters closeModal={() => setMoreFiltersisOpen(false)} />
+      )}
       <CostumizeColumns
           isOpen={isOpenCostumizeColumns}
           closeModal={() => setIsOpenCostumizeColumns(false)}
-         
         />
-    </div>
+      
+      <div
+        className={`${styles.main} ${
+          moreFiltersisOpen === true || isOpenCostumizeColumns === true ? styles.blur : styles.noBlur
+        }`}
+      >
+        <div className={styles.navbar}>
+          <div className={styles.titlef}>Tournament List</div>
+          <div className={styles.btns}>
+            <div className={styles.btns}>
+              <div>
+                <ToggleThemeBtn />
+              </div>
+              <div>
+                <button
+                  className={styles.navNotificationBtn}
+                  onClick={() => toggleOpenNotifications(true)}
+                >
+                  <img src={notification} alt="" />
+                </button>
+              </div>
+              <Notifications isOpenNotifications={isOpenNotifications} />
+              <div>
+                <button className={styles.navEngineBtn}>
+                  <img src={engine} alt="" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.searchbar}>
+          <div className={styles.searchleft}>
+            <label htmlFor="search" className={styles.label}>
+              <img src={searchTournaments} alt="Search Tournaments" />
+              <input
+                type="search"
+                className={styles.search}
+                onChange={() => setSearchNameTournaments(event.target.value)}
+                placeholder="Search tournaments..."
+                id="search"
+              />
+            </label>
+            <label htmlFor="site" className={styles.labelSelectSite}>
+              <button
+                name="site"
+                id="site"
+                className={styles.selectSite}
+                onClick={() => toggleOpen(true)}
+              >
+                Select Site
+              </button>
+            </label>
+            <SelectSite isOpen={isOpen} />
+            <div className={styles.maxMinSearch}>
+              <label htmlFor="min-value" className={styles.labelMaxMinValue}>
+                <div>Min $</div>
+                <input
+                  type="number"
+                  id="min-value"
+                  name="min-value"
+                  placeholder="Type..."
+                  onChange={(e) => {
+                    setMinBuyIn(e.target.value);
+                  }}
+                  className={styles.searchMaxMin}
+                />
+              </label>
+            </div>
+            <div className={styles.maxMinSearch}>
+              <label htmlFor="max-value" className={styles.labelMaxMinValue}>
+                <div>Max $</div>
+                <input
+                  type="number"
+                  id="max-value"
+                  name="max-value"
+                  placeholder="Type..."
+                  className={styles.searchMaxMin}
+                />
+              </label>
+            </div>
+            <label htmlFor="speed" className={styles.labelSelectSpeed}>
+              <button
+                name="speed"
+                id="speed"
+                className={styles.selectSpeed}
+                onClick={() => toggleOpenSpeed(true)}
+              >
+                Speed
+              </button>
+            </label>
+            <Speed isOpenSpeed={isOpenSpeed} />
+            <label htmlFor="size" className={styles.labelSelectSize}>
+              <button
+                name="size"
+                id="size"
+                className={styles.selectSize}
+                onClick={() => toggleOpenSize(true)}
+              >
+                Size
+              </button>
+            </label>
+            <Size isOpenSize={isOpenSize} />
+            <button
+              className={styles.searchBtn}
+              onClick={() => {
+                handleFilter();
+              }}
+            >
+              <img src={lupa} alt="Lupa icon" />{" "}
+            </button>
+            <button className={styles.saveBtn}>
+              <img src={save} alt="Save icon" />
+            </button>
+          </div>
+          <div className={styles.searchRight}>
+            <button
+              className={styles.manageColumnsBtn}
+              onClick={() => setIsOpenCostumizeColumns(true)}
+            >
+              <div>
+                <img src={manageColumns} alt="Manage Columns" />
+              </div>
+              Manage Columns
+            </button>
+            <button
+              className={styles.moreFiltersBtn}
+              onClick={() => setMoreFiltersisOpen(true)}
+            >
+              <div>
+                <img src={moreFilters} alt="More Filters" />
+              </div>
+              More Filters
+            </button>
+          </div>
+        </div>
+        <div className={styles.filterbar}>
+          <input type="checkbox" className={styles.filterCheckbox} />
+          {filterButtons.map((button, index) => (
+            <button
+              key={index}
+              className={`${button.className} ${
+                button.isActive ? styles.active : ""
+              }`}
+              onClick={button.onClick}
+            >
+              {button.label}
+            </button>
+          ))}
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              {orderList.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor:
+                      index % 2 === 0
+                        ? "transparent"
+                        : "rgba(255, 255, 255, 0.05)",
+                  }}
+                >
+                  <td className={styles.stylesCheckboxTable}>
+                    <FavouriteStar className={styles.favouriteStar} />
+                    <input type="checkbox" className={styles.checkBoxTable} />
+                  </td>
+                  <td className={styles.siteTable}>
+                    <img src={item.site} alt="svg" />
+                  </td>
+                  <td className={styles.startTable}>{item.start}</td>
+                  <td className={styles.buyInTable}>${item.buyIn}</td>
+                  <td className={styles.nameTable}>{item.name}</td>
+                  <td className={styles.prizePoolTable}>
+                    $
+                    <FormatNumber value={item.prizePool} />
+                  </td>
+                  <td className={styles.maxReentryTable}>
+                    {item.maxReentry === null ? "-" : item.maxReentry}
+                  </td>
+                  <td className={styles.blindsTable}>{item.blinds}</td>
+                  <td className={styles.speedTable}>
+                    <SpeedMap speed={item.speed} />
+                  </td>
+                  <td className={styles.fieldTable}>{item.field}</td>
+                  <td className={styles.endTable}>{item.end}</td>
+                  <td className={styles.mlrTable}>
+                    <Timer startEvent={item.start} />
+                  </td>
+                  <td className={styles.tableSizeTable}>{item.tableSize}</td>
+                  <td className={styles.priorityTable}>{item.priority}</td>
+                </div>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+        <button onClick={openNewAlarm}>afhdasdf</button>
+        <NewAlarm isOpen={isOpenNewAlarm} onClose={closeNewAlarm} />
+      </div>
+    </>
   );
 };
 

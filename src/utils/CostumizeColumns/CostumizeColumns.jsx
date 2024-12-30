@@ -73,7 +73,7 @@ const CostumizeColumns = ({ isOpen, closeModal, }) => {
         <div className={styles.costumizeTitle}>
           <span>Customize Columns</span>
           <button className={styles.exitBtn} onClick={closeModal}>
-            <img src={exit} alt="Exit" />
+            <img src={exit} alt="Exit" width="13"/>
           </button>
         </div>
         <div className={styles.orderColumns}>

@@ -1,0 +1,584 @@
+.moreFilters {
+  width: 35%;
+  height: auto;
+  background-color: #191934;
+  border-radius: 10px;
+  position: absolute;
+  z-index: 10000;
+  top: 10%;
+ left: 30%;
+}
+.title {
+  color: #fff;
+  margin-top: none;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid 2px rgb(255, 255, 255, 0.08);
+  padding: 0px 24px 0px 24px;
+  align-items: center;
+}
+.title p {
+  font-size: 24px;
+  font-weight: bold;
+}
+.title button {
+  background-color: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.network {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 19px;
+  margin-right: 19px;
+  margin-bottom: 35px;
+}
+.network input {
+  width: auto;
+}
+
+.buyIn {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 19px;
+  padding-right: 19px;
+  margin-bottom: 35px;
+}
+.buyIn div {
+  display: flex;
+  justify-content: space-between;
+}
+.buyIn input {
+  width: 220px;
+}
+.fromToTime {
+  margin-left: 19px;
+  gap: 22px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 35px;
+}
+.fromTime,
+.toTime {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.fromTime input[type="time"],
+.toTime input[type="time"],
+.registeringFromTime input[type="time"],
+.registeringToTime input[type="time"],
+.endTime input[type="time"] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 43px;
+  border: solid 2px #5d5c5c;
+  padding-left: 10px;
+  width: 78px;
+  font-size: 14px;
+  color: #fff;
+}
+.fromTime input[type="time"]::-webkit-calendar-picker-indicator,
+.toTime input[type="time"]::-webkit-calendar-picker-indicator,
+.registeringFromTime input[type="time"]::-webkit-calendar-picker-indicator,
+.registeringToTime input[type="time"]::-webkit-calendar-picker-indicator,
+.endTime input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+.fromTime input[type="time"]:focus,
+.toTime input[type="time"]:focus,
+.registeringFromTime input[type="time"]:focus,
+.registeringToTime input[type="time"]:focus,
+.endTime input[type="time"]:focus {
+  outline: none;
+}
+
+.relogio {
+  position: relative;
+  width: 14px;
+  bottom: 30px;
+  left: 60px;
+}
+.moreFilters label {
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 9px;
+  font-weight: bold;
+}
+.moreFilters input[type="text"] {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 43px;
+  border: solid 2px #5d5c5c;
+  padding-left: 10px;
+  font-size: 14px;
+  color: #fff;
+}
+.moreFilters input[type="number"] {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 43px;
+  border: solid 2px #5d5c5c;
+  padding-left: 10px;
+  font-size: 14px;
+  color: #fff;
+}
+.moreFilters input[type="text"]:focus {
+  outline: none;
+  color: #fff;
+  box-shadow: none;
+}
+.moreFilters input[type="number"]:focus {
+  outline: none;
+  color: #fff;
+  box-shadow: none;
+}
+
+.registering {
+  margin-left: 19px;
+  width: 100%;
+  margin-bottom: 35px;
+}
+.orderInputs {
+  display: flex;
+  flex-direction: row;
+  gap: 22px;
+  width: 100%;
+}
+.registeringFromTime,
+.registeringToTime {
+  margin-top: 9px;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: #fff;
+}
+.prizePool {
+  margin-left: 19px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 9px;
+  margin-bottom: 35px;
+}
+.prizePool div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.prizePool > div > span {
+  color: #fff;
+  position: relative;
+  top: 15px;
+  right: 25px;
+  font-size: 12px;
+}
+.prizePool > div > input {
+  width: 220px;
+}
+
+.excludeWords {
+  display: flex;
+  flex-direction: column;
+  margin-left: 19px;
+  margin-right: 19px;
+  margin-bottom: 35px;
+}
+.participants {
+  display: flex;
+  flex-direction: column;
+  margin-left: 19px;
+  margin-right: 19px;
+  margin-bottom: 35px;
+}
+.participants div {
+  display: flex;
+  justify-content: space-between;
+}
+.participants > div > input {
+  width: 220px;
+}
+
+.tableSize {
+  display: flex;
+  flex-direction: column;
+  margin-left: 19px;
+  margin-right: 19px;
+  margin-bottom: 35px;
+}
+.tableSize > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.tableSize > div > button {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 48px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0px 15px 0px 15px;
+}
+.tableSize > div > button:hover {
+  background-color: #191934;
+}
+
+.blinds {
+  display: flex;
+  flex-direction: column;
+  margin-left: 19px;
+  margin-right: 19px;
+  margin-bottom: 35px;
+}
+.blinds div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.blinds > div > input {
+  width: 220px;
+}
+
+.priority {
+  display: flex;
+  flex-direction: column;
+  margin-left: 19px;
+  margin-right: 19px;
+  margin-bottom: 35px;
+}
+.priority select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 35px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0px 15px 0px 15px;
+  width: 235px;
+  height: 48px;
+}
+.selectIcon {
+  width: 16px;
+  position: relative;
+  left: 210px;
+  bottom: 26px;
+}
+
+.endTime {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+
+.dayOfWeek {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.dayOfWeek > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.dayOfWeek > div > button {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 39px;
+  width: 49px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+}
+.dayOfWeek > div > button:hover {
+  background-color: #191934;
+}
+
+.reEntry {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.reEntry > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #fff;
+  gap: 8px;
+}
+.reEntry input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+.reEntry input[type="radio"]:checked {
+  border-color: #5f33d6;
+  background-color: #5f33d6;
+}
+.reEntry input[type="radio"]:checked::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.speed {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.speed > div {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+.speed > div > button {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 39px;
+  padding: 0px 12px 0px 12px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+}
+.speed > div > button:hover {
+  background-color: #191934;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.game > div {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+.game > div > button {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 39px;
+  padding: 0px 12px 0px 12px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+}
+.game > div > button:hover {
+  background-color: #191934;
+}
+
+.variant {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.variant > div {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+.variant > div > button {
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 39px;
+  padding: 0px 12px 0px 12px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+}
+.variant > div > button:hover {
+  background-color: #191934;
+}
+
+.maxAbility {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.maxAbility > div {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 224px;
+  height: 6px;
+  background: #555454;
+  border-radius: 4px;
+  outline: none;
+  transition: background 0.3s;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 10px;
+  background: #555454;
+  border-radius: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  position: relative;
+  bottom: 2px;
+  background: #7651fd;
+  border-radius: 50%;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #7651fd;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+input[type="range"]::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  background: #7651fd;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    #7651fd var(--value),
+    #555454 var(--value)
+  );
+}
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    #7651fd var(--value),
+    #555454 var(--value)
+  );
+}
+.maxAbilityRange {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  gap: 5px;
+}
+
+.maxLate {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.maxLate > div {
+  display: flex;
+  flex-direction: row;
+  color: #fff;
+  align-items: center;
+}
+.maxLate > div > input, .includeClosed div > input {
+  margin: 0px 8px 0px 0px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #070b2b;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+}
+.maxLate div > input:checked::before, .includeClosed div > input:checked::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: #5f33d6;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.2l-4.2-4.2L3.5 13l5.5 5.5 11-11L18.3 6l-9.3 9.2z"/></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: block;
+  border-radius: 2px;
+}
+.maxLate input:hover, .includeClosed input:hover {
+  box-shadow: 0 0 3px 2px rgba(255, 255, 255, 0.3);
+}
+
+.includeClosed {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 24px 35px 24px;
+}
+.includeClosed > div {
+    display: flex;
+    flex-direction: row;
+    color: #fff;
+    align-items: center;
+}
+
+.modalActions{
+    border-top: solid 2px rgb(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+.modalActions>button{
+    margin: 32px 0px 32px 0px;
+    width: 230px;
+    height: 61px;
+    border-radius: 9px;
+    color: #fff;
+}
+
+.saveBtn{
+    background-color: #191934;
+    border: solid 2px #555454;
+    font-weight:500;
+    font-size: 16px;
+    cursor: pointer;
+}
+.saveBtn:hover{
+    background-color: #1e1e3e;
+}
+.saveIcon{
+    padding-right: 10px;
+}
+
+.applyColumns{
+    background: radial-gradient(ellipse at top,#9f81eb, #5F33D6 66% );
+    border: solid 1.5px rgba(255, 255, 255, 0.2);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.applyColumns:hover{
+    background: radial-gradient(ellipse at top,#a281f5, #6b36ff 66% );
+}

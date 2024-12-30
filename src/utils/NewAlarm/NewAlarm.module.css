@@ -1,0 +1,295 @@
+.newAlarm {
+  background-color: #191934;
+  width: 552px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.title {
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 2px rgb(255, 255, 255, 0.08);
+  padding: 0px 24px 0px 24px;
+}
+.title button {
+  background-color: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+.alarmName {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 24px 40px 24px;
+}
+
+.alarmName input {
+  background-color: #191934;
+  border-bottom: solid 2px rgb(255, 255, 255, 0.25);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  width: 110%;
+  font-size: 20px;
+}
+.alarmName input:focus {
+  border: none;
+  outline: none;
+  border-bottom: solid 2px rgb(255, 255, 255, 0.25);
+  color: #fff;
+}
+.alarmName input::placeholder {
+  color: rgb(255, 255, 255, 0.8);
+}
+.alarmName img {
+  position: relative;
+  right: 25px;
+}
+
+.today {
+  color: #fff;
+  font-size: 16px;
+  margin: 0px 24px 40px 24px;
+}
+
+.daysBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 24px 40px 24px;
+}
+
+.daysBtns > button {
+  border: none;
+  background-color: #070b2b;
+  color: #fff;
+  border-radius: 14px;
+  width: 56px;
+  height: 56px;
+  cursor: pointer;
+}
+.daysBtns > button:hover {
+  background-color: #03061c;
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 42px;
+  height: 20px;
+  border-radius: 50px;
+
+  background: radial-gradient(circle, #ffdead, #fa6e49, #c314d4);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s;
+  transition: background 0.3s ease;
+}
+
+.toggleButton.on {
+  background: radial-gradient(circle to right, #c314d4, #fa6e49, #ffdead);
+}
+
+.toggleButton.off {
+  background: radial-gradient(circle to right, #c314d4, #fa6e49, #ffdead);
+}
+
+.toggleCircle {
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  position: relative;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-59%);
+  transition: transform 0.3s ease;
+}
+
+.toggleCircle.left {
+  left: 17px;
+}
+
+.toggleCircle.right {
+  right: 2px;
+}
+
+.setTime{
+    display: flex;
+    flex-direction: row;
+    margin: 0px 24px 40px 24px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setTime input[type="time"] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+    background-color: rgb(255, 255, 255, 0.08);
+    border-radius: 9px;
+    height: 43px;
+    border: solid 2px #5d5c5c;
+    padding-left: 10px;
+    width: 78px;
+    font-size: 14px;
+    color: #fff;
+  }
+
+  .setTime input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
+
+  .setTime input[type="time"]:focus {
+    outline: none;
+  }
+  .relogio {
+    position: relative;
+    width: 14px;
+    right: 30px;
+  }
+.setTime>div{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    color: #fff;
+}
+
+.sound{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 24px 40px 24px;
+    gap: 5px;
+    
+}
+.sound label{
+    font-size: 16px;
+    color: #fff;
+}
+.sound button{
+    display: flex;
+    align-items: center;
+    height: 43px;
+    border-radius: 9px;
+    color: #fff;
+    font-size: 16px;
+    border: solid 1px rgb(255, 255, 255, 0.08);
+    background-color: rgb(255, 255, 255, 0.10);
+    cursor: pointer;
+    font-weight:lighter ;
+}
+
+.moreOptions{
+    display: flex;
+    justify-content: end;
+    border-bottom: solid 2px rgb(255, 255, 255, 0.08);
+}
+.moreOptions button{
+    margin-right: 24px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.priority{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0px 24px 40px 24px;
+}
+.priority label{
+    color: #fff;
+    font-size: 16px;
+}
+.priority button{
+    width: 252px;
+    height: 51px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 16px;
+    border-radius: 9px;
+    color: #fff;
+    border: solid 1px rgb(255, 255, 255, 0.08);
+    background-color: rgb(255, 255, 255, 0.10);
+    cursor: pointer;
+    font-weight:lighter ;
+}
+
+.comment{
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    padding: 0px 0px 40px 0px;
+    border-bottom: solid 2px rgb(255, 255, 255, 0.08);
+}
+.comment label{
+    margin: 0px 24px 0px 24px;
+    color: #fff;
+    font-size: 16px;
+}
+.comment textarea{
+    background-color: #070b2b;
+    border: none;
+    width: auto;
+    height: 87px;
+    resize: none;
+    border-radius: 8px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    margin: 0px 24px 0px 24px;
+    padding: 10px 15px 0px 15px;
+}
+.comment textarea:focus{
+    border: none;
+    outline: none;
+    color: #fff;
+}
+.modalActions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 24px 24px 0px 24px;
+    padding-bottom: 41px;
+}
+.modalActions button{
+    width: 209px;
+    height: 61px;
+}
+.favoriteBtn{
+    background-color: #191934;
+    border: solid 2px rgb(255, 255, 255, 0.10);
+    border-radius: 9px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11.8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+.favoriteBtn:hover{
+    background-color: #1e1e3e;
+}
+.setAlarmBtn{
+    background: radial-gradient(ellipse at top,#9f81eb, #5F33D6 66% );
+    border: solid 1.5px rgba(255, 255, 255, 0.2);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 9px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+.setAlarmBtn:hover{
+    background: radial-gradient(ellipse at top,#a281f5, #6b36ff 66% );
+}
