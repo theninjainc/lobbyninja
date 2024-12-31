@@ -10,41 +10,35 @@ body {
 }
 
 .main {
-  padding: 0px 22px 0px 29px;
+  padding: 15px 0px 0px 29px;
+  margin-right: 22px;
   margin-left: 89px;
 }
 
-.title {
+.titlef {
   color: #ffff;
   font-size: 28px;
   font-weight: 800;
   text-align: center;
-  margin-top: 30px;
   float: left;
 }
 
 .navbar {
-  top: 0;
   width: 100%;
   height: 53px;
-}
-
-.btns {
-  float: right;
+  display: flex;
+  justify-content: space-between;
 }
 
 .displayNone {
   display: none;
 }
 
-.navbar ul {
+.navbar .btns {
   display: flex;
   flex-direction: row;
-  list-style: none;
-}
-
-.navbar ul>li {
-  padding-left: 10px;
+  align-items: center;
+  gap: 10px;
 }
 
 .navNotificationBtn,
@@ -63,7 +57,19 @@ body {
   justify-content: space-between;
 }
 
+.searchleft {
+  display: flex;
+  gap: 10px;
+}
+
+.searchRight {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
 .label {
+  
   width: 228px;
   height: 44px;
   border-radius: 50px;
@@ -87,11 +93,7 @@ body {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.searchleft {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
+
 
 .labelSelectSite {
   width: 118px;
@@ -255,12 +257,7 @@ input[type="number"]::-webkit-inner-spin-button {
   cursor: pointer;
 }
 
-.searchRight {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 13px;
-}
+
 
 .manageColumnsBtn {
   width: 156px;
@@ -405,13 +402,9 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 95px;
   border: none;
   background-color: var(--bg-filterbar);
-  color: transparent;
+  color: #fff;
   background-clip: text;
   -webkit-background-clip: text;
-  background-image: radial-gradient(ellipse at 30% 30%,
-      #ffdead 0%,
-      #fa6e49 27%,
-      #c314d4 90%);
   font-size: 12px;
   font-weight: 800;
   display: flex;
@@ -425,13 +418,9 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 112px;
   border: none;
   background-color: var(--bg-filterbar);
-  color: transparent;
+  color: #fff;
   background-clip: text;
   -webkit-background-clip: text;
-  background-image: radial-gradient(ellipse at 30% 30%,
-      #ffdead 0%,
-      #fa6e49 27%,
-      #c314d4 90%);
   font-size: 12px;
   font-weight: 800;
   display: flex;
@@ -655,6 +644,43 @@ table {
   color: #ffff;
 }
 
+.speedTableImgRegular {
+  position: relative;
+  top: 3.5px;
+  padding-right: 3px;
+}
+.speedTableImgSlow {
+  position: relative;
+  top: 0px;
+  padding-right: 3px;
+}
+.speedTableImgTurbo {
+  position: relative;
+  top: 2px;
+  padding-right: 3px;
+}
+.speedTableImgHyper {
+  position: relative;
+  top: 2.5px;
+  padding-right: 3px;
+}
+
+.slow {
+  color: #3c88ea;
+}
+
+.regular {
+  color: #52ae4c;
+}
+
+.turbo {
+  color: #ff9c40;
+}
+
+.hyper {
+  color: #cf0122;
+}
+
 .fieldTable {
   height: 38px;
   width: 78px;
@@ -738,4 +764,16 @@ table {
   transform: scale(1.1);
   color: #ff0000;
   /* Cor vermelha mais intensa quando hover */
+}
+.active{
+
+  color: transparent;
+  background-image: radial-gradient(
+    ellipse at 30% 30%,
+    #ffdead 0%,
+    #fa6e49 27%,
+    #c314d4 90%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
 }
