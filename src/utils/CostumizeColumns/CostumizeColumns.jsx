@@ -4,7 +4,7 @@ import exit from "../../assets/exit.svg";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // eslint-disable-next-line react/prop-types
-const CostumizeColumns = ({ isOpen, closeModal, }) => {
+const CostumizeColumns = ({ isOpen, closeModal }) => {
   const [modalIsOpen, setModalIsOpen] = useState(isOpen);
   const [columns, setColumns] = useState([
     "Site",
@@ -24,12 +24,20 @@ const CostumizeColumns = ({ isOpen, closeModal, }) => {
 
   // Estado para controlar os checkboxes
   const [selectedColumns, setSelectedColumns] = useState({
-    Site: false, Start: false, Name: false, Speed: false, "Buy In": false,
-    "Prize Pool": false, "Max Reentry": false, Blinds: false, Field: false,
-    End: false, MLR: false, "Table Size": false, Priority: false
+    Site: false,
+    Start: false,
+    Name: false,
+    Speed: false,
+    "Buy In": false,
+    "Prize Pool": false,
+    "Max Reentry": false,
+    Blinds: false,
+    Field: false,
+    End: false,
+    MLR: false,
+    "Table Size": false,
+    Priority: false,
   });
-
-  console.log(selectedColumns);
 
   useEffect(() => {
     setModalIsOpen(isOpen);
@@ -44,25 +52,25 @@ const CostumizeColumns = ({ isOpen, closeModal, }) => {
   };
 
   const handleDragEnd = (result) => {
-    const { destination} = result;
+    const { destination } = result;
     if (!destination) return;
 
+    const items = reorder(
+      columns,
+      result.source.index,
+      result.destination.index
+    );
 
-   const items = reorder(columns, result.source.index, result.destination.index)
-
-   console.log(columns)
     setColumns(items);
   };
 
-  function reorder (column, startIndex, endIndex){
+  function reorder(column, startIndex, endIndex) {
     const result = Array.from(column);
-    const [removed] = result.splice(startIndex,1)
-    result.splice(endIndex, 0, removed)
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
 
-    console.log(result)
     return result;
   }
-
 
   // Filtrando as colunas selecionadas
   const filteredColumns = columns.filter((column) => selectedColumns[column]);
@@ -73,7 +81,7 @@ const CostumizeColumns = ({ isOpen, closeModal, }) => {
         <div className={styles.costumizeTitle}>
           <span>Customize Columns</span>
           <button className={styles.exitBtn} onClick={closeModal}>
-            <img src={exit} alt="Exit" width="13"/>
+            <img src={exit} alt="Exit" width="13" />
           </button>
         </div>
         <div className={styles.orderColumns}>

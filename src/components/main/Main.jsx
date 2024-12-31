@@ -29,6 +29,10 @@ import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 import MoreFilters from "../../utils/MoreFilters/MoreFilters";
 import NewAlarm from "../../utils/NewAlarm/NewAlarm";
+import slow from "../../assets/Slow.svg";
+import regular from "../../assets/regular.svg";
+import hyper from "../../assets/hyper.svg";
+import turbo from "../../assets/turbo.svg";
 
 const Main = () => {
   const data = [
@@ -209,11 +213,11 @@ const Main = () => {
   const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
 
   const openNewAlarm = () => {
-    setIsOpenNewAlarm(true); 
+    setIsOpenNewAlarm(true);
   };
 
   const closeNewAlarm = () => {
-    setIsOpenNewAlarm(false); 
+    setIsOpenNewAlarm(false);
   };
 
   const toggleOpen = () => {
@@ -519,16 +523,67 @@ const Main = () => {
   //form Logics
   const [searchNameTournaments, setSearchNameTournaments] = useState("");
   const [minBuyIn, setMinBuyIn] = useState();
+  const [maxBuyIn, setMaxBuyIn] = useState();
+  const [selectedSite, setSelectedSite] = useState();
+  const [selectedSpeed, setSelectedSpeed] = useState();
+  const [selectedSize, setSelectedSize] = useState();
 
   const handleFilter = () => {
-    const filteredByName = data.filter((item) =>
-      item.name.toLowerCase().includes(searchNameTournaments.toLowerCase())
-    );
+    let filteredList = data;
 
-    const filteredByBuyIn = filteredByName.filter(
-      (item) => item.buyIn >= Number(minBuyIn)
-    );
-    setOrderList(filteredByBuyIn);
+    if (searchNameTournaments) {
+      filteredList = filteredList.filter((item) =>
+        item.name.toLowerCase().includes(searchNameTournaments.toLowerCase())
+      );
+    }
+
+    if (minBuyIn) {
+      filteredList = filteredList.filter(
+        (item) => item.buyIn >= Number(minBuyIn)
+      );
+    }
+
+    if (maxBuyIn) {
+      filteredList = filteredList.filter(
+        (item) => item.buyIn <= Number(maxBuyIn)
+      );
+    }
+
+    if (selectedSite) {
+      filteredList = filteredList.filter((item) =>
+        item.site.includes(selectedSite.site)
+      );
+    }
+
+    if (selectedSpeed) {
+      filteredList = filteredList.filter(
+        (item) => item.speed === selectedSpeed
+      );
+    }
+
+    if (selectedSize) {
+      switch (selectedSize) {
+        case 1:
+          filteredList = filteredList.filter((item) => item.tableSizeize === 2);
+          break;
+        case 2:
+          filteredList = filteredList.filter(
+            (item) => item.tableSize >= 3 && item.tableSize <= 5
+          );
+          break;
+        case 3:
+          filteredList = filteredList.filter((item) => item.tableSize === 6);
+          break;
+        case 4:
+          filteredList = filteredList.filter(
+            (item) => item.tableSize >= 7 && item.tableSize <= 10
+          );
+          break;
+        default:
+          filteredList;
+      }
+    }
+    setOrderList(filteredList);
   };
 
   return (
@@ -537,13 +592,15 @@ const Main = () => {
         <MoreFilters closeModal={() => setMoreFiltersisOpen(false)} />
       )}
       <CostumizeColumns
-          isOpen={isOpenCostumizeColumns}
-          closeModal={() => setIsOpenCostumizeColumns(false)}
-        />
-      
+        isOpen={isOpenCostumizeColumns}
+        closeModal={() => setIsOpenCostumizeColumns(false)}
+      />
+
       <div
         className={`${styles.main} ${
-          moreFiltersisOpen === true || isOpenCostumizeColumns === true ? styles.blur : styles.noBlur
+          moreFiltersisOpen === true || isOpenCostumizeColumns === true
+            ? styles.blur
+            : styles.noBlur
         }`}
       >
         <div className={styles.navbar}>
@@ -589,10 +646,24 @@ const Main = () => {
                 className={styles.selectSite}
                 onClick={() => toggleOpen(true)}
               >
-                Select Site
+                {selectedSite ? (
+                  <div className={styles.selectedSite}>
+                    <img
+                      src={selectedSite.site}
+                      alt={`Site ${selectedSite.name}`}
+                    />
+                    <p>{selectedSite.name}</p>
+                  </div>
+                ) : (
+                  "Select Site"
+                )}
               </button>
             </label>
-            <SelectSite isOpen={isOpen} />
+            <SelectSite
+              isOpen={isOpen}
+              orderList={data}
+              setSelectedSite={setSelectedSite}
+            />
             <div className={styles.maxMinSearch}>
               <label htmlFor="min-value" className={styles.labelMaxMinValue}>
                 <div>Min $</div>
@@ -616,6 +687,9 @@ const Main = () => {
                   id="max-value"
                   name="max-value"
                   placeholder="Type..."
+                  onChange={(e) => {
+                    setMaxBuyIn(e.target.value);
+                  }}
                   className={styles.searchMaxMin}
                 />
               </label>
@@ -627,10 +701,42 @@ const Main = () => {
                 className={styles.selectSpeed}
                 onClick={() => toggleOpenSpeed(true)}
               >
-                Speed
+                {selectedSpeed ? (
+                  <div className={styles.selectedSpeed}>
+                    <img
+                      src={
+                        selectedSpeed === 1
+                          ? slow
+                          : selectedSpeed === 2
+                          ? regular
+                          : selectedSpeed === 3
+                          ? turbo
+                          : selectedSpeed === 4
+                          ? hyper
+                          : null
+                      }
+                    ></img>
+                    <p>
+                      {selectedSpeed === 1
+                        ? "Slow"
+                        : selectedSpeed === 2
+                        ? "Regular"
+                        : selectedSpeed === 3
+                        ? "Turbo"
+                        : selectedSpeed === 4
+                        ? "Hyper"
+                        : null}
+                    </p>
+                  </div>
+                ) : (
+                  "Speed"
+                )}
               </button>
             </label>
-            <Speed isOpenSpeed={isOpenSpeed} />
+            <Speed
+              isOpenSpeed={isOpenSpeed}
+              setSelectedSpeed={setSelectedSpeed}
+            />
             <label htmlFor="size" className={styles.labelSelectSize}>
               <button
                 name="size"
@@ -638,10 +744,25 @@ const Main = () => {
                 className={styles.selectSize}
                 onClick={() => toggleOpenSize(true)}
               >
-                Size
+                {selectedSize ? (
+                  <p className={styles.searchSizeBtn}>
+                    {selectedSize === 1
+                      ? "2"
+                      : selectedSize === 2
+                      ? "3-5"
+                      : selectedSize === 3
+                      ? "6"
+                      : selectedSize === 4
+                      ? "7 to 10"
+                      : null}
+                  </p>
+                ) : (
+                  "Size"
+                )}
               </button>
             </label>
-            <Size isOpenSize={isOpenSize} />
+            <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
+            {console.log(selectedSize)}
             <button
               className={styles.searchBtn}
               onClick={() => {
