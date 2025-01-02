@@ -1,31 +1,33 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import styles from "./MoreFilter.module.css";
 import exit from "../../assets/exit.svg";
 import relogio from "../../assets/relogio.svg";
 import select from "../../assets/selectSite.svg";
 import save from "../../assets/save.svg";
-// eslint-disable-next-line react/prop-types
-const MoreFilters = ({ applyFilters, closeModal }) => {
+//imgSites
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   // Estados para todos os filtros
-  const [buyInMin, setBuyInMin] = useState("");
-  const [buyInMax, setBuyInMax] = useState("");
+  const [network, setNetwork] = useState();
+  const [buyInMin, setBuyInMin] = useState();
+  const [buyInMax, setBuyInMax] = useState();
   const [fromTime, setFromTime] = useState("");
   const [toTime, setToTime] = useState("");
   const [registeringFromTime, setRegisteringFromTime] = useState("");
   const [registeringToTime, setRegisteringToTime] = useState("");
-  const [prizePoolMin, setPrizePoolMin] = useState("");
-  const [prizePoolMax, setPrizePoolMax] = useState("");
+  const [prizePoolMin, setPrizePoolMin] = useState();
+  const [prizePoolMax, setPrizePoolMax] = useState();
   const [excludeWords, setExcludeWords] = useState("");
-  const [participantsMin, setParticipantsMin] = useState("");
-  const [participantsMax, setParticipantsMax] = useState("");
-  const [tableSize, setTableSize] = useState("Any");
-  const [blindsMin, setBlindsMin] = useState("");
-  const [blindsMax, setBlindsMax] = useState("");
-  const [priority, setPriority] = useState("");
+  const [participantsMin, setParticipantsMin] = useState();
+  const [participantsMax, setParticipantsMax] = useState();
+  const [tableSize, setTableSize] = useState();
+  const [blindsMin, setBlindsMin] = useState();
+  const [blindsMax, setBlindsMax] = useState();
+  const [priority, setPriority] = useState();
   const [endTime, setEndTime] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("All");
   const [reEntry, setReEntry] = useState("allowed");
-  const [speed, setSpeed] = useState("any");
+  const [speed, setSpeed] = useState();
   const [game, setGame] = useState("any");
   const [variant, setVariant] = useState("any");
   const [maxAbility, setMaxAbility] = useState("20");
@@ -34,6 +36,7 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
 
   const handleApplyFilters = () => {
     applyFilters({
+      network,
       buyInMin,
       buyInMax,
       fromTime,
@@ -59,6 +62,82 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
       maxLate,
       includeClosed,
     });
+
+    let filteredList = orderList;
+
+    if (network) {
+      filteredList = filteredList.filter((item) => item.name === network);
+    }
+    if (buyInMin) {
+      filteredList = filteredList.filter((item) => item.buyIn >= buyInMin);
+    }
+    if (buyInMax) {
+      filteredList = filteredList.filter((item) => item.buyIn <= buyInMax);
+    }
+    if (prizePoolMin) {
+      filteredList = filteredList.filter(
+        (item) => item.prizePool >= prizePoolMin
+      );
+    }
+    if (prizePoolMax) {
+      filteredList = filteredList.filter(
+        (item) => item.prizePool <= prizePoolMax
+      );
+    }
+    if (tableSize) {
+      switch (tableSize) {
+        case 1:
+          filteredList = filteredList.filter((item) => item.tableSizeize === 2);
+          break;
+        case 2:
+          filteredList = filteredList.filter(
+            (item) => item.tableSize >= 3 && item.tableSize <= 5
+          );
+          break;
+        case 3:
+          filteredList = filteredList.filter((item) => item.tableSize >= 6);
+          break;
+        case 4:
+          filteredList = filteredList.filter(
+            (item) => item.tableSize >= 7 && item.tableSize <= 10
+          );
+          break;
+        default:
+          filteredList;
+      }
+    }
+    if (blindsMin) {
+      filteredList = filteredList.filter((item) => item.blinds >= blindsMin);
+    }
+    if (blindsMax) {
+      filteredList = filteredList.filter((item) => item.blinds <= blindsMax);
+    }
+    if (priority) {
+      filteredList = filteredList.filter((item) => item.priority === priority);
+    }
+    if (reEntry === "allowed") {
+      filteredList = filteredList.filter(
+        (item) => item.maxReentry != null && item.maxReentry !== ""
+      );
+    } else if (reEntry === "notAllowed") {
+      filteredList = filteredList.filter(
+        (item) => item.maxReentry == null || item.maxReentry === ""
+      );
+    }
+    if (speed) {
+      filteredList = filteredList.filter((item) => item.speed === speed);
+    }
+    if (excludeWords) {
+      filteredList = filteredList.filter(
+        (item) => !item.name.toLowerCase().includes(excludeWords)
+        //Está bugado com a letra A
+      );
+    }
+    if (endTime) {
+      filteredList = filteredList.filter((item) => item.end === endTime);
+    }
+    setOrderList(filteredList);
+    closeModal();
   };
 
   return (
@@ -72,9 +151,22 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
 
       <div className={styles.network}>
         <label htmlFor="">Network</label>
-        <input type="text" placeholder="Network" />
+        <select
+          name="Network"
+          id=""
+          onChange={(e) => {
+            setNetwork(e.target.value);
+          }}
+        >
+          <option value="">Network</option>
+          {orderList.map((item, index) => (
+            <option key={index} value={item.name}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+        <img src={select} alt="Select icon" className={styles.selectIcon} />
       </div>
-
       <div className={styles.buyIn}>
         <label>Buy In</label>
         <div>
@@ -189,13 +281,11 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
       <div className={styles.tableSize}>
         <label>Table Size</label>
         <div>
-          <button onClick={() => setTableSize("any")}>Any</button>
-          <button onClick={() => setTableSize("7to10")}>
-            7to10(Full Ring)
-          </button>
-          <button onClick={() => setTableSize("6-Max")}>6-Max</button>
-          <button onClick={() => setTableSize("3-5")}>3-5</button>
-          <button onClick={() => setTableSize("2")}>2(HU)</button>
+          <button onClick={() => setTableSize()}>Any</button>
+          <button onClick={() => setTableSize(4)}>7to10(Full Ring)</button>
+          <button onClick={() => setTableSize(3)}>6-Max</button>
+          <button onClick={() => setTableSize(2)}>3-5</button>
+          <button onClick={() => setTableSize(1)}>2(HU)</button>
         </div>
       </div>
 
@@ -219,8 +309,11 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
 
       <div className={styles.priority}>
         <label>Priority</label>
-        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-          <option value="">Choose Priority</option>{" "}
+        <select
+          value={priority}
+          onChange={(e) => setPriority(Number(e.target.value))}
+        >
+          <option value="">Choose Priority</option>
           {[...Array(10)].map((_, index) => (
             <option key={index} value={index + 1}>
               {index + 1}
@@ -229,7 +322,7 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
         </select>
         <img src={select} alt="Select icon" className={styles.selectIcon} />
       </div>
-
+      {console.log(priority)}
       <div className={styles.endTime}>
         <label>End Time</label>
         <input
@@ -297,31 +390,95 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
       <div className={styles.speed}>
         <label>Speed</label>
         <div>
-          <button onClick={() => setSpeed("any")}>Any</button>
-          <button onClick={() => setSpeed("slow")}>Slow</button>
-          <button onClick={() => setSpeed("regular")}>Regular</button>
-          <button onClick={() => setSpeed("turbo")}>Turbo</button>
-          <button onClick={() => setSpeed("hyper turbo")}>Hyper Turbo</button>
+          <button
+            onClick={() => setSpeed(null)}
+            className={speed === null ? styles.active : ""}
+          >
+            Any
+          </button>
+          <button
+            onClick={() => setSpeed(1)}
+            className={speed === 1 ? styles.active : ""}
+          >
+            Slow
+          </button>
+          <button
+            onClick={() => setSpeed(2)}
+            className={speed === 2 ? styles.active : ""}
+          >
+            Regular
+          </button>
+          <button
+            onClick={() => setSpeed(3)}
+            className={speed === 3 ? styles.active : ""}
+          >
+            Turbo
+          </button>
+          <button
+            onClick={() => setSpeed(4)}
+            className={speed === 4 ? styles.active : ""}
+          >
+            Hyper Turbo
+          </button>
         </div>
       </div>
-
       <div className={styles.game}>
         <label>Game</label>
         <div>
-          <button onClick={() => setGame("any")}>Any</button>
-          <button onClick={() => setGame("nlh")}>NLH</button>
-          <button onClick={() => setGame("plo4")}>PLO4</button>
-          <button onClick={() => setGame("plo5")}>PLO5</button>
-          <button onClick={() => setGame("plo6")}>PLO6</button>
+          <button
+            onClick={() => setGame("any")}
+            className={game === "any" ? styles.active : ""}
+          >
+            Any
+          </button>
+          <button
+            onClick={() => setGame("nlh")}
+            className={game === "nlh" ? styles.active : ""}
+          >
+            NLH
+          </button>
+          <button
+            onClick={() => setGame("plo4")}
+            className={game === "plo4" ? styles.active : ""}
+          >
+            PLO4
+          </button>
+          <button
+            onClick={() => setGame("plo5")}
+            className={game === "plo5" ? styles.active : ""}
+          >
+            PLO5
+          </button>
+          <button
+            onClick={() => setGame("plo6")}
+            className={game === "plo6" ? styles.active : ""}
+          >
+            PLO6
+          </button>
         </div>
       </div>
 
       <div className={styles.variant}>
         <label>Variant</label>
         <div>
-          <button onClick={() => setVariant("any")}>Any</button>
-          <button onClick={() => setVariant("regular")}>Regular</button>
-          <button onClick={() => setVariant("knockout")}>Knockout</button>
+          <button
+            onClick={() => setVariant("any")}
+            className={variant === "any" ? styles.active : ""}
+          >
+            Any
+          </button>
+          <button
+            onClick={() => setVariant("regular")}
+            className={variant === "regular" ? styles.active : ""}
+          >
+            Regular
+          </button>
+          <button
+            onClick={() => setVariant("knockout")}
+            className={variant === "knockout" ? styles.active : ""}
+          >
+            Knockout
+          </button>
         </div>
       </div>
 
@@ -373,10 +530,15 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
           <span>Include closed tournaments</span>
         </div>
       </div>
-
       <div className={styles.modalActions}>
-        <button onClick={handleApplyFilters} className={styles.saveBtn}><img src={save} alt="SaveIcon" className={styles.saveIcon} />Save Filter</button>
-        <button onClick={handleApplyFilters} className={styles.applyColumns}>Apply Columns</button>
+        <button className={styles.saveBtn}>
+          <img src={save} alt="SaveIcon" className={styles.saveIcon} />
+          Save Filter
+        </button>
+        <button onClick={handleApplyFilters} className={styles.applyColumns}>
+          Apply Columns
+        </button>
+        {console.log(endTime)}
       </div>
     </div>
   );

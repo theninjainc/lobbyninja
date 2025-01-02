@@ -122,10 +122,6 @@ const NewAlarm = ({ isOpen, onClose }) => {
             </button>
           </div>
         </div>
-        <div className={styles.sound}>
-          <label>Sound</label>
-          <button>Lorem ispum</button>
-        </div>
         <div className={styles.moreOptions}>
         <button onClick={() => setShowMoreOptions(!showMoreOptions)}>
           + More options

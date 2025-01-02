@@ -1,0 +1,47 @@
+.options{
+    width: 443px;
+    height: 51px;
+    background-color:#191934;
+    border-radius: 59px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 15px;
+    padding-right: 15px;
+    gap: 15px;
+}
+
+.selectedTournaments{
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 14px;
+}
+
+.options button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 3.5px;
+
+}
+
+.skipped, .star,.delete,.alarm,.threeLine{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.options img{
+    height: 15px;
+}
+
+.border{
+    margin-top: 12px;
+    border-right: solid 2px rgb(255, 255, 255, 0.08); 
+    height: 25px;
+}
+
+.delete img{
+    height: auto;
+}

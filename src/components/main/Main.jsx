@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Timer from "../../utils/Timer/Timer";
 import styles from "./main.module.css";
 import lupa from "../../assets/Lupa.svg";
@@ -6,7 +6,7 @@ import save from "../../assets/save.svg";
 import manageColumns from "../../assets/manageColumns.svg";
 import moreFilters from "../../assets/moreFilters.svg";
 import searchTournaments from "../../assets/searchTournaments.svg";
-import teste from "../../assets/siteRed.svg";
+import poker888 from "../../assets/siteRed.svg";
 import b from "../../assets/image 1.svg";
 import c from "../../assets/image 2.svg";
 import d from "../../assets/image 3.svg";
@@ -20,198 +20,68 @@ import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import Speed from "../../utils/Speed/Speed";
 import Size from "../../utils/Size/Size";
-import notification from "../../assets/notification.svg";
 import engine from "../../assets/engine.svg";
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
-import Notifications from "../../utils/Notifications/Notifications";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
 import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 import MoreFilters from "../../utils/MoreFilters/MoreFilters";
 import NewAlarm from "../../utils/NewAlarm/NewAlarm";
-import slow from "../../assets/Slow.svg";
-import regular from "../../assets/regular.svg";
-import hyper from "../../assets/hyper.svg";
-import turbo from "../../assets/turbo.svg";
+import Options from "../../utils/Options/Options";
+import ChoosePriority from "../../utils/ChoosePriority/ChoosePriority";
+
+const PAGE_SIZE = 20;
 
 const Main = () => {
-  const data = [
-    {
-      site: teste,
-      start: "16:30",
-      buyIn: 350,
-      name: "I Tournament",
-      prizePool: 12348,
-      maxReentry: 125,
-      blinds: "70",
-      speed: 2,
-      field: 105,
-      end: "18:30",
-      mlr: 200,
-      tableSize: 5,
-      priority: 9,
-    },
-    {
-      site: b,
-      start: "12:30",
-      buyIn: 320,
-      name: "B Tournament",
-      prizePool: 500,
-      maxReentry: null,
-      blinds: "50",
-      speed: 3,
-      field: 100,
-      end: "14:00",
-      mlr: 120,
-      tableSize: 9,
-      priority: 3,
-    },
-    {
-      site: c,
-      start: "16:00",
-      buyIn: 450,
-      name: "H Tournament",
-      prizePool: 1000,
-      maxReentry: 150,
-      blinds: "60",
-      speed: 3,
-      field: 110,
-      end: "18:00",
-      mlr: 1000,
-      tableSize: 6,
-      priority: 8,
-    },
-    {
-      site: d,
-      start: "13:00",
-      buyIn: 422,
-      name: "C Tournament",
-      prizePool: 15000,
-      maxReentry: 200,
-      blinds: "100",
-      speed: 2,
-      field: 120,
-      end: "15:59",
-      mlr: 850,
-      tableSize: 6,
-      priority: 2,
-    },
-    {
-      site: e,
-      start: "17:30",
-      buyIn: 30,
-      name: "K Tournament",
-      prizePool: 50000,
-      maxReentry: 90,
-      blinds: "40",
-      speed: 3,
-      field: 95,
-      end: "19:30",
-      mlr: 320,
-      tableSize: 4,
-      priority: 10,
-    },
-    {
-      site: f,
-      start: "12:30",
-      buyIn: 32,
-      name: "A Tournament",
-      prizePool: 7000,
-      maxReentry: 123,
-      blinds: "50",
-      speed: 1,
-      field: 100,
-      end: "14:00",
-      mlr: 540,
-      tableSize: 5,
-      priority: 1,
-    },
-    {
-      site: g,
-      start: "15:00",
-      buyIn: 60,
-      name: "F Tournament",
-      prizePool: 9000,
-      maxReentry: 500,
-      blinds: "200",
-      speed: 2,
-      field: 200,
-      end: "17:00",
-      mlr: 200,
-      tableSize: 10,
-      priority: 6,
-    },
-    {
-      site: h,
-      start: "23:00",
-      buyIn: 55,
-      name: "J Tournament",
-      prizePool: 15000,
-      maxReentry: 250,
-      blinds: "80",
-      speed: 1,
-      field: 130,
-      end: "19:00",
-      mlr: 100,
-      tableSize: 8,
-      priority: 9,
-    },
-    {
-      site: i,
-      start: "15:30",
-      buyIn: 25,
-      name: "B Tournament",
-      prizePool: 250000,
-      maxReentry: 100,
-      blinds: "50",
-      speed: 1,
-      field: 90,
-      end: "17:30",
-      mlr: 450,
-      tableSize: 7,
-      priority: 7,
-    },
-    {
-      site: j,
-      start: "14:30",
-      buyIn: 20,
-      name: "B Tournament",
-      prizePool: 14500,
-      maxReentry: 50,
-      blinds: "25",
-      speed: 4,
-      field: 80,
-      end: "16:30",
-      mlr: 150,
-      tableSize: 4,
-      priority: 5,
-    },
-    {
-      site: b,
-      start: "14:00",
-      buyIn: 50,
-      name: "D Tournament",
-      prizePool: 40000,
-      maxReentry: 300,
-      blinds: "75",
-      speed: 4,
-      field: 150,
-      end: "00:10",
-      mlr: 340,
-      tableSize: 8,
-      priority: 4,
-    },
-  ];
+  const [orderList, setOrderList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
+
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleString("pt-BR", {
+      weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+      hour: 'numeric', minute: 'numeric'
+    });
+  };
+  // Função para buscar os itens da API
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/torneios/api/activeTournaments");
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os dados");
+      }
+
+      const data = await response.json(); // Essa linha é importante
+      console.log(data); // Para conferir se os dados estão chegando corretamente
+      setOrderList(data); // Atualize o estado com os dados
+    } catch (error) {
+      setError(error.message); // Atualiza o estado com o erro
+    }
+  }
+
+  // Função para obter os itens da página atual
+  const getPaginatedOrders = () => {
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = currentPage * PAGE_SIZE;
+    console.log(orderList[0])
+    return orderList.slice(startIndex, endIndex);
+  };
+
+  // Chama a função de buscar os dados ao carregar o componente
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const allFilters = [
     "Site",
     "Start",
-    "Name",
-    "Speed",
     "Buy In",
+    "Name",
     "Prize Pool",
     "Max Reentry",
     "Blinds",
+    "Speed",
     "Field",
     "End",
     "Mlr",
@@ -224,7 +94,6 @@ const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
   const [isOpenSize, setIsOpenSize] = useState(false);
-  const [isOpenNotifications, setIsOpenNotifications] = useState(false);
   const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
   const [moreFiltersisOpen, setMoreFiltersisOpen] = useState(false);
   const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
@@ -246,9 +115,6 @@ const Main = () => {
   const toggleOpenSize = () => {
     setIsOpenSize((prevState) => !prevState);
   };
-  const toggleOpenNotifications = () => {
-    setIsOpenNotifications((prevState) => !prevState);
-  };
 
   //Filter Buttons
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
@@ -263,7 +129,6 @@ const Main = () => {
   const [orderEndFilter, setOrderEndFilter] = useState("asc");
   const [orderSpeedFilter, setOrderSpeedFilter] = useState("asc");
   const [orderPrizePool, setOrderPrizePool] = useState("asc");
-  const [orderList, setOrderList] = useState(data);
   const [allowedFilters, setAllowedFilters] = useState();
 
   const orderedListPrizePool = () => {
@@ -375,8 +240,8 @@ const Main = () => {
     const newListMaxReentry = [...orderList];
     newListMaxReentry.sort((a, b) =>
       orderMaxReentryFilter === "asc"
-        ? a.maxReentry - b.maxReentry
-        : b.maxReentry - a.maxReentry
+        ? a.MaxReentry - b.MaxReentry
+        : b.MaxReentry - a.MaxReentry
     );
     setOrderList(newListMaxReentry);
     setOrderMaxReentryFilter(orderMaxReentryFilter === "asc" ? "desc" : "asc");
@@ -384,10 +249,11 @@ const Main = () => {
 
   const orderedListName = () => {
     const newList = [...orderList];
+    console.log(newList[0])
     newList.sort((a, b) =>
       orderNameFilter === "asc"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name)
+        ? a.Name.localeCompare(b.Name)
+        : b.Name.localeCompare(a.Name)
     );
     setOrderList(newList);
     setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
@@ -396,7 +262,7 @@ const Main = () => {
   const orderedListBuyIn = () => {
     const newListBuyIn = [...orderList];
     newListBuyIn.sort((a, b) =>
-      orderBuyInFilter === "asc" ? a.buyIn - b.buyIn : b.buyIn - a.buyIn
+      orderBuyInFilter === "asc" ? a.BuyIn - b.BuyIn : b.BuyIn - a.BuyIn
     );
     setOrderList(newListBuyIn);
     setOrderBuyInFilter(orderBuyInFilter === "asc" ? "desc" : "asc");
@@ -405,7 +271,7 @@ const Main = () => {
   const orderedBlinds = () => {
     const newListBlinds = [...orderList];
     newListBlinds.sort((a, b) =>
-      orderBlindsFilter === "asc" ? a.blinds - b.blinds : b.blinds - a.blinds
+      orderBlindsFilter === "asc" ? a.Blinds - b.Blinds : b.Blinds - a.Blinds
     );
     setOrderList(newListBlinds);
     setOrderBlindsFilter(orderBlindsFilter === "asc" ? "desc" : "asc");
@@ -545,17 +411,17 @@ const Main = () => {
   const [selectedSize, setSelectedSize] = useState();
 
   const handleFilter = () => {
-    let filteredList = data;
+    let filteredList = orderList;
 
     if (searchNameTournaments) {
       filteredList = filteredList.filter((item) =>
-        item.name.toLowerCase().includes(searchNameTournaments.toLowerCase())
+        item.Name.toLowerCase().includes(searchNameTournaments.toLowerCase())
       );
     }
 
     if (minBuyIn) {
       filteredList = filteredList.filter(
-        (item) => item.buyIn >= Number(minBuyIn)
+        (item) => item.BuyIn >= Number(minBuyIn)
       );
     }
 
@@ -601,275 +467,312 @@ const Main = () => {
     }
     setOrderList(filteredList);
   };
-
+  const applyFilters = () => { };
   return (
-    <div className={styles.main}>
-      <div className={styles.navbar}>
-        <div className={styles.titlef}>Tournament List</div>
-        <div className={styles.btns}>
-          <div className={styles.btns}>
-            <div>
-              <ToggleThemeBtn />
-            </div>
-            <div>
-              <button
-                className={styles.navNotificationBtn}
-                onClick={() => toggleOpenNotifications(true)}
-              >
-                <img src={notification} alt="" />
-              </button>
-            </div>
-            <Notifications isOpenNotifications={isOpenNotifications} />
-            <div>
-              <button className={styles.navEngineBtn}>
-                <img src={engine} alt="" />
-              </button>
+    <>
+      <div className={styles.main}>
+
+        {moreFiltersisOpen && (
+          <MoreFilters
+            closeModal={() => setMoreFiltersisOpen(false)}
+            orderList={orderList}
+            setOrderList={setOrderList}
+            applyFilters={applyFilters}
+          />
+        )}
+        <CostumizeColumns
+          isOpen={isOpenCostumizeColumns}
+          closeModal={() => setIsOpenCostumizeColumns(false)}
+          onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
+        />
+
+        <div
+          className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
+            ? styles.blur
+            : styles.noBlur
+            }`}
+        >
+          <div className={styles.navbar}>
+            <div className={styles.titlef}>Tournament List</div>
+            <div className={styles.btns}>
+              <div className={styles.btns}>
+                <div>
+                  <ToggleThemeBtn />
+                </div>
+                <div>
+                  <button className={styles.navEngineBtn}>
+                    <img src={engine} alt="" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className={styles.searchbar}>
-        <div className={styles.searchleft}>
-          <label htmlFor="search" className={styles.label}>
-            <img src={searchTournaments} alt="Search Tournaments" />
-            <input
-              type="search"
-              className={styles.search}
-              onChange={() => setSearchNameTournaments(event.target.value)}
-              placeholder="Search tournaments..."
-              id="search"
+        <div className={styles.searchbar}>
+          <div className={styles.searchleft}>
+            <label htmlFor="search" className={styles.label}>
+              <img src={searchTournaments} alt="Search Tournaments" />
+              <input
+                type="search"
+                className={styles.search}
+                onChange={() => setSearchNameTournaments(event.target.value)}
+                placeholder="Search tournaments..."
+                id="search"
+              />
+            </label>
+            <label htmlFor="site" className={styles.labelSelectSite}>
+              <button
+                name="site"
+                id="site"
+                className={styles.selectSite}
+                onClick={() => toggleOpen(true)}
+              >
+                {selectedSite ? (
+                  <div className={styles.selectedSite}>
+                    <img
+                      src={selectedSite.site}
+                      alt={`Site ${selectedSite.name}`}
+                    />
+                    <p>{selectedSite.name}</p>
+                  </div>
+                ) : (
+                  "Select Site"
+                )}
+              </button>
+            </label>
+            <SelectSite
+              isOpen={isOpen}
+              orderList={orderList}
+              setSelectedSite={setSelectedSite}
             />
-          </label>
-          <label htmlFor="site" className={styles.labelSelectSite}>
-            <button
-              name="site"
-              id="site"
-              className={styles.selectSite}
-              onClick={() => toggleOpen(true)}
-            >
-              {selectedSite ? (
-                <div className={styles.selectedSite}>
-                  <img
-                    src={selectedSite.site}
-                    alt={`Site ${selectedSite.name}`}
-                  />
-                  <p>{selectedSite.name}</p>
-                </div>
-              ) : (
-                "Select Site"
-              )}
-            </button>
-          </label>
-          <SelectSite
-            isOpen={isOpen}
-            orderList={data}
-            setSelectedSite={setSelectedSite}
-          />
-          <div className={styles.maxMinSearch}>
-            <label htmlFor="min-value" className={styles.labelMaxMinValue}>
-              <div>Min $</div>
-              <input
-                type="number"
-                id="min-value"
-                name="min-value"
-                placeholder="Type..."
-                onChange={(e) => {
-                  setMinBuyIn(e.target.value);
-                }}
-                className={styles.searchMaxMin}
-              />
-            </label>
-          </div>
-          <div className={styles.maxMinSearch}>
-            <label htmlFor="max-value" className={styles.labelMaxMinValue}>
-              <div>Max $</div>
-              <input
-                type="number"
-                id="max-value"
-                name="max-value"
-                placeholder="Type..."
-                onChange={(e) => {
-                  setMaxBuyIn(e.target.value);
-                }}
-                className={styles.searchMaxMin}
-              />
-            </label>
-          </div>
-          <label htmlFor="speed" className={styles.labelSelectSpeed}>
-            <button
-              name="speed"
-              id="speed"
-              className={styles.selectSpeed}
-              onClick={() => toggleOpenSpeed(true)}
-            >
-              {selectedSpeed ? (
-                <div className={styles.selectedSpeed}>
-                  <img
-                    src={
-                      selectedSpeed === 1
-                        ? slow
+            <div className={styles.maxMinSearch}>
+              <label htmlFor="min-value" className={styles.labelMaxMinValue}>
+                <div>Min $</div>
+                <input
+                  type="number"
+                  id="min-value"
+                  name="min-value"
+                  placeholder="Type..."
+                  onChange={(e) => {
+                    setMinBuyIn(e.target.value);
+                  }}
+                  className={styles.searchMaxMin}
+                />
+              </label>
+            </div>
+            <div className={styles.maxMinSearch}>
+              <label htmlFor="max-value" className={styles.labelMaxMinValue}>
+                <div>Max $</div>
+                <input
+                  type="number"
+                  id="max-value"
+                  name="max-value"
+                  placeholder="Type..."
+                  onChange={(e) => {
+                    setMaxBuyIn(e.target.value);
+                  }}
+                  className={styles.searchMaxMin}
+                />
+              </label>
+            </div>
+            <label htmlFor="speed" className={styles.labelSelectSpeed}>
+              <button
+                name="speed"
+                id="speed"
+                className={styles.selectSpeed}
+                onClick={() => toggleOpenSpeed(true)}
+              >
+                {selectedSpeed ? (
+                  <div className={styles.selectedSpeed}>
+                    <img
+                      src={
+                        selectedSpeed === 1
+                          ? slow
+                          : selectedSpeed === 2
+                            ? regular
+                            : selectedSpeed === 3
+                              ? turbo
+                              : selectedSpeed === 4
+                                ? hyper
+                                : null
+                      }
+                    ></img>
+                    <p>
+                      {selectedSpeed === 1
+                        ? "Slow"
                         : selectedSpeed === 2
-                          ? regular
+                          ? "Regular"
                           : selectedSpeed === 3
-                            ? turbo
+                            ? "Turbo"
                             : selectedSpeed === 4
-                              ? hyper
-                              : null
-                    }
-                  ></img>
-                  <p>
-                    {selectedSpeed === 1
-                      ? "Slow"
-                      : selectedSpeed === 2
-                        ? "Regular"
-                        : selectedSpeed === 3
-                          ? "Turbo"
-                          : selectedSpeed === 4
-                            ? "Hyper"
+                              ? "Hyper"
+                              : null}
+                    </p>
+                  </div>
+                ) : (
+                  "Speed"
+                )}
+              </button>
+            </label>
+            <Speed
+              isOpenSpeed={isOpenSpeed}
+              setSelectedSpeed={setSelectedSpeed}
+            />
+            <label htmlFor="size" className={styles.labelSelectSize}>
+              <button
+                name="size"
+                id="size"
+                className={styles.selectSize}
+                onClick={() => toggleOpenSize(true)}
+              >
+                {selectedSize ? (
+                  <p className={styles.searchSizeBtn}>
+                    {selectedSize === 1
+                      ? "2"
+                      : selectedSize === 2
+                        ? "3-5"
+                        : selectedSize === 3
+                          ? "6"
+                          : selectedSize === 4
+                            ? "7 to 10"
                             : null}
                   </p>
-                </div>
-              ) : (
-                "Speed"
-              )}
-            </button>
-          </label>
-          <Speed
-            isOpenSpeed={isOpenSpeed}
-            setSelectedSpeed={setSelectedSpeed}
-          />
-          <label htmlFor="size" className={styles.labelSelectSize}>
+                ) : (
+                  "Size"
+                )}
+              </button>
+            </label>
+            <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
+            {console.log(selectedSize)}
             <button
-              name="size"
-              id="size"
-              className={styles.selectSize}
-              onClick={() => toggleOpenSize(true)}
+              className={styles.searchBtn}
+              onClick={() => {
+                handleFilter();
+              }}
             >
-              {selectedSize ? (
-                <p className={styles.searchSizeBtn}>
-                  {selectedSize === 1
-                    ? "2"
-                    : selectedSize === 2
-                      ? "3-5"
-                      : selectedSize === 3
-                        ? "6"
-                        : selectedSize === 4
-                          ? "7 to 10"
-                          : null}
-                </p>
-              ) : (
-                "Size"
-              )}
+              <img src={lupa} alt="Lupa icon" />{" "}
             </button>
-          </label>
-          <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
-          {console.log(selectedSize)}
-          <button
-            className={styles.searchBtn}
-            onClick={() => {
-              handleFilter();
-            }}
-          >
-            <img src={lupa} alt="Lupa icon" />{" "}
-          </button>
-          <button className={styles.saveBtn}>
-            <img src={save} alt="Save icon" />
-          </button>
-        </div>
-        <div className={styles.searchRight}>
-          <button
-            className={styles.manageColumnsBtn}
-            onClick={() => setIsOpenCostumizeColumns(true)}
-          >
-            <div>
-              <img src={manageColumns} alt="Manage Columns" />
-            </div>
-            Manage Columns
-          </button>
-          <button
-            className={styles.moreFiltersBtn}
-            onClick={() => setMoreFiltersisOpen(true)}
-          >
-            <div>
-              <img src={moreFilters} alt="More Filters" />
-            </div>
-            More Filters
-          </button>
-        </div>
-      </div>
-      <div className={styles.filterbar}>
-        <input type="checkbox" className={styles.filterCheckbox} />
-        {filterButtons
-          .filter((button) => !allowedFilters || allowedFilters.includes(button.label))
-          .sort((a, b) => {
-            if (!allowedFilters) return 0;
-            return allowedFilters.indexOf(a.label) - allowedFilters.indexOf(b.label);
-          })
-          .map((button, index) => (
+            <button className={styles.saveBtn}>
+              <img src={save} alt="Save icon" />
+            </button>
+          </div>
+          <div className={styles.searchRight}>
             <button
-              key={index}
-              className={`${button.className} ${button.isActive ? styles.active : ""}`}
-              onClick={button.onClick}
+              className={styles.manageColumnsBtn}
+              onClick={() => setIsOpenCostumizeColumns(true)}
             >
-              {button.label}
-            </button>
-          ))}
-
-      </div>
-      <table>
-        <tbody>
-          <tr>
-            {orderList.map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundColor:
-                    index % 2 === 0
-                      ? "transparent"
-                      : "rgba(255, 255, 255, 0.05)",
-                }}
-              >
-                {console.log(allowedFilters == null)}
-                <td className={styles.stylesCheckboxTable}>
-                  <FavouriteStar className={styles.favouriteStar} />
-                  <input type="checkbox" className={styles.checkBoxTable} />
-                </td>
-                {(allowedFilters || allFilters).map((filter) => (
-                  <td
-                    key={filter}
-                    className={styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]}
-                  >
-                    {filter === "Site" && <img src={item.site} alt="svg" />}
-                    {filter === "Start" && item.start}
-                    {filter === "Buy In" && `$${item.buyIn}`}
-                    {filter === "Name" && item.name}
-                    {filter === "Prize Pool" && `$${item.prizePool}`}
-                    {filter === "Max Reentry" && (item.maxReentry === null ? "-" : item.maxReentry)}
-                    {filter === "Blinds" && item.blinds}
-                    {filter === "Speed" && <SpeedMap speed={item.speed} />}
-                    {filter === "Field" && item.field}
-                    {filter === "End" && item.end}
-                    {filter === "MLR" && <Timer startEvent={item.start} />}
-                    {filter === "Table Size" && item.tableSize}
-                    {filter === "Priority" && item.priority}
-                  </td>
-                ))}
-
-
+              <div>
+                <img src={manageColumns} alt="Manage Columns" />
               </div>
+              Manage Columns
+            </button>
+            <button
+              className={styles.moreFiltersBtn}
+              onClick={() => setMoreFiltersisOpen(true)}
+            >
+              <div>
+                <img src={moreFilters} alt="More Filters" />
+              </div>
+              More Filters
+            </button>
+          </div>
+        </div>
+        <div className={styles.filterbar}>
+          <input type="checkbox" className={styles.filterCheckbox} />
+          {filterButtons
+            .filter((button) => !allowedFilters || allowedFilters.includes(button.label))
+            .sort((a, b) => {
+              if (!allowedFilters) return 0;
+              return allowedFilters.indexOf(a.label) - allowedFilters.indexOf(b.label);
+            })
+            .map((button, index) => (
+              <button
+                key={index}
+                className={`${button.className} ${button.isActive ? styles.active : ""}`}
+                onClick={button.onClick}
+              >
+                {button.label}
+              </button>
             ))}
-          </tr>
-        </tbody>
-      </table>
-      <CostumizeColumns
-        isOpen={isOpenCostumizeColumns}
-        closeModal={() => setIsOpenCostumizeColumns(false)}
-        onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
-      />
-      {moreFiltersisOpen && (
-        <MoreFilters closeModal={() => setMoreFiltersisOpen(false)} />
-      )}
-    </div>
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              {getPaginatedOrders().map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor:
+                      index % 2 === 0
+                        ? "transparent"
+                        : "rgba(255, 255, 255, 0.05)",
+                  }}
+                >
+                  <td className={styles.stylesCheckboxTable}>
+                    <FavouriteStar className={styles.favouriteStar} />
+                    <input type="checkbox" className={styles.checkBoxTable} />
+                  </td>
+                  {(allowedFilters || allFilters).map((filter) => (
+                    <td
+                      key={filter}
+                      className={styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]}
+                    >
+                      {filter === "Site" && item.Site && (
+                        <img
+                          src={item.Site === "888Poker" ? "poker888" : item.Site}
+                          alt="site logo"
+                        />
+                      )}
+
+                      {filter === "Start" && (item.Start ? new Date(item.Start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "-")}
+
+                      {filter === "Buy In" && (item.BuyIn ? `$${item.BuyIn}` : "-")}
+
+                      {filter === "Name" && (item.Name ? item.Name : "-")}
+
+                      {filter === "Prize Pool" && (item.PrizePool ? `$${item.PrizePool}` : "-")}
+
+                      {filter === "Max Reentry" && (item.MaxReentry ? item.MaxReentry : "-")}
+
+                      {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
+
+                      {filter === "Speed" && (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
+
+                      {filter === "Field" && (item.Field ? item.Field : "-")}
+
+                      {filter === "End" && (item.End ? item.End : "-")}
+
+                      {filter === "Mlr" && (item.Start ? <Timer startEvent={new Date(item.Start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} /> : "-")}
+
+                      {filter === "TableSize" && (item.TableSize ? item.TableSize : "-")}
+
+                      {filter === "Priority" && (item.Priority ? item.Priority : "-")}
+                    </td>
+                  ))}
+
+                </div>
+              ))}
+            </tr>
+            <div>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </button>
+              <span>Página {currentPage}</span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage * PAGE_SIZE >= orderList.length}
+              >
+                Próxima
+              </button>
+            </div>
+          </tbody>
+        </table>
+
+      </div>
+    </>
   );
 };
 

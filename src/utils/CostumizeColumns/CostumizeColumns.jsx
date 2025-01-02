@@ -22,15 +22,13 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
     "Priority",
   ];
 
-  // Estado para as colunas disponíveis e selecionadas
   const [localColumns, setLocalColumns] = useState(initialColumns);
-  const [selectedColumns, setSelectedColumns] = useState([]); // Apenas o lado direito
+  const [selectedColumns, setSelectedColumns] = useState([]);
 
   useEffect(() => {
     setModalIsOpen(isOpen);
   }, [isOpen]);
 
-  // Atualizar a ordem das colunas selecionadas
   const handleDragEnd = (result) => {
     const { source, destination } = result;
 
