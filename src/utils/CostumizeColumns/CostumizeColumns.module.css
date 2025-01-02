@@ -40,10 +40,14 @@
 
 .costumizeColumns {
   background-color: #191934;
-  width: 754px;
+  width: 55%;
   height: auto;
   border-radius: 10px;
   padding: 24px 0px 0px 0px;
+  position: absolute;
+  top: 5%;
+  right: 25%;
+  z-index: 10000;
 }
 
 .costumizeTitle {
@@ -63,6 +67,7 @@
 }
 
 .costumizeTitle button {
+  padding-top:10px ;
   width: 30px;
   height: 30px;
   border: none;
@@ -146,4 +151,17 @@
 
 .footerApplyColumnsBtn:hover{
     background: radial-gradient(ellipse at top,#865cf2, #4a14de 66% );
+}
+
+
+.fromTime1 input{
+  background-color: rgb(255, 255, 255, 0.08);
+border-radius: 7px;
+height: 35px;
+border: solid 2px #5d5c5c;
+padding-left: 10px;
+width: 100%;
+font-size: 14px;
+color: #fff;
+
 }

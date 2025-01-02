@@ -27,6 +27,12 @@ import Notifications from "../../utils/Notifications/Notifications";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
 import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
+import MoreFilters from "../../utils/MoreFilters/MoreFilters";
+import NewAlarm from "../../utils/NewAlarm/NewAlarm";
+import slow from "../../assets/Slow.svg";
+import regular from "../../assets/regular.svg";
+import hyper from "../../assets/hyper.svg";
+import turbo from "../../assets/turbo.svg";
 
 const Main = () => {
   const data = [
@@ -154,7 +160,7 @@ const Main = () => {
       site: i,
       start: "15:30",
       buyIn: 25,
-      name: "G Tournament",
+      name: "B Tournament",
       prizePool: 250000,
       maxReentry: 100,
       blinds: "50",
@@ -169,7 +175,7 @@ const Main = () => {
       site: j,
       start: "14:30",
       buyIn: 20,
-      name: "E Tournament",
+      name: "B Tournament",
       prizePool: 14500,
       maxReentry: 50,
       blinds: "25",
@@ -203,6 +209,16 @@ const Main = () => {
   const [isOpenSize, setIsOpenSize] = useState(false);
   const [isOpenNotifications, setIsOpenNotifications] = useState(false);
   const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
+  const [moreFiltersisOpen, setMoreFiltersisOpen] = useState(false);
+  const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
+
+  const openNewAlarm = () => {
+    setIsOpenNewAlarm(true);
+  };
+
+  const closeNewAlarm = () => {
+    setIsOpenNewAlarm(false);
+  };
 
   const toggleOpen = () => {
     setIsOpen((prevState) => !prevState);
@@ -505,6 +521,72 @@ const Main = () => {
     },
   ];
 
+  //form Logics
+  const [searchNameTournaments, setSearchNameTournaments] = useState("");
+  const [minBuyIn, setMinBuyIn] = useState();
+  const [maxBuyIn, setMaxBuyIn] = useState();
+  const [selectedSite, setSelectedSite] = useState();
+  const [selectedSpeed, setSelectedSpeed] = useState();
+  const [selectedSize, setSelectedSize] = useState();
+
+  const handleFilter = () => {
+    let filteredList = data;
+
+    if (searchNameTournaments) {
+      filteredList = filteredList.filter((item) =>
+        item.name.toLowerCase().includes(searchNameTournaments.toLowerCase())
+      );
+    }
+
+    if (minBuyIn) {
+      filteredList = filteredList.filter(
+        (item) => item.buyIn >= Number(minBuyIn)
+      );
+    }
+
+    if (maxBuyIn) {
+      filteredList = filteredList.filter(
+        (item) => item.buyIn <= Number(maxBuyIn)
+      );
+    }
+
+    if (selectedSite) {
+      filteredList = filteredList.filter((item) =>
+        item.site.includes(selectedSite.site)
+      );
+    }
+
+    if (selectedSpeed) {
+      filteredList = filteredList.filter(
+        (item) => item.speed === selectedSpeed
+      );
+    }
+
+    if (selectedSize) {
+      switch (selectedSize) {
+        case 1:
+          filteredList = filteredList.filter((item) => item.tableSizeize === 2);
+          break;
+        case 2:
+          filteredList = filteredList.filter(
+            (item) => item.tableSize >= 3 && item.tableSize <= 5
+          );
+          break;
+        case 3:
+          filteredList = filteredList.filter((item) => item.tableSize === 6);
+          break;
+        case 4:
+          filteredList = filteredList.filter(
+            (item) => item.tableSize >= 7 && item.tableSize <= 10
+          );
+          break;
+        default:
+          filteredList;
+      }
+    }
+    setOrderList(filteredList);
+  };
+
   return (
     <div className={styles.main}>
       <div className={styles.navbar}>
@@ -538,6 +620,7 @@ const Main = () => {
             <input
               type="search"
               className={styles.search}
+              onChange={() => setSearchNameTournaments(event.target.value)}
               placeholder="Search tournaments..."
               id="search"
             />
@@ -549,10 +632,24 @@ const Main = () => {
               className={styles.selectSite}
               onClick={() => toggleOpen(true)}
             >
-              Select Site
+              {selectedSite ? (
+                <div className={styles.selectedSite}>
+                  <img
+                    src={selectedSite.site}
+                    alt={`Site ${selectedSite.name}`}
+                  />
+                  <p>{selectedSite.name}</p>
+                </div>
+              ) : (
+                "Select Site"
+              )}
             </button>
           </label>
-          <SelectSite isOpen={isOpen} />
+          <SelectSite
+            isOpen={isOpen}
+            orderList={data}
+            setSelectedSite={setSelectedSite}
+          />
           <div className={styles.maxMinSearch}>
             <label htmlFor="min-value" className={styles.labelMaxMinValue}>
               <div>Min $</div>
@@ -561,6 +658,9 @@ const Main = () => {
                 id="min-value"
                 name="min-value"
                 placeholder="Type..."
+                onChange={(e) => {
+                  setMinBuyIn(e.target.value);
+                }}
                 className={styles.searchMaxMin}
               />
             </label>
@@ -573,6 +673,9 @@ const Main = () => {
                 id="max-value"
                 name="max-value"
                 placeholder="Type..."
+                onChange={(e) => {
+                  setMaxBuyIn(e.target.value);
+                }}
                 className={styles.searchMaxMin}
               />
             </label>
@@ -584,10 +687,42 @@ const Main = () => {
               className={styles.selectSpeed}
               onClick={() => toggleOpenSpeed(true)}
             >
-              Speed
+              {selectedSpeed ? (
+                <div className={styles.selectedSpeed}>
+                  <img
+                    src={
+                      selectedSpeed === 1
+                        ? slow
+                        : selectedSpeed === 2
+                          ? regular
+                          : selectedSpeed === 3
+                            ? turbo
+                            : selectedSpeed === 4
+                              ? hyper
+                              : null
+                    }
+                  ></img>
+                  <p>
+                    {selectedSpeed === 1
+                      ? "Slow"
+                      : selectedSpeed === 2
+                        ? "Regular"
+                        : selectedSpeed === 3
+                          ? "Turbo"
+                          : selectedSpeed === 4
+                            ? "Hyper"
+                            : null}
+                  </p>
+                </div>
+              ) : (
+                "Speed"
+              )}
             </button>
           </label>
-          <Speed isOpenSpeed={isOpenSpeed} />
+          <Speed
+            isOpenSpeed={isOpenSpeed}
+            setSelectedSpeed={setSelectedSpeed}
+          />
           <label htmlFor="size" className={styles.labelSelectSize}>
             <button
               name="size"
@@ -595,11 +730,31 @@ const Main = () => {
               className={styles.selectSize}
               onClick={() => toggleOpenSize(true)}
             >
-              Size
+              {selectedSize ? (
+                <p className={styles.searchSizeBtn}>
+                  {selectedSize === 1
+                    ? "2"
+                    : selectedSize === 2
+                      ? "3-5"
+                      : selectedSize === 3
+                        ? "6"
+                        : selectedSize === 4
+                          ? "7 to 10"
+                          : null}
+                </p>
+              ) : (
+                "Size"
+              )}
             </button>
           </label>
-          <Size isOpenSize={isOpenSize} />
-          <button className={styles.searchBtn}>
+          <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
+          {console.log(selectedSize)}
+          <button
+            className={styles.searchBtn}
+            onClick={() => {
+              handleFilter();
+            }}
+          >
             <img src={lupa} alt="Lupa icon" />{" "}
           </button>
           <button className={styles.saveBtn}>
@@ -607,13 +762,19 @@ const Main = () => {
           </button>
         </div>
         <div className={styles.searchRight}>
-          <button className={styles.manageColumnsBtn} onClick={() => setIsOpenCostumizeColumns(true)}>
+          <button
+            className={styles.manageColumnsBtn}
+            onClick={() => setIsOpenCostumizeColumns(true)}
+          >
             <div>
               <img src={manageColumns} alt="Manage Columns" />
             </div>
             Manage Columns
           </button>
-          <button className={styles.moreFiltersBtn} >
+          <button
+            className={styles.moreFiltersBtn}
+            onClick={() => setMoreFiltersisOpen(true)}
+          >
             <div>
               <img src={moreFilters} alt="More Filters" />
             </div>
@@ -624,6 +785,7 @@ const Main = () => {
       <div className={styles.filterbar}>
         <input type="checkbox" className={styles.filterCheckbox} />
         {filterButtons
+          .filter((button) => !allowedFilters || allowedFilters.includes(button.label))
           .map((button, index) => (
             <button
               key={index}
@@ -647,55 +809,59 @@ const Main = () => {
                       : "rgba(255, 255, 255, 0.05)",
                 }}
               >
-                {allowedFilters && allowedFilters.includes("Site") && (
+                {console.log(allowedFilters == null)}
+                <td className={styles.stylesCheckboxTable}>
+                  <FavouriteStar className={styles.favouriteStar} />
+                  <input type="checkbox" className={styles.checkBoxTable} />
+                </td>
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Site")) && (
                   <td className={styles.siteTable}>
                     <img src={item.site} alt="svg" />
                   </td>
                 )}
-                {allowedFilters && allowedFilters.includes("Start") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Start")) && (
                   <td className={styles.startTable}>{item.start}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("Buy In") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Buy In")) && (
                   <td className={styles.buyInTable}>${item.buyIn}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("Name") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Name")) && (
                   <td className={styles.nameTable}>{item.name}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("Prize Pool") && (
-                  <td className={styles.prizePoolTable}>
-                    ${item.prizePool}
-                  </td>
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Prize Pool")) && (
+                  <td className={styles.prizePoolTable}>${item.prizePool}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("Max Reentry") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Max Reentry")) && (
                   <td className={styles.maxReentryTable}>
                     {item.maxReentry === null ? "-" : item.maxReentry}
                   </td>
                 )}
-                {allowedFilters && allowedFilters.includes("Blinds") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Blinds")) && (
                   <td className={styles.blindsTable}>{item.blinds}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("Speed") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Speed")) && (
                   <td className={styles.speedTable}>
                     <SpeedMap speed={item.speed} />
                   </td>
                 )}
-                {allowedFilters && allowedFilters.includes("Field") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Field")) && (
                   <td className={styles.fieldTable}>{item.field}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("End") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("End")) && (
                   <td className={styles.endTable}>{item.end}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("MLR") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("MLR")) && (
                   <td className={styles.mlrTable}>
                     <Timer startEvent={item.start} />
                   </td>
                 )}
-                {allowedFilters && allowedFilters.includes("Table Size") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Table Size")) && (
                   <td className={styles.tableSizeTable}>{item.tableSize}</td>
                 )}
-                {allowedFilters && allowedFilters.includes("Priority") && (
+                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Priority")) && (
                   <td className={styles.priorityTable}>{item.priority}</td>
                 )}
+
               </div>
             ))}
           </tr>
@@ -706,6 +872,9 @@ const Main = () => {
         closeModal={() => setIsOpenCostumizeColumns(false)}
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
+      {moreFiltersisOpen && (
+        <MoreFilters closeModal={() => setMoreFiltersisOpen(false)} />
+      )}
     </div>
   );
 };

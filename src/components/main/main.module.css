@@ -15,6 +15,17 @@ body {
   margin-left: 89px;
 }
 
+.blur {
+  filter: blur(5px);
+  transition: filter 0.1s ease;
+  z-index: 100;
+}
+
+.noBlur {
+  filter: none; /* Remove o desfoque */
+  transition: filter 0.3s ease;
+}
+
 .titlef {
   color: #ffff;
   font-size: 28px;
@@ -69,7 +80,6 @@ body {
 }
 
 .label {
-  
   width: 228px;
   height: 44px;
   border-radius: 50px;
@@ -93,10 +103,8 @@ body {
   color: rgba(255, 255, 255, 0.4);
 }
 
-
-
 .labelSelectSite {
-  width: 118px;
+  width: 153px;
   height: 44px;
   border-radius: 50px;
   background-color: var(--bg-inputs);
@@ -112,7 +120,7 @@ body {
   background-position: right 3px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 105px;
+  width: 145px;
   border-radius: 50px;
   color: rgba(255, 255, 255, 0.4);
   outline: none;
@@ -124,6 +132,16 @@ body {
   text-indent: 0.01px;
   cursor: pointer;
   padding-right: 10px;
+}
+
+.selectedSite {
+  display: flex;
+  flex-direction: row;
+  width: 132px;
+  height: 20px;
+  align-items: center;
+
+  gap: 5px;
 }
 
 .labelMaxMinValue {
@@ -173,7 +191,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .labelSelectSpeed {
-  width: 85px;
+  width: 105px;
   height: 44px;
   border-radius: 50px;
   background-color: var(--bg-inputs);
@@ -191,31 +209,44 @@ input[type="number"]::-webkit-inner-spin-button {
   background-position: right 0px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 75px;
+  width: 97px;
   border-radius: 50px;
   outline: none;
   border: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 10px;
   text-indent: 0.01px;
   cursor: pointer;
 }
 
+.selectedSpeed {
+  display: flex;
+  flex-direction: row;
+  width: 90px;
+  height: 20px;
+  align-items: center;
+  gap: 5px;
+  padding-left: 10px;
+}
+
 .labelSelectSize {
-  width: 70px;
+  width: 90px;
   height: 44px;
   border-radius: 50px;
   background-color: var(--bg-inputs);
   display: flex;
-  justify-content: first;
+  justify-content: center;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
 }
 
 .selectSize {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-color: var(--bg-inputs);
   color: rgba(255, 255, 255, 0.4);
   outline: none;
@@ -225,7 +256,8 @@ input[type="number"]::-webkit-inner-spin-button {
   background-repeat: no-repeat;
   background-size: 12px 12px;
   border-radius: 50px;
-  width: 60px;
+  width: 80px;
+  height: 44px;
   outline: none;
   border: none;
   -webkit-appearance: none;
@@ -256,8 +288,6 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
   cursor: pointer;
 }
-
-
 
 .manageColumnsBtn {
   width: 156px;
@@ -765,8 +795,8 @@ table {
   color: #ff0000;
   /* Cor vermelha mais intensa quando hover */
 }
-.active{
 
+.active {
   color: transparent;
   background-image: radial-gradient(
     ellipse at 30% 30%,
