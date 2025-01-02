@@ -6,8 +6,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
   const [modalIsOpen, setModalIsOpen] = useState(isOpen);
 
-  // Estado original no componente pai
-  const [columns, setColumns] = useState([
+  const initialColumns = [
     "Site",
     "Start",
     "Name",
@@ -18,71 +17,55 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
     "Blinds",
     "Field",
     "End",
-    "MLR",
-    "Table Size",
+    "Mlr",
+    "TableSize",
     "Priority",
-  ]);
+  ];
 
-  const [selectedColumns, setSelectedColumns] = useState(
-    columns.reduce((acc, column) => {
-      acc[column] = false;
-      return acc;
-    }, {})
-  );
-
-  // Estados temporários
-  const [localColumns, setLocalColumns] = useState(columns);
-  const [localSelectedColumns, setLocalSelectedColumns] = useState(selectedColumns);
+  // Estado para as colunas disponíveis e selecionadas
+  const [localColumns, setLocalColumns] = useState(initialColumns);
+  const [selectedColumns, setSelectedColumns] = useState([]); // Apenas o lado direito
 
   useEffect(() => {
     setModalIsOpen(isOpen);
   }, [isOpen]);
 
+  // Atualizar a ordem das colunas selecionadas
   const handleDragEnd = (result) => {
     const { source, destination } = result;
 
     if (!destination || source.index === destination.index) return;
 
-    const selectedColumnNames = localColumns.filter(
-      (column) => localSelectedColumns[column]
-    );
-    const reordered = reorder(selectedColumnNames, source.index, destination.index);
+    const newSelectedColumns = Array.from(selectedColumns);
+    const [movedItem] = newSelectedColumns.splice(source.index, 1);
+    newSelectedColumns.splice(destination.index, 0, movedItem);
 
-    const newColumns = [...localColumns];
-    reordered.forEach((column, i) => {
-      const originalIndex = localColumns.indexOf(column);
-      newColumns.splice(originalIndex, 1);
-      newColumns.splice(source.index + i, 0, column);
-    });
-
-    setLocalColumns(newColumns);
+    setSelectedColumns(newSelectedColumns);
   };
 
   const handleCheckboxChange = (column) => {
-    setLocalSelectedColumns((prev) => ({
-      ...prev,
-      [column]: !prev[column],
-    }));
+    if (selectedColumns.includes(column)) {
+      // Se já está selecionado, remover do `selectedColumns` e adicionar em `unselectedColumns`
+      setSelectedColumns(selectedColumns.filter((col) => col !== column));
+    } else {
+      // Adicionar ao selecionado e remover do não-selecionado
+      setSelectedColumns([...selectedColumns, column]);
+    }
   };
 
-  const handleApplyColumns = () => {
-    // Atualiza o estado no componente pai
-    setColumns(localColumns);
-    setSelectedColumns(localSelectedColumns);
-    onColumnsChange(localColumns.filter((col) => localSelectedColumns[col]));
 
-    console.log(localColumns)
+  // Aplicar as mudanças ao estado principal
+  const handleApplyColumns = () => {
+    onColumnsChange(selectedColumns);
+
+    console.log(selectedColumns)
     closeModal();
   };
 
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
-
-  const filteredColumns = localColumns.filter((column) => localSelectedColumns[column]);
+  // Filtrar colunas não selecionadas para o lado esquerdo
+  const unselectedColumns = localColumns.filter(
+    (column) => !selectedColumns.includes(column)
+  );
 
   if (modalIsOpen) {
     return (
@@ -98,11 +81,11 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
             <span>Column Options</span>
             <p>Default</p>
             <div className={styles.defaultCheckbox}>
-              {localColumns.map((column) => (
+              {unselectedColumns.map((column) => (
                 <div key={column} className={styles.checkboxColumns}>
                   <input
                     type="checkbox"
-                    checked={localSelectedColumns[column]}
+                    checked={selectedColumns.includes(column)}
                     onChange={() => handleCheckboxChange(column)}
                   />
                   {column}
@@ -119,12 +102,8 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
                     ref={provided.innerRef}
                     className={styles.defaultCheckbox}
                   >
-                    {filteredColumns.map((column, index) => (
-                      <Draggable
-                        key={column}
-                        draggableId={column}
-                        index={index}
-                      >
+                    {selectedColumns.map((column, index) => (
+                      <Draggable key={column} draggableId={column} index={index}>
                         {(provided) => (
                           <div
                             className={styles.checkboxColumns}

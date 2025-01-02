@@ -638,7 +638,7 @@ table {
   width: 68px;
 }
 
-.buyInTable {
+.buyinTable {
   color: white;
   height: 38px;
   width: 68px;
@@ -650,13 +650,13 @@ table {
   color: #ffff;
 }
 
-.prizePoolTable {
+.prizepoolTable {
   height: 38px;
   width: 90px;
   color: #ffff;
 }
 
-.maxReentryTable {
+.maxreentryTable {
   height: 38px;
   width: 110px;
   color: #ffff;
@@ -735,7 +735,7 @@ table {
   color: #ffff;
 }
 
-.tableSizeTable{
+.tablesizeTable{
   height: 38px;
   width: 96px;
   color: #ffff;
@@ -754,16 +754,16 @@ table {
 
 .siteTable,
 .startTable,
-.buyInTable,
+.buyinTable,
 .nameTable,
-.prizePoolTable,
-.maxReentryTable,
+.prizepoolTable,
+.maxreentryTable,
 .blindsTable,
 .speedTable,
 .fieldTable,
 .endTable,
 .mlrTable,
-.tableSizeTable,
+.tablesizeTable,
 .tableSizeTableRegistered,
 .priorityTable,
 .priorityTableRegistered {
@@ -777,7 +777,6 @@ table {
   cursor: pointer;
   color: #ff5555;
   font-size: 18px;
-  /* Ajuste o tamanho do ícone */
   padding: 5px;
   transition: transform 0.2s ease-in-out;
   display: flex;
@@ -787,13 +786,11 @@ table {
 
 .deleteButton i {
   margin-right: 5px;
-  /* Espaçamento entre o ícone e o texto */
 }
 
 .deleteButton:hover {
   transform: scale(1.1);
   color: #ff0000;
-  /* Cor vermelha mais intensa quando hover */
 }
 
 .active {

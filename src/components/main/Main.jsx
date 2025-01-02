@@ -203,6 +203,23 @@ const Main = () => {
     },
   ];
 
+  const allFilters = [
+    "Site",
+    "Start",
+    "Name",
+    "Speed",
+    "Buy In",
+    "Prize Pool",
+    "Max Reentry",
+    "Blinds",
+    "Field",
+    "End",
+    "Mlr",
+    "TableSize",
+    "Priority",
+  ];
+
+
   //Modals
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
@@ -400,7 +417,6 @@ const Main = () => {
     setActiveFilter(filter);
   };
 
-  //FilterBar Btns
   const filterButtons = [
     {
       label: "Site",
@@ -521,7 +537,6 @@ const Main = () => {
     },
   ];
 
-  //form Logics
   const [searchNameTournaments, setSearchNameTournaments] = useState("");
   const [minBuyIn, setMinBuyIn] = useState();
   const [maxBuyIn, setMaxBuyIn] = useState();
@@ -786,6 +801,10 @@ const Main = () => {
         <input type="checkbox" className={styles.filterCheckbox} />
         {filterButtons
           .filter((button) => !allowedFilters || allowedFilters.includes(button.label))
+          .sort((a, b) => {
+            if (!allowedFilters) return 0;
+            return allowedFilters.indexOf(a.label) - allowedFilters.indexOf(b.label);
+          })
           .map((button, index) => (
             <button
               key={index}
@@ -795,6 +814,7 @@ const Main = () => {
               {button.label}
             </button>
           ))}
+
       </div>
       <table>
         <tbody>
@@ -814,53 +834,27 @@ const Main = () => {
                   <FavouriteStar className={styles.favouriteStar} />
                   <input type="checkbox" className={styles.checkBoxTable} />
                 </td>
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Site")) && (
-                  <td className={styles.siteTable}>
-                    <img src={item.site} alt="svg" />
+                {(allowedFilters || allFilters).map((filter) => (
+                  <td
+                    key={filter}
+                    className={styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]}
+                  >
+                    {filter === "Site" && <img src={item.site} alt="svg" />}
+                    {filter === "Start" && item.start}
+                    {filter === "Buy In" && `$${item.buyIn}`}
+                    {filter === "Name" && item.name}
+                    {filter === "Prize Pool" && `$${item.prizePool}`}
+                    {filter === "Max Reentry" && (item.maxReentry === null ? "-" : item.maxReentry)}
+                    {filter === "Blinds" && item.blinds}
+                    {filter === "Speed" && <SpeedMap speed={item.speed} />}
+                    {filter === "Field" && item.field}
+                    {filter === "End" && item.end}
+                    {filter === "MLR" && <Timer startEvent={item.start} />}
+                    {filter === "Table Size" && item.tableSize}
+                    {filter === "Priority" && item.priority}
                   </td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Start")) && (
-                  <td className={styles.startTable}>{item.start}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Buy In")) && (
-                  <td className={styles.buyInTable}>${item.buyIn}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Name")) && (
-                  <td className={styles.nameTable}>{item.name}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Prize Pool")) && (
-                  <td className={styles.prizePoolTable}>${item.prizePool}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Max Reentry")) && (
-                  <td className={styles.maxReentryTable}>
-                    {item.maxReentry === null ? "-" : item.maxReentry}
-                  </td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Blinds")) && (
-                  <td className={styles.blindsTable}>{item.blinds}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Speed")) && (
-                  <td className={styles.speedTable}>
-                    <SpeedMap speed={item.speed} />
-                  </td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Field")) && (
-                  <td className={styles.fieldTable}>{item.field}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("End")) && (
-                  <td className={styles.endTable}>{item.end}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("MLR")) && (
-                  <td className={styles.mlrTable}>
-                    <Timer startEvent={item.start} />
-                  </td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Table Size")) && (
-                  <td className={styles.tableSizeTable}>{item.tableSize}</td>
-                )}
-                {(allowedFilters == null || allowedFilters != null && allowedFilters.includes("Priority")) && (
-                  <td className={styles.priorityTable}>{item.priority}</td>
-                )}
+                ))}
+
 
               </div>
             ))}

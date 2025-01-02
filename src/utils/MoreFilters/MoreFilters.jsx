@@ -31,7 +31,7 @@ const MoreFilters = ({ applyFilters, closeModal }) => {
   const [maxAbility, setMaxAbility] = useState("20");
   const [maxLate, setMaxLate] = useState(false);
   const [includeClosed, setIncludeClosed] = useState(false);
-  // Função para aplicar os filtros
+
   const handleApplyFilters = () => {
     applyFilters({
       buyInMin,
