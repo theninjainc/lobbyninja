@@ -15,7 +15,6 @@ function Timer({ startEvent }) {
     // Cria um novo objeto Date para o evento
     const eventTime = new Date();
     eventTime.setHours(hours, minutes, 0, 0);
-
     // Calcula a diferença em milissegundos
     const diffInMilliseconds = eventTime - now;
 

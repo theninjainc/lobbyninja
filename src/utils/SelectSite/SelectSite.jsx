@@ -1,10 +1,7 @@
 /* eslint-disable react/prop-types */
 import styles from "./selectSite.module.css";
 
-
-const SelectSite = ({ isOpen, orderList, setSelectedSite}) => {
-
-
+const SelectSite = ({ isOpen, orderList, setSelectedSite }) => {
   if (isOpen) {
     return (
       <div className={styles.selectSiteModal}>
@@ -20,7 +17,6 @@ const SelectSite = ({ isOpen, orderList, setSelectedSite}) => {
         ))}
       </div>
     );
-
   }
   return null;
 };

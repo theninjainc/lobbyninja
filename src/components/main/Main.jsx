@@ -20,186 +20,192 @@ import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import Speed from "../../utils/Speed/Speed";
 import Size from "../../utils/Size/Size";
-import notification from "../../assets/notification.svg";
 import engine from "../../assets/engine.svg";
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
-import Notifications from "../../utils/Notifications/Notifications";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
 import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 import MoreFilters from "../../utils/MoreFilters/MoreFilters";
 import NewAlarm from "../../utils/NewAlarm/NewAlarm";
-import slow from "../../assets/Slow.svg";
-import regular from "../../assets/regular.svg";
-import hyper from "../../assets/hyper.svg";
-import turbo from "../../assets/turbo.svg";
-
+import Options from "../../utils/Options/Options";
+import ChoosePriority from "../../utils/ChoosePriority/ChoosePriority";
 const Main = () => {
   const data = [
     {
+      id: "1",
       site: teste,
       start: "16:30",
       buyIn: 350,
       name: "I Tournament",
       prizePool: 12348,
       maxReentry: 125,
-      blinds: "70",
+      blinds: 70,
       speed: 2,
       field: 105,
       end: "18:30",
       mlr: 200,
       tableSize: 5,
-      priority: 9,
+      priority: null,
     },
     {
+      id: "2",
       site: b,
       start: "12:30",
       buyIn: 320,
       name: "B Tournament",
       prizePool: 500,
-      maxReentry: null,
-      blinds: "50",
+      maxReentry: 20,
+      blinds: 50,
       speed: 3,
       field: 100,
       end: "14:00",
       mlr: 120,
       tableSize: 9,
-      priority: 3,
+      priority: null,
     },
     {
+      id: "3",
       site: c,
       start: "16:00",
       buyIn: 450,
       name: "H Tournament",
       prizePool: 1000,
-      maxReentry: 150,
-      blinds: "60",
+      maxReentry: null,
+      blinds: 60,
       speed: 3,
       field: 110,
       end: "18:00",
       mlr: 1000,
       tableSize: 6,
-      priority: 8,
+      priority: null,
     },
     {
+      id: "4",
       site: d,
       start: "13:00",
       buyIn: 422,
       name: "C Tournament",
       prizePool: 15000,
       maxReentry: 200,
-      blinds: "100",
+      blinds: 100,
       speed: 2,
       field: 120,
       end: "15:59",
       mlr: 850,
       tableSize: 6,
-      priority: 2,
+      priority: null,
     },
     {
+      id: "5",
       site: e,
       start: "17:30",
       buyIn: 30,
       name: "K Tournament",
       prizePool: 50000,
-      maxReentry: 90,
-      blinds: "40",
+      maxReentry: null,
+      blinds: 40,
       speed: 3,
       field: 95,
       end: "19:30",
       mlr: 320,
       tableSize: 4,
-      priority: 10,
+      priority: null,
     },
     {
+      id: "6",
       site: f,
       start: "12:30",
       buyIn: 32,
       name: "A Tournament",
       prizePool: 7000,
       maxReentry: 123,
-      blinds: "50",
+      blinds: 50,
       speed: 1,
       field: 100,
       end: "14:00",
       mlr: 540,
       tableSize: 5,
-      priority: 1,
+      priority: null,
     },
     {
+      id: "7",
       site: g,
       start: "15:00",
       buyIn: 60,
       name: "F Tournament",
       prizePool: 9000,
       maxReentry: 500,
-      blinds: "200",
+      blinds: 200,
       speed: 2,
       field: 200,
       end: "17:00",
       mlr: 200,
       tableSize: 10,
-      priority: 6,
+      priority: null,
     },
     {
+      id: "8",
       site: h,
       start: "23:00",
       buyIn: 55,
       name: "J Tournament",
       prizePool: 15000,
       maxReentry: 250,
-      blinds: "80",
+      blinds: 80,
       speed: 1,
       field: 130,
       end: "19:00",
       mlr: 100,
       tableSize: 8,
-      priority: 9,
+      priority: null,
     },
     {
+      id: "9",
       site: i,
       start: "15:30",
       buyIn: 25,
       name: "B Tournament",
       prizePool: 250000,
       maxReentry: 100,
-      blinds: "50",
+      blinds: 50,
       speed: 1,
       field: 90,
       end: "17:30",
       mlr: 450,
       tableSize: 7,
-      priority: 7,
+      priority: null,
     },
     {
+      id: 10,
       site: j,
       start: "14:30",
       buyIn: 20,
       name: "B Tournament",
       prizePool: 14500,
       maxReentry: 50,
-      blinds: "25",
+      blinds: 25,
       speed: 4,
       field: 80,
       end: "16:30",
       mlr: 150,
       tableSize: 4,
-      priority: 5,
+      priority: null,
     },
     {
+      id: 11,
       site: b,
       start: "14:00",
       buyIn: 50,
       name: "D Tournament",
       prizePool: 40000,
       maxReentry: 300,
-      blinds: "75",
+      blinds: 75,
       speed: 4,
       field: 150,
       end: "00:10",
       mlr: 340,
       tableSize: 8,
-      priority: 4,
+      priority: null,
     },
   ];
 
@@ -207,7 +213,6 @@ const Main = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSpeed, setIsOpenSpeed] = useState(false);
   const [isOpenSize, setIsOpenSize] = useState(false);
-  const [isOpenNotifications, setIsOpenNotifications] = useState(false);
   const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
   const [moreFiltersisOpen, setMoreFiltersisOpen] = useState(false);
   const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
@@ -228,9 +233,6 @@ const Main = () => {
   };
   const toggleOpenSize = () => {
     setIsOpenSize((prevState) => !prevState);
-  };
-  const toggleOpenNotifications = () => {
-    setIsOpenNotifications((prevState) => !prevState);
   };
 
   //Filter Buttons
@@ -585,11 +587,16 @@ const Main = () => {
     }
     setOrderList(filteredList);
   };
-
+  const applyFilters = () => {};
   return (
     <>
       {moreFiltersisOpen && (
-        <MoreFilters closeModal={() => setMoreFiltersisOpen(false)} />
+        <MoreFilters
+          closeModal={() => setMoreFiltersisOpen(false)}
+          orderList={data}
+          setOrderList={setOrderList}
+          applyFilters={applyFilters}
+        />
       )}
       <CostumizeColumns
         isOpen={isOpenCostumizeColumns}
@@ -610,15 +617,6 @@ const Main = () => {
               <div>
                 <ToggleThemeBtn />
               </div>
-              <div>
-                <button
-                  className={styles.navNotificationBtn}
-                  onClick={() => toggleOpenNotifications(true)}
-                >
-                  <img src={notification} alt="" />
-                </button>
-              </div>
-              <Notifications isOpenNotifications={isOpenNotifications} />
               <div>
                 <button className={styles.navEngineBtn}>
                   <img src={engine} alt="" />
@@ -646,17 +644,7 @@ const Main = () => {
                 className={styles.selectSite}
                 onClick={() => toggleOpen(true)}
               >
-                {selectedSite ? (
-                  <div className={styles.selectedSite}>
-                    <img
-                      src={selectedSite.site}
-                      alt={`Site ${selectedSite.name}`}
-                    />
-                    <p>{selectedSite.name}</p>
-                  </div>
-                ) : (
-                  "Select Site"
-                )}
+                Select Site
               </button>
             </label>
             <SelectSite
@@ -701,36 +689,7 @@ const Main = () => {
                 className={styles.selectSpeed}
                 onClick={() => toggleOpenSpeed(true)}
               >
-                {selectedSpeed ? (
-                  <div className={styles.selectedSpeed}>
-                    <img
-                      src={
-                        selectedSpeed === 1
-                          ? slow
-                          : selectedSpeed === 2
-                          ? regular
-                          : selectedSpeed === 3
-                          ? turbo
-                          : selectedSpeed === 4
-                          ? hyper
-                          : null
-                      }
-                    ></img>
-                    <p>
-                      {selectedSpeed === 1
-                        ? "Slow"
-                        : selectedSpeed === 2
-                        ? "Regular"
-                        : selectedSpeed === 3
-                        ? "Turbo"
-                        : selectedSpeed === 4
-                        ? "Hyper"
-                        : null}
-                    </p>
-                  </div>
-                ) : (
-                  "Speed"
-                )}
+                Speed
               </button>
             </label>
             <Speed
@@ -744,25 +703,10 @@ const Main = () => {
                 className={styles.selectSize}
                 onClick={() => toggleOpenSize(true)}
               >
-                {selectedSize ? (
-                  <p className={styles.searchSizeBtn}>
-                    {selectedSize === 1
-                      ? "2"
-                      : selectedSize === 2
-                      ? "3-5"
-                      : selectedSize === 3
-                      ? "6"
-                      : selectedSize === 4
-                      ? "7 to 10"
-                      : null}
-                  </p>
-                ) : (
-                  "Size"
-                )}
+                Size
               </button>
             </label>
             <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
-            {console.log(selectedSize)}
             <button
               className={styles.searchBtn}
               onClick={() => {
@@ -850,7 +794,9 @@ const Main = () => {
                     <Timer startEvent={item.start} />
                   </td>
                   <td className={styles.tableSizeTable}>{item.tableSize}</td>
-                  <td className={styles.priorityTable}>{item.priority}</td>
+                  <td className={styles.priorityTable}>
+                    {item.priority === null ? "-" : item.priority}
+                  </td>
                 </div>
               ))}
             </tr>
@@ -858,6 +804,8 @@ const Main = () => {
         </table>
         <button onClick={openNewAlarm}>afhdasdf</button>
         <NewAlarm isOpen={isOpenNewAlarm} onClose={closeNewAlarm} />
+        <Options />
+        <ChoosePriority />
       </div>
     </>
   );

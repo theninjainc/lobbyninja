@@ -48,3 +48,7 @@
 .card:first-child {
   margin-top: 5px;
 }
+
+.active{
+  background-color: #0b0b21;
+}
