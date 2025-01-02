@@ -40,14 +40,20 @@ const Main = () => {
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleString("pt-BR", {
-      weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
-      hour: 'numeric', minute: 'numeric'
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
     });
   };
   // Função para buscar os itens da API
   const fetchOrders = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/torneios/api/activeTournaments");
+      const response = await fetch(
+        "http://localhost:3000/api/torneios/api/activeTournaments"
+      );
       if (!response.ok) {
         throw new Error("Erro ao buscar os dados");
       }
@@ -58,13 +64,13 @@ const Main = () => {
     } catch (error) {
       setError(error.message); // Atualiza o estado com o erro
     }
-  }
+  };
 
   // Função para obter os itens da página atual
   const getPaginatedOrders = () => {
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = currentPage * PAGE_SIZE;
-    console.log(orderList[0])
+    console.log(orderList[0]);
     return orderList.slice(startIndex, endIndex);
   };
 
@@ -88,7 +94,6 @@ const Main = () => {
     "TableSize",
     "Priority",
   ];
-
 
   //Modals
   const [isOpen, setIsOpen] = useState(false);
@@ -249,7 +254,7 @@ const Main = () => {
 
   const orderedListName = () => {
     const newList = [...orderList];
-    console.log(newList[0])
+    console.log(newList[0].Name);
     newList.sort((a, b) =>
       orderNameFilter === "asc"
         ? a.Name.localeCompare(b.Name)
@@ -467,11 +472,10 @@ const Main = () => {
     }
     setOrderList(filteredList);
   };
-  const applyFilters = () => { };
+  const applyFilters = () => {};
   return (
     <>
       <div className={styles.main}>
-
         {moreFiltersisOpen && (
           <MoreFilters
             closeModal={() => setMoreFiltersisOpen(false)}
@@ -483,14 +487,17 @@ const Main = () => {
         <CostumizeColumns
           isOpen={isOpenCostumizeColumns}
           closeModal={() => setIsOpenCostumizeColumns(false)}
-          onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
+          onColumnsChange={(updatedColumns) =>
+            setAllowedFilters(updatedColumns)
+          }
         />
 
         <div
-          className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
-            ? styles.blur
-            : styles.noBlur
-            }`}
+          className={`${styles.main} ${
+            moreFiltersisOpen === true || isOpenCostumizeColumns === true
+              ? styles.blur
+              : styles.noBlur
+          }`}
         >
           <div className={styles.navbar}>
             <div className={styles.titlef}>Tournament List</div>
@@ -589,24 +596,24 @@ const Main = () => {
                         selectedSpeed === 1
                           ? slow
                           : selectedSpeed === 2
-                            ? regular
-                            : selectedSpeed === 3
-                              ? turbo
-                              : selectedSpeed === 4
-                                ? hyper
-                                : null
+                          ? regular
+                          : selectedSpeed === 3
+                          ? turbo
+                          : selectedSpeed === 4
+                          ? hyper
+                          : null
                       }
                     ></img>
                     <p>
                       {selectedSpeed === 1
                         ? "Slow"
                         : selectedSpeed === 2
-                          ? "Regular"
-                          : selectedSpeed === 3
-                            ? "Turbo"
-                            : selectedSpeed === 4
-                              ? "Hyper"
-                              : null}
+                        ? "Regular"
+                        : selectedSpeed === 3
+                        ? "Turbo"
+                        : selectedSpeed === 4
+                        ? "Hyper"
+                        : null}
                     </p>
                   </div>
                 ) : (
@@ -630,12 +637,12 @@ const Main = () => {
                     {selectedSize === 1
                       ? "2"
                       : selectedSize === 2
-                        ? "3-5"
-                        : selectedSize === 3
-                          ? "6"
-                          : selectedSize === 4
-                            ? "7 to 10"
-                            : null}
+                      ? "3-5"
+                      : selectedSize === 3
+                      ? "6"
+                      : selectedSize === 4
+                      ? "7 to 10"
+                      : null}
                   </p>
                 ) : (
                   "Size"
@@ -680,15 +687,23 @@ const Main = () => {
         <div className={styles.filterbar}>
           <input type="checkbox" className={styles.filterCheckbox} />
           {filterButtons
-            .filter((button) => !allowedFilters || allowedFilters.includes(button.label))
+            .filter(
+              (button) =>
+                !allowedFilters || allowedFilters.includes(button.label)
+            )
             .sort((a, b) => {
               if (!allowedFilters) return 0;
-              return allowedFilters.indexOf(a.label) - allowedFilters.indexOf(b.label);
+              return (
+                allowedFilters.indexOf(a.label) -
+                allowedFilters.indexOf(b.label)
+              );
             })
             .map((button, index) => (
               <button
                 key={index}
-                className={`${button.className} ${button.isActive ? styles.active : ""}`}
+                className={`${button.className} ${
+                  button.isActive ? styles.active : ""
+                }`}
                 onClick={button.onClick}
               >
                 {button.label}
@@ -715,41 +730,66 @@ const Main = () => {
                   {(allowedFilters || allFilters).map((filter) => (
                     <td
                       key={filter}
-                      className={styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]}
+                      className={
+                        styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]
+                      }
                     >
                       {filter === "Site" && item.Site && (
                         <img
-                          src={item.Site === "888Poker" ? "poker888" : item.Site}
+                          src={
+                            item.Site === "888Poker" ? "poker888" : item.Site
+                          }
                           alt="site logo"
                         />
                       )}
 
-                      {filter === "Start" && (item.Start ? new Date(item.Start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "-")}
+                      {filter === "Start" &&
+                        (item.Start
+                          ? new Date(item.Start).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "-")}
 
-                      {filter === "Buy In" && (item.BuyIn ? `$${item.BuyIn}` : "-")}
+                      {filter === "Buy In" &&
+                        (item.BuyIn ? `$${item.BuyIn}` : "-")}
 
                       {filter === "Name" && (item.Name ? item.Name : "-")}
 
-                      {filter === "Prize Pool" && (item.PrizePool ? `$${item.PrizePool}` : "-")}
+                      {filter === "Prize Pool" &&
+                        (item.PrizePool ? `$${item.PrizePool}` : "-")}
 
-                      {filter === "Max Reentry" && (item.MaxReentry ? item.MaxReentry : "-")}
+                      {filter === "Max Reentry" &&
+                        (item.MaxReentry ? item.MaxReentry : "-")}
 
                       {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
 
-                      {filter === "Speed" && (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
+                      {filter === "Speed" &&
+                        (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
 
                       {filter === "Field" && (item.Field ? item.Field : "-")}
 
                       {filter === "End" && (item.End ? item.End : "-")}
 
-                      {filter === "Mlr" && (item.Start ? <Timer startEvent={new Date(item.Start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} /> : "-")}
+                      {filter === "Mlr" &&
+                        (item.Start ? (
+                          <Timer
+                            startEvent={new Date(item.Start).toLocaleTimeString(
+                              [],
+                              { hour: "2-digit", minute: "2-digit" }
+                            )}
+                          />
+                        ) : (
+                          "-"
+                        ))}
 
-                      {filter === "TableSize" && (item.TableSize ? item.TableSize : "-")}
+                      {filter === "TableSize" &&
+                        (item.TableSize ? item.TableSize : "-")}
 
-                      {filter === "Priority" && (item.Priority ? item.Priority : "-")}
+                      {filter === "Priority" &&
+                        (item.Priority ? item.Priority : "-")}
                     </td>
                   ))}
-
                 </div>
               ))}
             </tr>
@@ -770,7 +810,6 @@ const Main = () => {
             </div>
           </tbody>
         </table>
-
       </div>
     </>
   );
