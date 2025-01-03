@@ -248,16 +248,26 @@ const Main = () => {
   };
 
   const orderedListName = () => {
-    const newList = [...orderList];
-    console.log(newList[0])
-    newList.sort((a, b) =>
-      orderNameFilter === "asc"
-        ? a.Name.localeCompare(b.Name)
-        : b.Name.localeCompare(a.Name)
-    );
-    setOrderList(newList);
-    setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
+    if (!orderList || orderList.length === 0) return; // Verifica se a lista existe e não está vazia
+
+    const newList = [...orderList]; // Cria uma cópia da lista
+    console.log("Antes de ordenar:", newList[0]);
+
+    newList.sort((a, b) => {
+      const nameA = a.Name || ""; // Garante que 'Name' não seja undefined
+      const nameB = b.Name || ""; // Garante que 'Name' não seja undefined
+
+      return orderNameFilter === "asc"
+        ? nameA.localeCompare(nameB) // Ordena de forma ascendente
+        : nameB.localeCompare(nameA); // Ordena de forma descendente
+    });
+
+    console.log("Depois de ordenar:", newList[0]);
+    setOrderList(newList); // Atualiza o estado com a lista ordenada
+    setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc"); // Alterna entre asc e desc
   };
+
+
 
   const orderedListBuyIn = () => {
     const newListBuyIn = [...orderList];
@@ -643,7 +653,6 @@ const Main = () => {
               </button>
             </label>
             <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
-            {console.log(selectedSize)}
             <button
               className={styles.searchBtn}
               onClick={() => {
