@@ -78,7 +78,7 @@ const Main = () => {
     console.log(lobbyData)
 
     try {
-      const response = await fetch('http://localhost:3000/api/lobbys/lobbyCreate', {
+      const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/torneios/api/activeTournaments"
+        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         throw new Error("Erro ao buscar os dados");
