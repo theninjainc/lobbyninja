@@ -1,8 +1,10 @@
 const express = require('express');
-const { getFavouriteLobbysHandler } = require('../controllers/lobbyController');
+const { getLobbysHandler, updateStateHandler, createLobbyHandler } = require('../controllers/lobbyController');
 
 const router = express.Router();
 
-router.post('/favourite', getFavouriteLobbysHandler);
+router.post('/lobbyAllOptions', getLobbysHandler);
+router.put('/lobbyUpdateOptions', updateStateHandler);
+router.post('/lobbyCreate', createLobbyHandler);
 
 module.exports = router;

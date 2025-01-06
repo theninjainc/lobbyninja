@@ -48,18 +48,19 @@ router.get('/api/activeTournaments', async (req, res) => {
                             .map(tournament => {
                                 const tournamentStart = new Date(parseInt(tournament["@scheduledStartDate"]) * 1000);
                                 const today = new Date();
-                                const sameDay = tournamentStart.getDate() === today.getDate() &&
-                                    tournamentStart.getMonth() === today.getMonth() &&
-                                    tournamentStart.getFullYear() === today.getFullYear();
 
-                                if (sameDay) {
-                                    const buyIn = parseFloat(tournament["@stake"]) + parseFloat(tournament["@rake"]);
+                                // Verificação para garantir que o torneio ainda não começou
+                                if (tournamentStart > today) {
+                                    // Convertendo buyIn e prizePool para inteiros
+                                    const buyIn = parseInt(tournament["@stake"]) + parseInt(tournament["@rake"]);
+                                    const prizePool = parseInt(tournament["@guarantee"]);
+
                                     return {
                                         Site: tournament["@network"],
                                         Start: tournamentStart.toLocaleString(),
-                                        BuyIn: `${buyIn.toFixed(2)} USD`,
+                                        BuyIn: `${buyIn}`,
                                         Name: tournament["@name"],
-                                        PrizePool: tournament["@guarantee"],
+                                        PrizePool: prizePool,
                                         MaxReentry: tournament["@flags"]?.includes("R") ? "Yes" : "No",
                                         Blinds: tournament["@structure"],
                                         Speed: null,
@@ -70,7 +71,7 @@ router.get('/api/activeTournaments', async (req, res) => {
                                         Priority: null
                                     };
                                 }
-                                return null;
+                                return null; // Ignora torneios que já começaram
                             })
                             .filter(tournament => tournament !== null);
                     } else {
@@ -88,5 +89,6 @@ router.get('/api/activeTournaments', async (req, res) => {
         res.status(500).json({ error: 'Erro ao buscar torneios. Tente novamente mais tarde.' });
     }
 });
+
 
 module.exports = router;

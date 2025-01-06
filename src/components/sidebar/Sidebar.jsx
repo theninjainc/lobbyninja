@@ -27,7 +27,7 @@ const Sidebar = () => {
 
       <ul className="">
         <li>
-          <Link to="/">
+          <Link to="/dashboard">
             <div className={styles.bgHoverIconFirst}>
               <img src={tornauments} alt="Tournaments" />
             </div>
@@ -76,12 +76,12 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <a href="#section7" className={styles.bgHover}>
+          <Link to="/deleted">
             <div className={styles.bgHoverIcon}>
               <img src={deleted} alt="Deleted" />
             </div>
             {isOpen && <span>Deleted</span>}
-          </a>
+          </Link>
         </li>
       </ul>
     </div>

@@ -8,7 +8,7 @@ import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import { Client, Account } from 'appwrite';
 import wpt from "../../assets/wpn.svg";
 
-const Registered = () => {
+const Deleted = () => {
     const [orderNameFilter, setOrderNameFilter] = useState("asc");
     const [orderList, setOrderList] = useState([]);
     const [email, setEmail] = useState("");
@@ -53,7 +53,6 @@ const Registered = () => {
 
     const handleDelete = async (id, state, index) => {
         try {
-
             console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
 
             const apiUrl = 'http://localhost:3000/api/lobbys/lobbyUpdateOptions';
@@ -79,18 +78,16 @@ const Registered = () => {
 
             console.log(`Lobby com ID: ${id} foi atualizado com sucesso.`);
 
-            const data = await response.json();
+            // Atualiza a lista removendo o item deletado
+            setOrderList((prevList) => prevList.filter((_, i) => i !== index));
 
-            if (index !== undefined) {
-                removeAlarm(index);
-            }
-
-            console.log('Resposta da API:', data);
+            console.log('Lobby removido da interface.');
         } catch (error) {
             console.error("Erro ao atualizar lobby:", error);
             alert(`Erro ao atualizar lobby: ${error.message}`);
         }
     };
+
 
     useEffect(() => {
         const getEmail = async () => {
@@ -111,7 +108,7 @@ const Registered = () => {
 
     useEffect(() => {
         if (email) {
-            const state = 'registered';
+            const state = 'deleted';
             fetchRegisteredLobbys(email, state);
         }
     }, [email]);
@@ -171,7 +168,7 @@ const Registered = () => {
                                 <div onClick={() => handleDelete(item.$id, 'favourite')}>
                                     <FavouriteStar
                                         className={styles.favouriteStar}
-                                        favourites={true}
+                                        favourites={item.favourite}
                                     />
                                 </div>
                                 <input type="checkbox" className={styles.checkBoxTable} />
@@ -194,7 +191,7 @@ const Registered = () => {
                             <td className={styles.deleteLinha}>
                                 <div
                                     className={styles.deleteButton}
-                                    onClick={() => handleDelete(item.$id, 'registered', index)}
+                                    onClick={() => handleDelete(item.$id, 'deleted', index)}
                                 >
                                     <i className="fas fa-trash-alt"></i>
                                 </div>
@@ -207,4 +204,4 @@ const Registered = () => {
     );
 };
 
-export default Registered;
+export default Deleted;

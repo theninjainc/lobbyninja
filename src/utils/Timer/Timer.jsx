@@ -15,6 +15,7 @@ function Timer({ startEvent }) {
     // Cria um novo objeto Date para o evento
     const eventTime = new Date();
     eventTime.setHours(hours, minutes, 0, 0);
+
     // Calcula a diferença em milissegundos
     const diffInMilliseconds = eventTime - now;
 
@@ -23,31 +24,29 @@ function Timer({ startEvent }) {
 
     // Define o tempo inicial
     setTime(diffInSeconds);
-  }, [startEvent]); // Recalcula quando startEvent muda
+  }, [startEvent]);
 
   useEffect(() => {
     if (time <= 0) return;
 
     // Inicia o intervalo para diminuir o tempo a cada segundo
     const interval = setInterval(() => {
-      setTime((prevTime) => {
-        const updatedTime = prevTime - 1; // Diminui 1 segundo
-        return updatedTime;
-      });
+      setTime((prevTime) => Math.max(0, prevTime - 1));
     }, 1000);
 
     // Limpa o intervalo quando o componente for desmontado ou o tempo acabar
     return () => clearInterval(interval);
-  }, [time]); // Executa a cada mudança no 'time'
+  }, [time]);
 
-  // Função para converter segundos em minutos:segundos
-  function convertSeconds(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+  // Função para converter segundos em horas:minutos
+  function convertToHoursMinutes(seconds) {
+    const totalMinutes = Math.floor(seconds / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
   }
 
-  return <>{convertSeconds(time)}</>;
+  return <>{convertToHoursMinutes(time)}</>;
 }
 
 export default Timer;
