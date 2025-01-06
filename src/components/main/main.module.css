@@ -10,42 +10,52 @@ body {
 }
 
 .main {
-  padding: 0px 22px 0px 29px;
-  width: 100%;
+  padding: 15px 0px 0px 29px;
+  margin-right: 22px;
   margin-left: 89px;
 }
 
-.title {
+.blur {
+  filter: blur(5px);
+  transition: filter 0.1s ease;
+  z-index: 100;
+}
+
+.noBlur {
+  filter: none;
+  /* Remove o desfoque */
+  transition: filter 0.3s ease;
+}
+
+.titlef {
   color: #ffff;
   font-size: 28px;
   font-weight: 800;
   text-align: center;
-  margin-top: 60px;
-  
+  float: left;
 }
 
 .navbar {
+  width: 100%;
+  height: 53px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.displayNone {
+  display: none;
+}
+
+.navbar .btns {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  top: 0;
-  width: 100%;
-  height: 53px;
-  margin-bottom: 30px;
+  gap: 10px;
 }
 
-.navbar ul {
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-}
-
-.navbar ul > li {
-  padding-left: 10px;
-}
-
-.navNotificationBtn, .navEngineBtn{
+.navNotificationBtn,
+.navEngineBtn {
+  cursor: pointer;
   background-color: #191934;
   border-radius: 50%;
   width: 42px;
@@ -53,12 +63,22 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-
 .searchbar {
   padding-top: 30px;
   display: flex;
   width: 100%;
   justify-content: space-between;
+}
+
+.searchleft {
+  display: flex;
+  gap: 10px;
+}
+
+.searchRight {
+  display: flex;
+  align-items: center;
+  gap: 13px;
 }
 
 .label {
@@ -85,14 +105,8 @@ body {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.searchleft {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
-
 .labelSelectSite {
-  width: 118px;
+  width: 153px;
   height: 44px;
   border-radius: 50px;
   background-color: var(--bg-inputs);
@@ -108,7 +122,7 @@ body {
   background-position: right 3px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 105px;
+  width: 145px;
   border-radius: 50px;
   color: rgba(255, 255, 255, 0.4);
   outline: none;
@@ -120,7 +134,16 @@ body {
   text-indent: 0.01px;
   cursor: pointer;
   padding-right: 10px;
-  
+}
+
+.selectedSite {
+  display: flex;
+  flex-direction: row;
+  width: 132px;
+  height: 20px;
+  align-items: center;
+
+  gap: 5px;
 }
 
 .labelMaxMinValue {
@@ -135,7 +158,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.labelMaxMinValue > div {
+.labelMaxMinValue>div {
   width: 50px;
   height: 44px;
   font-size: 12px;
@@ -170,7 +193,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .labelSelectSpeed {
-  width: 85px;
+  width: 105px;
   height: 44px;
   border-radius: 50px;
   background-color: var(--bg-inputs);
@@ -188,31 +211,44 @@ input[type="number"]::-webkit-inner-spin-button {
   background-position: right 0px center;
   background-repeat: no-repeat;
   background-size: 12px 12px;
-  width: 75px;
+  width: 97px;
   border-radius: 50px;
   outline: none;
   border: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 10px;
   text-indent: 0.01px;
   cursor: pointer;
 }
 
+.selectedSpeed {
+  display: flex;
+  flex-direction: row;
+  width: 90px;
+  height: 20px;
+  align-items: center;
+  gap: 5px;
+  padding-left: 10px;
+}
+
 .labelSelectSize {
-  width: 70px;
+  width: 90px;
   height: 44px;
   border-radius: 50px;
   background-color: var(--bg-inputs);
   display: flex;
-  justify-content: first;
+  justify-content: center;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
 }
 
 .selectSize {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-color: var(--bg-inputs);
   color: rgba(255, 255, 255, 0.4);
   outline: none;
@@ -222,7 +258,8 @@ input[type="number"]::-webkit-inner-spin-button {
   background-repeat: no-repeat;
   background-size: 12px 12px;
   border-radius: 50px;
-  width: 60px;
+  width: 80px;
+  height: 44px;
   outline: none;
   border: none;
   -webkit-appearance: none;
@@ -236,12 +273,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .searchBtn {
   width: 44px;
   height: 44px;
-  background: radial-gradient(
-    ellipse at 60% 10%,
-    #ffdead -10%,
-    #fa6e49 40%,
-    #c314d4 110%
-  );
+  background: radial-gradient(ellipse at 60% 10%,
+      #ffdead -10%,
+      #fa6e49 40%,
+      #c314d4 110%);
   border-radius: 50px;
   border: none;
   cursor: pointer;
@@ -254,13 +289,6 @@ input[type="number"]::-webkit-inner-spin-button {
   border-radius: 50px;
   border: none;
   cursor: pointer;
-}
-
-.searchRight {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 13px;
 }
 
 .manageColumnsBtn {
@@ -278,6 +306,7 @@ input[type="number"]::-webkit-inner-spin-button {
   align-items: center;
   justify-content: center;
 }
+
 .moreFiltersBtn {
   width: 123px;
   height: 44px;
@@ -309,7 +338,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215,  U + FEFF,  U + FFFD;
+    U+2212, U+2215, U + FEFF, U + FFFD;
 }
 
 .filterCheckbox {
@@ -357,6 +386,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterStartBtn {
   height: 38px;
   width: 72px;
@@ -370,6 +400,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterBuyInBtn {
   height: 38px;
   width: 72px;
@@ -383,6 +414,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterNameBtn {
   height: 38px;
   width: 220px;
@@ -402,15 +434,9 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 95px;
   border: none;
   background-color: var(--bg-filterbar);
-  color: transparent;
+  color: #fff;
   background-clip: text;
   -webkit-background-clip: text;
-  background-image: radial-gradient(
-    ellipse at 30% 30%,
-    #ffdead 0%,
-    #fa6e49 27%,
-    #c314d4 90%
-  );
   font-size: 12px;
   font-weight: 800;
   display: flex;
@@ -418,20 +444,15 @@ input[type="number"]::-webkit-inner-spin-button {
   justify-content: first baseline;
   cursor: pointer;
 }
+
 .filterMaxReentryBtn {
   height: 38px;
   width: 112px;
   border: none;
   background-color: var(--bg-filterbar);
-  color: transparent;
+  color: #fff;
   background-clip: text;
   -webkit-background-clip: text;
-  background-image: radial-gradient(
-    ellipse at 30% 30%,
-    #ffdead 0%,
-    #fa6e49 27%,
-    #c314d4 90%
-  );
   font-size: 12px;
   font-weight: 800;
   display: flex;
@@ -439,6 +460,7 @@ input[type="number"]::-webkit-inner-spin-button {
   justify-content: first baseline;
   cursor: pointer;
 }
+
 .filterBlindsBtn {
   height: 38px;
   width: 75px;
@@ -452,6 +474,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterSpeedBtn {
   height: 38px;
   width: 78px;
@@ -465,6 +488,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterFieldBtn {
   height: 38px;
   width: 83px;
@@ -478,6 +502,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterEndBtn {
   height: 38px;
   width: 67px;
@@ -491,6 +516,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterMlrBtn {
   height: 38px;
   width: 80px;
@@ -504,6 +530,7 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 12px;
   cursor: pointer;
 }
+
 .filterTableSizeBtn {
   height: 38px;
   width: 97px;
@@ -544,7 +571,7 @@ table {
   width: 100%;
 }
 
-tr {
+.tableTr {
   display: flex;
   flex-direction: column;
 }
@@ -556,16 +583,13 @@ tr {
   width: 75px;
 }
 
-
-.favouriteStar{
-  cursor: pointer;  
+.favouriteStar {
+  cursor: pointer;
 }
 
-.checked{
-  fill: #FFF600
+.checked {
+  fill: #fff600;
 }
-
-
 
 .checkBoxTable {
   margin-top: 15px;
@@ -605,7 +629,6 @@ tr {
 }
 
 .siteTable {
-  
   height: 38px;
   width: 69px;
   color: #ffff;
@@ -616,7 +639,8 @@ tr {
   height: 38px;
   width: 68px;
 }
-.buyInTable {
+
+.buyinTable {
   color: white;
   height: 38px;
   width: 68px;
@@ -628,13 +652,13 @@ tr {
   color: #ffff;
 }
 
-.prizePoolTable {
+.prizepoolTable {
   height: 38px;
   width: 90px;
   color: #ffff;
 }
 
-.maxReentryTable {
+.maxreentryTable {
   height: 38px;
   width: 110px;
   color: #ffff;
@@ -650,6 +674,46 @@ tr {
   height: 38px;
   width: 73px;
   color: #ffff;
+}
+
+.speedTableImgRegular {
+  position: relative;
+  top: 3.5px;
+  padding-right: 3px;
+}
+
+.speedTableImgSlow {
+  position: relative;
+  top: 0px;
+  padding-right: 3px;
+}
+
+.speedTableImgTurbo {
+  position: relative;
+  top: 2px;
+  padding-right: 3px;
+}
+
+.speedTableImgHyper {
+  position: relative;
+  top: 2.5px;
+  padding-right: 3px;
+}
+
+.slow {
+  color: #3c88ea;
+}
+
+.regular {
+  color: #52ae4c;
+}
+
+.turbo {
+  color: #ff9c40;
+}
+
+.hyper {
+  color: #cf0122;
 }
 
 .fieldTable {
@@ -670,7 +734,13 @@ tr {
   color: #ffff;
 }
 
-.tableSizeTable {
+.tableSizeTableRegistered {
+  height: 38px;
+  width: 90px;
+  color: #ffff;
+}
+
+.tablesizeTable {
   height: 38px;
   width: 96px;
   color: #ffff;
@@ -682,21 +752,129 @@ tr {
   color: #ffff;
 }
 
+.priorityTableRegistered {
+  height: 38px;
+  width: 70px;
+  color: #ffff;
+}
+
 .siteTable,
 .startTable,
-.buyInTable,
+.buyinTable,
 .nameTable,
-.prizePoolTable,
-.maxReentryTable,
+.prizepoolTable,
+.maxreentryTable,
 .blindsTable,
 .speedTable,
 .fieldTable,
 .endTable,
 .mlrTable,
-.tableSizeTable,
-.priorityTable {
+.tablesizeTable,
+.tableSizeTableRegistered,
+.priorityTable,
+.priorityTableRegistered {
   font-size: 12px;
   vertical-align: middle;
 }
 
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ff5555;
+  font-size: 18px;
+  padding: 5px;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.deleteButton i {
+  margin-right: 5px;
+}
+
+.deleteButton:hover {
+  transform: scale(1.1);
+  color: #ff0000;
+}
+
+.active {
+  color: transparent;
+  background-image: radial-gradient(ellipse at 30% 30%,
+      #ffdead 0%,
+      #fa6e49 27%,
+      #c314d4 90%);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination span {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+}
+
+.pagination .active {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.pagination span[style*="not-allowed"] {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-numbers span:hover:not(.active) {
+  color: #007bff;
+}
+
+/* Menu inferior */
+.bottomMenu {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  background-color: #191934;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 100;
+}
+
+h4 {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  padding-right: 20px;
+}
+
+.separator {
+  width: 0.2px;
+  background-color: white;
+  height: 25px;
+  margin: 0 10px;
+}
+
+.bottomMenu img {
+  cursor: pointer;
+}

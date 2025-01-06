@@ -1,34 +1,54 @@
-.selectSiteModal{
-    width: 243px;
-    height: 530px;
-    position: fixed;
-    z-index: 1000;
-    font-size: 14px;
-    color: #ffff;
-    background: #191934;
-    border-radius: 10px;
-    left: 234px;
-    top: 165px;
+.selectSiteModal {
+  width: 243px;
+  height: auto;
+  position: fixed;
+  z-index: 1000;
+  font-size: 14px;
+  color: #ffff;
+  background: #191934;
+  border-radius: 10px;
+  left: 272px;
+  top: 150px;
 }
 
-.card{
- width: 211px;
- height: 36px;
- margin-top: 5px;
- gap: 10px;
- display: inline-flex;
- margin-left: 16px;
- margin-right: 16px;
+.card {
+  width: 211px;
+  height: 46.5px;
+  cursor: pointer;
+  gap: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 16px;
+  margin-right: 16px;
+  padding-bottom: 5px;
+  border: none;
+  background-color: #191934;
+  color: #ffff;
 }
 
-.card img{
-    max-width: 18px;
-    margin-left: 5px;
-    margin-top: 10px;
+.card:hover {
+  background: #0b0b21;
+  border-radius: 3px;
 }
 
-.card:not(:last-child) {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.10);
-    padding-bottom: 10px;
-  }
-  
+.card img {
+  margin-left: 5px;
+}
+
+.card:not(:first-child) {
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.card:last-child {
+  height: 46.5px;
+  margin-bottom: 10px;
+}
+
+.card:first-child {
+  margin-top: 5px;
+}
+
+.active{
+  background-color: #0b0b21;
+}

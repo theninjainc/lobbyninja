@@ -12,6 +12,7 @@
   flex-direction: column;
   transition: 0.3s;
   z-index: 1000;
+  overflow: auto;
 }
 
 .sidebar.open{
@@ -43,11 +44,8 @@ li {
   width: 100%;
 }
 
-.bgHoverIcon{
+.bgHoverIconFirst{
   transition: 0.2s;
-}
-
-a:hover .bgHoverIcon{
   background: radial-gradient(
     ellipse at 50% 1%,
     #BBA5F4 -30%,
@@ -62,7 +60,27 @@ a:hover .bgHoverIcon{
   
 }
 
-a:hover span{
+
+.bgHoverTextFirst{
+  color: #5F33D6;
+}
+
+a:hover .bgHoverIconRETIRED{
+  background: radial-gradient(
+    ellipse at 50% 1%,
+    #BBA5F4 -30%,
+    #5F33D6 50%
+  );
+  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+a:hover spanRETIRED{
   color: #5F33D6;
 }
 

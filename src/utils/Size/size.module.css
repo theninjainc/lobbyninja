@@ -4,8 +4,8 @@
     background-color: #191934;
     position: fixed;
     z-index: 1000;
-    left: 837px;
-    top: 165px;
+    left: 890px;
+    top: 150px;
     border-radius: 10px;
 }
 
@@ -15,7 +15,7 @@
     background-color: transparent;
     color: white;
     margin: 5px 0px 0px 5px;
-    
+    cursor: pointer;
 }
 
 .size button:hover{

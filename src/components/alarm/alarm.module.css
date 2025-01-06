@@ -1,0 +1,148 @@
+.main {
+  padding: 0px 22px 0px 29px;
+  width: 100%;
+  margin-left: 89px;
+  color: #fff;
+}
+
+.filterbar {
+  margin-top: 43px;
+  background-color: var(--bg-filterbar);
+  width: 87%;
+  height: 38px;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 200 800;
+
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U + FEFF, U + FFFD;
+}
+
+.filterCheckbox {
+  margin: 0px 20px 0px 40px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #070b2b;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+}
+
+.filterCheckbox:checked::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: #5f33d6;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.2l-4.2-4.2L3.5 13l5.5 5.5 11-11L18.3 6l-9.3 9.2z"/></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: block;
+
+  border-radius: 2px;
+}
+
+.filterCheckbox:hover {
+  box-shadow: 0 0 3px 2px rgba(255, 255, 255, 0.3);
+}
+
+.filterSiteBtn {
+  width: 68px;
+  height: 38px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 35px;
+}
+
+.filterStartBtn {
+  width: 95px;
+  height: 38px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filterBuyInBtn {
+  width: 115px;
+  height: 38px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 1%;
+}
+
+.filterNameBtn {
+  height: 38px;
+  border: none;
+  background-color: var(--bg-filterbar);
+  color: #ffff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.NameBtn,
+.BuyInBtn,
+.SiteBtn,
+.StartBtn {
+  width: 95px;
+  height: 38px;
+  font-size: 12px;
+}
+
+.linha {
+  width: 87%;
+}
+
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ff5555;
+  font-size: 18px;
+  padding: 5px;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deleteButton i {
+  margin-right: 5px;
+}
+
+.deleteButton:hover {
+  transform: scale(1.1);
+  color: #ff0000;
+}
