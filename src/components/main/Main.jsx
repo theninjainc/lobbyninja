@@ -15,7 +15,7 @@ import siteiPoker from "../../assets/siteiPoker.svg";
 import siteGGNetwork from "../../assets/siteGGNetwork.svg";
 import siteChico from "../../assets/siteChico.svg";
 import siteBodog from "../../assets/siteBodog.svg";
-import { Account, Client } from 'appwrite'
+import { Account, Client } from "appwrite";
 import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import Speed from "../../utils/Speed/Speed";
@@ -27,15 +27,12 @@ import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 import MoreFilters from "../../utils/MoreFilters/MoreFilters";
 import NewAlarm from "../../utils/NewAlarm/NewAlarm";
-import Options from "../../utils/Options/Options";
 import ChoosePriority from "../../utils/ChoosePriority/ChoosePriority";
 import { Link } from "react-router-dom";
-
-import skipped from '../../assets/skipped.svg'
-import alarm from '../../assets/alarm.svg'
-import deleted from '../../assets/deleted.svg'
-import registered from '../../assets/Frame.png'
-
+import skipped from "../../assets/skipped.svg";
+import alarm from "../../assets/alarm.svg";
+import deleted from "../../assets/deleted.svg";
+import registered from "../../assets/Frame.png";
 
 const PAGE_SIZE = 20;
 
@@ -53,7 +50,7 @@ const Main = () => {
     { network: "Bodog", image: siteBodog },
   ];
   const [orderList, setOrderList] = useState([]);
-  const [orderDate, setOrderDate] = useState([])
+  const [orderDate, setOrderDate] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -61,12 +58,12 @@ const Main = () => {
   const handleCreateLobby = async (opcao) => {
     const client = new Client();
     const account = new Account(client);
-    client.setProject('lobbyninja');
+    client.setProject("lobbyninja");
     const user = await account.get();
     const email = user.email;
     const lobbyData = {
       email,
-      lobbies: selectedItems.map(item => ({
+      lobbies: selectedItems.map((item) => ({
         ...item,
         registered: opcao == 3 ? true : false,
         alarm: opcao == 4 ? true : false,
@@ -75,26 +72,29 @@ const Main = () => {
       })),
     };
 
-    console.log(lobbyData)
+    console.log(lobbyData);
 
     try {
-      const response = await fetch('http://localhost:3000/api/lobbys/lobbyCreate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(lobbyData),
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/lobbys/lobbyCreate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(lobbyData),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Lobby criado com sucesso:', data);
+        console.log("Lobby criado com sucesso:", data);
       } else {
-        console.error('Erro ao criar lobby:', data.error);
+        console.error("Erro ao criar lobby:", data.error);
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error);
+      console.error("Erro ao fazer a requisição:", error);
     }
   };
 
@@ -283,18 +283,17 @@ const Main = () => {
       return newOrderStartFilter === "asc" ? timeA - timeB : timeB - timeA;
     });
 
-    console.log()
+    console.log();
 
     setOrderStartFilter(newOrderStartFilter);
     setOrderList(newListStart);
   };
 
-
   const orderedListSite = () => {
     const newListSite = [...orderList];
     newListSite.sort((a, b) => {
-      const siteA = a.site || "";
-      const siteB = b.site || "";
+      const siteA = a.Site || "";
+      const siteB = b.Site || "";
       return orderSiteFilter === "asc"
         ? siteA.localeCompare(siteB)
         : siteB.localeCompare(siteA);
@@ -302,7 +301,6 @@ const Main = () => {
     setOrderList(newListSite);
     setOrderSiteFilter(orderSiteFilter === "asc" ? "desc" : "asc");
   };
-
 
   const orderedListField = () => {
     const newListField = [...orderList];
@@ -312,9 +310,6 @@ const Main = () => {
     setOrderList(newListField);
     setOrderFieldFilter(orderFieldFilter === "asc" ? "desc" : "asc");
   };
-
-
-
 
   const orderedListTableSize = () => {
     const newListTableSize = [...orderList];
@@ -329,7 +324,6 @@ const Main = () => {
     setOrderTableSizeFilter(orderTableSizeFilter === "asc" ? "desc" : "asc");
   };
 
-
   const orderedListPriority = () => {
     const newListPriority = [...orderList];
     newListPriority.sort((a, b) => {
@@ -343,15 +337,17 @@ const Main = () => {
     setOrderPriorityFiter(orderPriorityFilter === "asc" ? "desc" : "asc");
   };
 
-
   const orderedListMaxReentry = () => {
     const newListMaxReentry = [...orderList];
 
-    const newOrderMaxReentryFilter = orderMaxReentryFilter === "asc" ? "desc" : "asc";
+    const newOrderMaxReentryFilter =
+      orderMaxReentryFilter === "asc" ? "desc" : "asc";
 
     newListMaxReentry.sort((a, b) => {
-      const maxReentryA = a.MaxReentry === "Yes" ? 1 : a.MaxReentry === "No" ? 0 : 0;
-      const maxReentryB = b.MaxReentry === "Yes" ? 1 : b.MaxReentry === "No" ? 0 : 0;
+      const maxReentryA =
+        a.MaxReentry === "Yes" ? 1 : a.MaxReentry === "No" ? 0 : 0;
+      const maxReentryB =
+        b.MaxReentry === "Yes" ? 1 : b.MaxReentry === "No" ? 0 : 0;
 
       return newOrderMaxReentryFilter === "asc"
         ? maxReentryA - maxReentryB
@@ -361,9 +357,6 @@ const Main = () => {
     setOrderList(newListMaxReentry);
     setOrderMaxReentryFilter(newOrderMaxReentryFilter);
   };
-
-
-
 
   const orderedListName = () => {
     if (!orderList || orderList.length === 0) return;
@@ -385,15 +378,13 @@ const Main = () => {
     setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
   };
 
-
-
   const orderedListBuyIn = () => {
     const newListBuyIn = [...orderList];
     newListBuyIn.sort((a, b) =>
       orderBuyInFilter === "asc" ? a.BuyIn - b.BuyIn : b.BuyIn - a.BuyIn
     );
 
-    newListBuyIn[0]
+    newListBuyIn[0];
 
     setOrderList(newListBuyIn);
     setOrderBuyInFilter(orderBuyInFilter === "asc" ? "desc" : "asc");
@@ -407,8 +398,8 @@ const Main = () => {
     newListBlinds.sort((a, b) => {
       const blindsA = a.Blinds ? a.Blinds.toString().toLowerCase() : "";
       const blindsB = b.Blinds ? b.Blinds.toString().toLowerCase() : "";
-      console.log(blindsA)
-      console.log(blindsB)
+      console.log(blindsA);
+      console.log(blindsB);
       return newOrderBlindsFilter === "asc"
         ? blindsA.localeCompare(blindsB)
         : blindsB.localeCompare(blindsA);
@@ -417,8 +408,6 @@ const Main = () => {
     setOrderList(newListBlinds);
     setOrderBlindsFilter(newOrderBlindsFilter);
   };
-
-
 
   //SelecionedFilters
   const [activeFilter, setActiveFilter] = useState(null);
@@ -560,8 +549,10 @@ const Main = () => {
 
     // Filtro por nome do torneio
     if (searchNameTournaments) {
-      filteredList = filteredList.filter((item) =>
-        item.Name && item.Name.toLowerCase().includes(searchNameTournaments.toLowerCase())
+      filteredList = filteredList.filter(
+        (item) =>
+          item.Name &&
+          item.Name.toLowerCase().includes(searchNameTournaments.toLowerCase())
       );
     }
 
@@ -622,32 +613,29 @@ const Main = () => {
     setOrderList(filteredList);
   };
 
-
-  const applyFilters = () => { };
+  const applyFilters = () => {};
   return (
     <>
-      <div className={styles.main}>
-        {moreFiltersisOpen && (
-          <MoreFilters
-            closeModal={() => setMoreFiltersisOpen(false)}
-            orderList={orderList}
-            setOrderList={setOrderList}
-            applyFilters={applyFilters}
-          />
-        )}
-        <CostumizeColumns
-          isOpen={isOpenCostumizeColumns}
-          closeModal={() => setIsOpenCostumizeColumns(false)}
-          onColumnsChange={(updatedColumns) =>
-            setAllowedFilters(updatedColumns)
-          }
+      {moreFiltersisOpen && (
+        <MoreFilters
+          closeModal={() => setMoreFiltersisOpen(false)}
+          orderList={orderList}
+          setOrderList={setOrderList}
+          applyFilters={applyFilters}
         />
+      )}
+      <CostumizeColumns
+        isOpen={isOpenCostumizeColumns}
+        closeModal={() => setIsOpenCostumizeColumns(false)}
+        onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
+      />
 
         <div
-          className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
-            ? styles.blur
-            : styles.noBlur
-            }`}
+          className={`${styles.main} ${
+            moreFiltersisOpen === true || isOpenCostumizeColumns === true
+              ? styles.blur
+              : styles.noBlur
+          }`}
         >
           <div className={styles.navbar}>
             <div className={styles.titlef}>Tournament List</div>
@@ -666,7 +654,6 @@ const Main = () => {
               </div>
             </div>
           </div>
-        </div>
         <div className={styles.searchbar}>
           <div className={styles.searchleft}>
             <label htmlFor="search" className={styles.label}>
@@ -748,24 +735,24 @@ const Main = () => {
                         selectedSpeed === 1
                           ? slow
                           : selectedSpeed === 2
-                            ? regular
-                            : selectedSpeed === 3
-                              ? turbo
-                              : selectedSpeed === 4
-                                ? hyper
-                                : null
+                          ? regular
+                          : selectedSpeed === 3
+                          ? turbo
+                          : selectedSpeed === 4
+                          ? hyper
+                          : null
                       }
                     ></img>
                     <p>
                       {selectedSpeed === 1
                         ? "Slow"
                         : selectedSpeed === 2
-                          ? "Regular"
-                          : selectedSpeed === 3
-                            ? "Turbo"
-                            : selectedSpeed === 4
-                              ? "Hyper"
-                              : null}
+                        ? "Regular"
+                        : selectedSpeed === 3
+                        ? "Turbo"
+                        : selectedSpeed === 4
+                        ? "Hyper"
+                        : null}
                     </p>
                   </div>
                 ) : (
@@ -789,12 +776,12 @@ const Main = () => {
                     {selectedSize === 1
                       ? "2"
                       : selectedSize === 2
-                        ? "3-5"
-                        : selectedSize === 3
-                          ? "6"
-                          : selectedSize === 4
-                            ? "7 to 10"
-                            : null}
+                      ? "3-5"
+                      : selectedSize === 3
+                      ? "6"
+                      : selectedSize === 4
+                      ? "7 to 10"
+                      : null}
                   </p>
                 ) : (
                   "Size"
@@ -852,8 +839,9 @@ const Main = () => {
             .map((button, index) => (
               <button
                 key={index}
-                className={`${button.className} ${button.isActive ? styles.active : ""
-                  }`}
+                className={`${button.className} ${
+                  button.isActive ? styles.active : ""
+                }`}
                 onClick={button.onClick}
               >
                 {button.label}
@@ -875,7 +863,9 @@ const Main = () => {
                 >
                   <td className={styles.stylesCheckboxTable}>
                     <FavouriteStar className={styles.favouriteStar} />
-                    <input type="checkbox" className={styles.checkBoxTable}
+                    <input
+                      type="checkbox"
+                      className={styles.checkBoxTable}
                       checked={selectedItems.includes(item)}
                       onChange={() => toggleItem(item)}
                     />
@@ -890,7 +880,8 @@ const Main = () => {
                       {filter === "Site" && item.Site && (
                         <img
                           src={
-                            siteData.find((site) => site.network === item.Site).image
+                            siteData.find((site) => site.network === item.Site)
+                              .image
                           }
                           alt="site logo"
                         />
@@ -899,9 +890,9 @@ const Main = () => {
                       {filter === "Start" &&
                         (item.Start
                           ? new Date(item.Start).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
                           : "-")}
 
                       {filter === "Buy In" &&
@@ -953,7 +944,10 @@ const Main = () => {
                     handlePageChange(currentPage - 1);
                   }
                 }}
-                style={{ cursor: currentPage === 1 ? "not-allowed" : "pointer", color: currentPage === 1 ? "#ccc" : "white" }}
+                style={{
+                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                  color: currentPage === 1 ? "#ccc" : "white",
+                }}
               >
                 Anterior
               </span>
@@ -976,13 +970,13 @@ const Main = () => {
               <span
                 onClick={() => handlePageChange(currentPage + 1)}
                 style={{
-                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                  cursor:
+                    currentPage === totalPages ? "not-allowed" : "pointer",
                   color: currentPage === totalPages ? "#ccc" : "white",
                 }}
               >
                 Próxima
               </span>
-
             </div>
           </tbody>
         </table>
@@ -993,16 +987,14 @@ const Main = () => {
               src={skipped}
               alt="Criar Lobby"
               onClick={() => handleCreateLobby(1)}
-              style={{ cursor: 'pointer' }}
-            />            <div className={styles.separator}></div>
-            <img src={alarm}
-              onClick={() => handleCreateLobby(4)} />
+              style={{ cursor: "pointer" }}
+            />{" "}
             <div className={styles.separator}></div>
-            <img src={registered}
-              onClick={() => handleCreateLobby(3)} />
+            <img src={alarm} onClick={() => handleCreateLobby(4)} />
             <div className={styles.separator}></div>
-            <img src={deleted}
-              onClick={() => handleCreateLobby(2)} />
+            <img src={registered} onClick={() => handleCreateLobby(3)} />
+            <div className={styles.separator}></div>
+            <img src={deleted} onClick={() => handleCreateLobby(2)} />
           </div>
         )}
       </div>
