@@ -630,30 +630,30 @@ const Main = () => {
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
 
-        <div
-          className={`${styles.main} ${
-            moreFiltersisOpen === true || isOpenCostumizeColumns === true
-              ? styles.blur
-              : styles.noBlur
-          }`}
-        >
-          <div className={styles.navbar}>
-            <div className={styles.titlef}>Tournament List</div>
+      <div
+        className={`${styles.main} ${
+          moreFiltersisOpen === true || isOpenCostumizeColumns === true
+            ? styles.blur
+            : styles.noBlur
+        }`}
+      >
+        <div className={styles.navbar}>
+          <div className={styles.titlef}>Tournament List</div>
+          <div className={styles.btns}>
             <div className={styles.btns}>
-              <div className={styles.btns}>
-                <div>
-                  <ToggleThemeBtn />
-                </div>
-                <div>
-                  <Link to="/config">
-                    <button className={styles.navEngineBtn}>
-                      <img src={engine} alt="" />
-                    </button>
-                  </Link>
-                </div>
+              <div>
+                <ToggleThemeBtn />
+              </div>
+              <div>
+                <Link to="/config">
+                  <button className={styles.navEngineBtn}>
+                    <img src={engine} alt="" />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
+        </div>
         <div className={styles.searchbar}>
           <div className={styles.searchleft}>
             <label htmlFor="search" className={styles.label}>
@@ -905,7 +905,7 @@ const Main = () => {
 
                       {filter === "Max Reentry" &&
                         (item.MaxReentry ? item.MaxReentry : "-")}
-
+                        
                       {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
 
                       {filter === "Speed" &&
