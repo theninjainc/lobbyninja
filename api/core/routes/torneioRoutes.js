@@ -42,16 +42,19 @@ router.get('/api/activeTournaments', async (req, res) => {
             networks.map(async (network) => {
                 try {
                     const response = await axios.get(`${url}/${network}/activeTournaments?filter=Type:H,NL;Type!:SAT,HU,FPP,TI,TR,SO,DN,TN,W,C,RH,L;Class:SCHEDULED`, { headers });
-
+                    console.log(response)
                     if (response.data.Response.RegisteringTournamentsResponse && response.data.Response.RegisteringTournamentsResponse.RegisteringTournaments) {
                         return response.data.Response.RegisteringTournamentsResponse.RegisteringTournaments.RegisteringTournament
                             .map(tournament => {
                                 const tournamentStart = new Date(parseInt(tournament["@scheduledStartDate"]) * 1000);
                                 const today = new Date();
 
-                                // Verificação para garantir que o torneio ainda não começou
-                                if (tournamentStart > today) {
-                                    // Convertendo buyIn e prizePool para inteiros
+                                console.log(tournamentStart)
+                                console.log(today)
+                                console.log(tournament["@scheduledStartDate"])
+                                const isSameDate = tournamentStart.toDateString() === today.toDateString();
+                                console.log(tournamentStart.toDateString(), today.toDateString())
+                                if (isSameDate && tournamentStart >= today) {
                                     const buyIn = parseInt(tournament["@stake"]) + parseInt(tournament["@rake"]);
                                     const prizePool = parseInt(tournament["@guarantee"]);
 
@@ -71,7 +74,7 @@ router.get('/api/activeTournaments', async (req, res) => {
                                         Priority: null
                                     };
                                 }
-                                return null; // Ignora torneios que já começaram
+                                return null;
                             })
                             .filter(tournament => tournament !== null);
                     } else {
