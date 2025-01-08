@@ -27,7 +27,7 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   const [endTime, setEndTime] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("All");
   const [reEntry, setReEntry] = useState("allowed");
-  const [speed, setSpeed] = useState();
+  const [speed, setSpeed] = useState(null);
   const [game, setGame] = useState("any");
   const [variant, setVariant] = useState("any");
   const [maxAbility, setMaxAbility] = useState("20");
@@ -65,41 +65,48 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
 
     let filteredList = orderList;
 
+    //funcionando
     if (network) {
-      filteredList = filteredList.filter((item) => item.name === network);
+      filteredList = filteredList.filter((item) => item.Site === network);
     }
+
+    //funcionando errado
     if (buyInMin) {
-      filteredList = filteredList.filter((item) => item.buyIn >= buyInMin);
+      filteredList = filteredList.filter((item) => item.BuyIn >= buyInMin);
     }
+    //não funciona
     if (buyInMax) {
-      filteredList = filteredList.filter((item) => item.buyIn <= buyInMax);
+      filteredList = filteredList.filter((item) => item.BuyIn <= buyInMax);
     }
+    //Funcionando
     if (prizePoolMin) {
       filteredList = filteredList.filter(
-        (item) => item.prizePool >= prizePoolMin
+        (item) => item.PrizePool >= prizePoolMin
       );
     }
+    //Funcionando
     if (prizePoolMax) {
       filteredList = filteredList.filter(
-        (item) => item.prizePool <= prizePoolMax
+        (item) => item.PrizePool <= prizePoolMax
       );
     }
+    //Funcionando
     if (tableSize) {
       switch (tableSize) {
         case 1:
-          filteredList = filteredList.filter((item) => item.tableSizeize === 2);
+          filteredList = filteredList.filter((item) => item.TableSize === 2);
           break;
         case 2:
           filteredList = filteredList.filter(
-            (item) => item.tableSize >= 3 && item.tableSize <= 5
+            (item) => item.TableSize >= 3 && item.TableSize <= 5
           );
           break;
         case 3:
-          filteredList = filteredList.filter((item) => item.tableSize >= 6);
+          filteredList = filteredList.filter((item) => item.TableSize >= 6);
           break;
         case 4:
           filteredList = filteredList.filter(
-            (item) => item.tableSize >= 7 && item.tableSize <= 10
+            (item) => item.TableSize >= 7 && item.TableSize <= 10
           );
           break;
         default:
@@ -107,30 +114,31 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
       }
     }
     if (blindsMin) {
-      filteredList = filteredList.filter((item) => item.blinds >= blindsMin);
+      filteredList = filteredList.filter((item) => item.Blinds >= blindsMin);
     }
     if (blindsMax) {
-      filteredList = filteredList.filter((item) => item.blinds <= blindsMax);
+      filteredList = filteredList.filter((item) => item.Blinds <= blindsMax);
     }
     if (priority) {
       filteredList = filteredList.filter((item) => item.priority === priority);
     }
+    //Funcionando
     if (reEntry === "allowed") {
       filteredList = filteredList.filter(
-        (item) => item.maxReentry != null && item.maxReentry !== ""
+        (item) => item.MaxReentry === "Yes"
       );
     } else if (reEntry === "notAllowed") {
       filteredList = filteredList.filter(
-        (item) => item.maxReentry == null || item.maxReentry === ""
+        (item) => item.MaxReentry === "No"
       );
     }
     if (speed) {
       filteredList = filteredList.filter((item) => item.speed === speed);
     }
+    //condição especial com o item.Name(não consigo enviar o formulário se tiver algum digito)
     if (excludeWords) {
       filteredList = filteredList.filter(
-        (item) => !item.name.toLowerCase().includes(excludeWords)
-        //Está bugado com a letra A
+        (item) => !item.Name.toLowerCase().includes(excludeWords)
       );
     }
     if (endTime) {
@@ -160,11 +168,12 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
         >
           <option value="">Network</option>
           {orderList.map((item, index) => (
-            <option key={index} value={item.name}>
-              {item.name}
+            <option key={index} value={item.Site}>
+              {item.Site}
             </option>
           ))}
         </select>
+        {console.log(network)}
         <img src={select} alt="Select icon" className={styles.selectIcon} />
       </div>
       <div className={styles.buyIn}>

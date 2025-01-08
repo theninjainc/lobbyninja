@@ -108,6 +108,14 @@ const Main = () => {
     });
   };
 
+  const toggleAllItems = (isChecked) => {
+    if (isChecked) {
+      setSelectedItems(getPaginatedOrders());
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
   const isMenuVisible = selectedItems.length > 0;
 
   const formatDate = (dateStr) => {
@@ -613,6 +621,9 @@ const Main = () => {
     setOrderList(filteredList);
   };
 
+  const isAllSelected =
+    getPaginatedOrders().length > 0 &&
+    selectedItems.length === getPaginatedOrders().length;
   const applyFilters = () => {};
   return (
     <>
@@ -630,30 +641,30 @@ const Main = () => {
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
 
-        <div
-          className={`${styles.main} ${
-            moreFiltersisOpen === true || isOpenCostumizeColumns === true
-              ? styles.blur
-              : styles.noBlur
-          }`}
-        >
-          <div className={styles.navbar}>
-            <div className={styles.titlef}>Tournament List</div>
+      <div
+        className={`${styles.main} ${
+          moreFiltersisOpen === true || isOpenCostumizeColumns === true
+            ? styles.blur
+            : styles.noBlur
+        }`}
+      >
+        <div className={styles.navbar}>
+          <div className={styles.titlef}>Tournament List</div>
+          <div className={styles.btns}>
             <div className={styles.btns}>
-              <div className={styles.btns}>
-                <div>
-                  <ToggleThemeBtn />
-                </div>
-                <div>
-                  <Link to="/config">
-                    <button className={styles.navEngineBtn}>
-                      <img src={engine} alt="" />
-                    </button>
-                  </Link>
-                </div>
+              <div>
+                <ToggleThemeBtn />
+              </div>
+              <div>
+                <Link to="/config">
+                  <button className={styles.navEngineBtn}>
+                    <img src={engine} alt="" />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
+        </div>
         <div className={styles.searchbar}>
           <div className={styles.searchleft}>
             <label htmlFor="search" className={styles.label}>
@@ -823,7 +834,13 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.filterbar}>
-          <input type="checkbox" className={styles.filterCheckbox} />
+          <input
+            type="checkbox"
+            className={styles.filterCheckbox}
+            checked={isAllSelected}
+            onChange={(e) => toggleAllItems(e.target.checked)}
+          />
+
           {filterButtons
             .filter(
               (button) =>

@@ -267,11 +267,13 @@
 .priority select:focus,
 .network select:focus {
   outline: none;
+  color: #fff;
 }
 .priority > select > option,
 .network > select > option {
   background-color: #191934;
   cursor: pointer;
+  color: #fff;
 }
 .selectIcon {
   width: 16px;
