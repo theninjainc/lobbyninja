@@ -15,80 +15,55 @@
   overflow: auto;
 }
 
-.sidebar.open{
+.sidebar.open {
   width: 206px;
   display: flex;
-  
 }
-
 
 .sidebar ul {
   margin-top: 216px;
-  margin-left: 29px ;
+  margin-left: 29px;
   position: fixed;
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-items:flex-start ;
+  justify-items: flex-start;
 }
-
-
 
 li {
   margin: 38px 0px 0px 0px;
   display: flex;
+  justify-content: center;
+  position: relative;
   flex-direction: row;
-  gap: 13px;
   width: 100%;
 }
 
-.bgHoverIconFirst{
-  transition: 0.2s;
-  background: radial-gradient(
-    ellipse at 50% 1%,
-    #BBA5F4 -30%,
-    #5F33D6 50%
-  );
-  border-radius: 12px;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-}
-
-
-.bgHoverTextFirst{
-  color: #5F33D6;
-}
-
-a:hover .bgHoverIconRETIRED{
-  background: radial-gradient(
-    ellipse at 50% 1%,
-    #BBA5F4 -30%,
-    #5F33D6 50%
-  );
-  border-radius: 12px;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-}
-
-a:hover spanRETIRED{
-  color: #5F33D6;
-}
-
-.sidebar a{
+li.open {
   display: flex;
   flex-direction: row;
-  gap: 13px;  
-  align-items:center ;
+  justify-content: space-between;
+}
+
+.bgIcon {
+  transition: 0.2s;
+  background: radial-gradient(ellipse at 50% 1%, #bba5f4 -30%, #5f33d6 50%);
+  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: none;
+}
+
+.sidebar a {
+  display: flex;
+  flex-direction: row;
+  gap: 13px;
+  align-items: center;
 }
 
 .sidebar ul li a {
@@ -97,49 +72,31 @@ a:hover spanRETIRED{
   font-weight: bold;
 }
 
-
-
 .logo {
-  display: inline-block; 
- margin-left: 2px;
+  display: inline-block;
+  margin-left: 2px;
   margin-top: 14.9px;
 }
 
 .logo img {
-  position: relative; 
-  z-index: 2; 
+  position: relative;
+  z-index: 2;
   width: 70px;
   height: 70px;
- }
-
-
-.logoOpened{
- margin-top: 16px;
 }
 
-.bgHoverText{
-  color:#5F33D6;
+.logoOpened {
+  margin-top: 16px;
 }
 
-.bgHover:hover .bgHoverIcon span{
-  background: radial-gradient(
-    ellipse at 50% 1%,
-    #BBA5F4 -30%,
-    #5F33D6 50%
-  );
-  border-radius: 12px;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid rgba(255, 252, 252, 0.3);
-  transition: 0.5s;
-  color: #5F33D6;
+.colorText {
+  color: #5f33d6;
 }
 
+.alignementList{
+  justify-content: space-between;
+}
 
-.sidebar>ul>li.marginCorrection{
-
-    margin-top: 18px;
+.marginLeft{
+  margin-left: 18px;
 }
