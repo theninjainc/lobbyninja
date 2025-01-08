@@ -108,6 +108,14 @@ const Main = () => {
     });
   };
 
+  const toggleAllItems = (isChecked) => {
+    if (isChecked) {
+      setSelectedItems(getPaginatedOrders());
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
   const isMenuVisible = selectedItems.length > 0;
 
   const formatDate = (dateStr) => {
@@ -613,6 +621,9 @@ const Main = () => {
     setOrderList(filteredList);
   };
 
+  const isAllSelected =
+    getPaginatedOrders().length > 0 &&
+    selectedItems.length === getPaginatedOrders().length;
   const applyFilters = () => {};
   return (
     <>
@@ -823,7 +834,13 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.filterbar}>
-          <input type="checkbox" className={styles.filterCheckbox} />
+          <input
+            type="checkbox"
+            className={styles.filterCheckbox}
+            checked={isAllSelected}
+            onChange={(e) => toggleAllItems(e.target.checked)}
+          />
+
           {filterButtons
             .filter(
               (button) =>
@@ -905,7 +922,7 @@ const Main = () => {
 
                       {filter === "Max Reentry" &&
                         (item.MaxReentry ? item.MaxReentry : "-")}
-                        
+
                       {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
 
                       {filter === "Speed" &&
