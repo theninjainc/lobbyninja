@@ -5,14 +5,14 @@
 }
 
 body {
-  background-color: var(--bg-color);
   font-family: "Plus Jakarta Sans", sans-serif;
+
 }
 
 .main {
-  padding: 15px 0px 0px 29px;
-  margin-right: 22px;
+  padding: 15px 22px 0px 29px;
   margin-left: 89px;
+  transition: 0.3s;
 }
 
 .blur {
@@ -28,11 +28,17 @@ body {
 }
 
 .titlef {
-  color: #ffff;
   font-size: 28px;
   font-weight: 800;
   text-align: center;
   float: left;
+}
+
+.darkTitle{
+  color: #ffff;
+}
+.lightTitle{
+  color: #02061e;
 }
 
 .navbar {
@@ -631,17 +637,17 @@ table {
 .siteTable {
   height: 38px;
   width: 69px;
-  color: #ffff;
+
 }
 
 .startTable {
-  color: white;
+
   height: 38px;
   width: 68px;
 }
 
 .buyinTable {
-  color: white;
+
   height: 38px;
   width: 68px;
 }
@@ -649,31 +655,31 @@ table {
 .nameTable {
   height: 38px;
   width: 220px;
-  color: #ffff;
+
 }
 
 .prizepoolTable {
   height: 38px;
   width: 90px;
-  color: #ffff;
+
 }
 
 .maxreentryTable {
   height: 38px;
   width: 110px;
-  color: #ffff;
+
 }
 
 .blindsTable {
   height: 38px;
   width: 71px;
-  color: #ffff;
+
 }
 
 .speedTable {
   height: 38px;
   width: 73px;
-  color: #ffff;
+
 }
 
 .speedTableImgRegular {
@@ -719,43 +725,42 @@ table {
 .fieldTable {
   height: 38px;
   width: 78px;
-  color: #ffff;
+
 }
 
 .endTable {
   height: 38px;
   width: 64px;
-  color: #ffff;
+
 }
 
 .mlrTable {
   height: 38px;
   width: 81px;
-  color: #ffff;
+
 }
 
 .tableSizeTableRegistered {
   height: 38px;
   width: 90px;
-  color: #ffff;
+
 }
 
 .tablesizeTable {
   height: 38px;
   width: 96px;
-  color: #ffff;
+
 }
 
 .priorityTable {
   height: 38px;
   width: 115px;
-  color: #ffff;
 }
 
 .priorityTableRegistered {
   height: 38px;
   width: 70px;
-  color: #ffff;
+ 
 }
 
 .siteTable,

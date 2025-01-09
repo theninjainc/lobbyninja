@@ -33,10 +33,13 @@ import skipped from "../../assets/skipped.svg";
 import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
 import registered from "../../assets/Frame.png";
+import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 
 const PAGE_SIZE = 20;
 
 const Main = () => {
+  const { isDarkMode } = useTheme();
+
   const siteData = [
     { network: "888Poker", image: poker888 },
     { network: "WPN", image: siteWpn },
@@ -642,14 +645,14 @@ const Main = () => {
       />
 
       <div
-        className={`${styles.main} ${
+        className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"} ${
           moreFiltersisOpen === true || isOpenCostumizeColumns === true
             ? styles.blur
             : styles.noBlur
         }`}
       >
         <div className={styles.navbar}>
-          <div className={styles.titlef}>Tournament List</div>
+          <div className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle}`}>Tournament List</div>
           <div className={styles.btns}>
             <div className={styles.btns}>
               <div>
@@ -872,11 +875,31 @@ const Main = () => {
                 <div
                   key={index}
                   style={{
-                    backgroundColor:
-                      index % 2 === 0
+                    backgroundColor: isDarkMode
+                      ? index % 2 === 0
                         ? "transparent"
-                        : "rgba(255, 255, 255, 0.05)",
+                        : "rgba(255, 255, 255, 0.05)"
+                      : index % 2 === 0
+                      ? "transparent"
+                      : "#30397D",  // cor para modo claro
+                    
+                    color: isDarkMode
+                      ? index % 2 === 0
+                        ? "#fff"
+                        : "#fff"
+                      : index % 2 === 0
+                      ? "#404040" 
+                      : "#fff",
+                  
+                    fontWeight: index % 2 === 0
+                      ? isDarkMode
+                        ? ""  // índice par, escuro, font weight 500
+                        : "600"  // índice par, claro, font weight 500
+                      : "normal",  // outros índices têm font-weight normal
                   }}
+                  
+                  
+                  
                 >
                   <td className={styles.stylesCheckboxTable}>
                     <FavouriteStar className={styles.favouriteStar} />
