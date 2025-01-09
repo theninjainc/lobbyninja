@@ -9,4 +9,23 @@
 
 body{
     margin: 0;
+    transition: 0.3s;
 }
+
+.dark-theme {
+    background-color: #02061e;
+    color: white;
+  }
+  
+  .light-theme {
+    background-color: #f9fafc; /* Fundo suave e limpo */
+    color: #2c3e50; /* Texto em azul-escuro para boa legibilidade */
+  }
+  
+  .light-theme-sidebar {
+    background-color: #e3e7f1; /* Azul claro para contraste suave com o fundo */
+    color: #2c3e50; /* Texto consistente com o resto da aplicação */
+  }
+  
+  
+  

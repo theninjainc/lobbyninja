@@ -33,7 +33,7 @@ const Registered = () => {
     const fetchRegisteredLobbys = async (email, state) => {
         try {
             console.log(state); // Para verificar o estado
-            const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
+            const response = await fetch('http://localhost:3000/api/lobbys/lobbyAllOptions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,8 +51,9 @@ const Registered = () => {
 
             const updatedData = data.map(item => {
                 const date = new Date(item.horarioInicio); // Converte para Date
-                const dateEnd = new Date(item.horarioFim); // Converte para Date
-                const formattedTime = date.toTimeString().slice(0, 5); // Formata a hora e minuto
+                const dateEnd = new Date(item.horarioFim);
+                const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
                 const formattedTimeEnd = dateEnd.toTimeString().slice(0, 5); // Formata a hora e minuto
                 return {
                     ...item,
@@ -72,12 +73,12 @@ const Registered = () => {
 
             console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
 
-            const apiUrl = 'https://ninja.lobby.ninja/api/api/lobbys/lobbyUpdateOptions';
+            const apiUrl = 'http://localhost:3000/api/lobbys/lobbyUpdateOptions';
             const requestBody = JSON.stringify({
-                email,       // E-mail do usuário
-                id,          // ID do lobby a ser atualizado
-                state: state, // Estado que está sendo removido
-                value: false,        // Define como não-favorito
+                email,
+                id,
+                state: state,
+                value: false,
             });
 
             const response = await fetch(apiUrl, {

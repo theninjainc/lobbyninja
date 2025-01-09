@@ -38,15 +38,15 @@ function Timer({ startEvent }) {
     return () => clearInterval(interval);
   }, [time]);
 
-  // Função para converter segundos em horas:minutos
-  function convertToHoursMinutes(seconds) {
-    const totalMinutes = Math.floor(seconds / 60);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  // Função para converter segundos em HH:MM:SS
+  function convertToHoursMinutesSeconds(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }
 
-  return <>{convertToHoursMinutes(time)}</>;
+  return <>{convertToHoursMinutesSeconds(time)}</>;
 }
 
 export default Timer;

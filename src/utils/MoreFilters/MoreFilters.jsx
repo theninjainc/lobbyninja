@@ -5,9 +5,17 @@ import exit from "../../assets/exit.svg";
 import relogio from "../../assets/relogio.svg";
 import select from "../../assets/selectSite.svg";
 import save from "../../assets/save.svg";
-//imgSites
-const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
-  // Estados para todos os filtros
+import poker888 from "../../assets/888poker.svg";
+import siteWpn from "../../assets/wpn.svg";
+import siteWinamax from "../../assets/siteWinamax.svg";
+import sitePokerStars from "../../assets/sitePokerStars.svg";
+import sitePartyPoker from "../../assets/sitePartyPoker.svg";
+import siteiPoker from "../../assets/siteiPoker.svg";
+import siteGGNetwork from "../../assets/siteGGNetwork.svg";
+import siteChico from "../../assets/siteChico.svg";
+import siteBodog from "../../assets/siteBodog.svg";
+
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, siteData }) => {
   const [network, setNetwork] = useState();
   const [buyInMin, setBuyInMin] = useState();
   const [buyInMax, setBuyInMax] = useState();
@@ -27,7 +35,7 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   const [endTime, setEndTime] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("All");
   const [reEntry, setReEntry] = useState("allowed");
-  const [speed, setSpeed] = useState();
+  const [speed, setSpeed] = useState(null);
   const [game, setGame] = useState("any");
   const [variant, setVariant] = useState("any");
   const [maxAbility, setMaxAbility] = useState("20");
@@ -65,41 +73,49 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
 
     let filteredList = orderList;
 
+    //funcionando
     if (network) {
-      filteredList = filteredList.filter((item) => item.name === network);
+      filteredList = filteredList.filter((item) => item.Site === network);
     }
+
+    //funcionando errado
     if (buyInMin) {
-      filteredList = filteredList.filter((item) => item.buyIn >= buyInMin);
+      console.log(filteredList.filter((item) => item.buyIn))
+      filteredList = filteredList.filter((item) => Number(item.BuyIn) >= buyInMin);
     }
+    //não funciona
     if (buyInMax) {
-      filteredList = filteredList.filter((item) => item.buyIn <= buyInMax);
+      filteredList = filteredList.filter((item) => Number(item.BuyIn) <= buyInMax);
     }
+    //Funcionando
     if (prizePoolMin) {
       filteredList = filteredList.filter(
-        (item) => item.prizePool >= prizePoolMin
+        (item) => Number(item.PrizePool) >= prizePoolMin
       );
     }
+    //Funcionando
     if (prizePoolMax) {
       filteredList = filteredList.filter(
-        (item) => item.prizePool <= prizePoolMax
+        (item) => Number(item.PrizePool) <= prizePoolMax
       );
     }
+    //Funcionando
     if (tableSize) {
       switch (tableSize) {
         case 1:
-          filteredList = filteredList.filter((item) => item.tableSizeize === 2);
+          filteredList = filteredList.filter((item) => item.TableSize === 2);
           break;
         case 2:
           filteredList = filteredList.filter(
-            (item) => item.tableSize >= 3 && item.tableSize <= 5
+            (item) => item.TableSize >= 3 && item.TableSize <= 5
           );
           break;
         case 3:
-          filteredList = filteredList.filter((item) => item.tableSize >= 6);
+          filteredList = filteredList.filter((item) => item.TableSize >= 6);
           break;
         case 4:
           filteredList = filteredList.filter(
-            (item) => item.tableSize >= 7 && item.tableSize <= 10
+            (item) => item.TableSize >= 7 && item.TableSize <= 10
           );
           break;
         default:
@@ -107,21 +123,22 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
       }
     }
     if (blindsMin) {
-      filteredList = filteredList.filter((item) => item.blinds >= blindsMin);
+      filteredList = filteredList.filter((item) => item.Blinds >= blindsMin);
     }
     if (blindsMax) {
-      filteredList = filteredList.filter((item) => item.blinds <= blindsMax);
+      filteredList = filteredList.filter((item) => item.Blinds <= blindsMax);
     }
     if (priority) {
       filteredList = filteredList.filter((item) => item.priority === priority);
     }
+    //Funcionando
     if (reEntry === "allowed") {
       filteredList = filteredList.filter(
-        (item) => item.maxReentry != null && item.maxReentry !== ""
+        (item) => item.MaxReentry === "Yes"
       );
     } else if (reEntry === "notAllowed") {
       filteredList = filteredList.filter(
-        (item) => item.maxReentry == null || item.maxReentry === ""
+        (item) => item.MaxReentry === "No"
       );
     }
     if (speed) {
@@ -129,8 +146,7 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
     }
     if (excludeWords) {
       filteredList = filteredList.filter(
-        (item) => !item.name.toLowerCase().includes(excludeWords)
-        //Está bugado com a letra A
+        (item) => !item.Name.toLowerCase().includes(excludeWords)
       );
     }
     if (endTime) {
@@ -159,12 +175,13 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
           }}
         >
           <option value="">Network</option>
-          {orderList.map((item, index) => (
-            <option key={index} value={item.name}>
-              {item.name}
+          {siteData.map((item, index) => (
+            <option key={index} value={item.network}>
+              <img src={item.image} /> {item.network}
             </option>
           ))}
         </select>
+        {console.log(network)}
         <img src={select} alt="Select icon" className={styles.selectIcon} />
       </div>
       <div className={styles.buyIn}>

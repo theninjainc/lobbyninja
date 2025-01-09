@@ -15,7 +15,7 @@ import siteiPoker from "../../assets/siteiPoker.svg";
 import siteGGNetwork from "../../assets/siteGGNetwork.svg";
 import siteChico from "../../assets/siteChico.svg";
 import siteBodog from "../../assets/siteBodog.svg";
-import { Account, Client } from 'appwrite'
+import { Account, Client } from "appwrite";
 import SelectSite from "../../utils/SelectSite/SelectSite";
 import FavouriteStar from "../../utils/FavouriteStar/FavouriteStar";
 import Speed from "../../utils/Speed/Speed";
@@ -23,23 +23,21 @@ import Size from "../../utils/Size/Size";
 import engine from "../../assets/engine.svg";
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
-import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 import MoreFilters from "../../utils/MoreFilters/MoreFilters";
-import NewAlarm from "../../utils/NewAlarm/NewAlarm";
-import Options from "../../utils/Options/Options";
-import ChoosePriority from "../../utils/ChoosePriority/ChoosePriority";
 import { Link } from "react-router-dom";
-
-import skipped from '../../assets/skipped.svg'
-import alarm from '../../assets/alarm.svg'
-import deleted from '../../assets/deleted.svg'
-import registered from '../../assets/Frame.png'
-
+import skipped from "../../assets/skipped.svg";
+import alarm from "../../assets/alarm.svg";
+import deleted from "../../assets/deleted.svg";
+import registered from "../../assets/Frame.png";
+import priority from "../../assets/priority.svg";
+import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 
 const PAGE_SIZE = 20;
 
 const Main = () => {
+  const { isDarkMode } = useTheme();
+
   const siteData = [
     { network: "888Poker", image: poker888 },
     { network: "WPN", image: siteWpn },
@@ -53,50 +51,62 @@ const Main = () => {
     { network: "Bodog", image: siteBodog },
   ];
   const [orderList, setOrderList] = useState([]);
-  const [orderDate, setOrderDate] = useState([])
+  const [orderDate, setOrderDate] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleCreateLobby = async (opcao) => {
+  const handleCreateLobby = async (state, priority, itemFavourite) => {
     const client = new Client();
     const account = new Account(client);
-    client.setProject('lobbyninja');
-    const user = await account.get();
-    const email = user.email;
-    const lobbyData = {
-      email,
-      lobbies: selectedItems.map(item => ({
-        ...item,
-        registered: opcao == 3 ? true : false,
-        alarm: opcao == 4 ? true : false,
-        skipped: opcao == 1 ? true : false,
-        deleted: opcao == 2 ? true : false,
-      })),
-    };
-
-    console.log(lobbyData)
+    client.setProject("lobbyninja");
 
     try {
-      const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(lobbyData),
-      });
+      const user = await account.get();
+      const email = user.email;
+
+      // Verifica se selectedItems está disponível; se não, usa itemFavourite
+      const itemsToUse = selectedItems && selectedItems.length > 0 ? selectedItems : [itemFavourite];
+
+      const lobbyData = {
+        email,
+        lobbies: itemsToUse.map((item) => ({
+          ...item,
+          priority, // Adiciona a prioridade ao objeto
+          registered: state === 3, // Exemplo: pode ajustar a lógica aqui, se necessário
+          alarm: state === 4,
+          skipped: state === 1,
+          deleted: state === 2,
+          favourite: state === 5,
+        })),
+      };
+
+      console.log("Enviando lobbyData:", lobbyData);
+
+      const response = await fetch(
+        "http://localhost:3000/api/lobbys/lobbyCreate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(lobbyData),
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Lobby criado com sucesso:', data);
+        console.log("Lobby criado com sucesso:", data);
       } else {
-        console.error('Erro ao criar lobby:', data.error);
+        console.error("Erro ao criar lobby:", data.error);
       }
     } catch (error) {
-      console.error('Erro ao fazer a requisição:', error);
+      console.error("Erro ao fazer a requisição:", error);
     }
   };
+
+
 
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
@@ -106,6 +116,14 @@ const Main = () => {
         return [...prev, item];
       }
     });
+  };
+
+  const toggleAllItems = (isChecked) => {
+    if (isChecked) {
+      setSelectedItems(getPaginatedOrders());
+    } else {
+      setSelectedItems([]);
+    }
   };
 
   const isMenuVisible = selectedItems.length > 0;
@@ -125,16 +143,26 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         throw new Error("Erro ao buscar os dados");
       }
 
       const data = await response.json();
-      console.log(data);
-      setOrderList(data);
-      setOrderDate(data);
+      console.log(data)
+      // Formata os horários automaticamente com o fuso horário local do usuário
+      const formattedData = data.map(tournament => {
+        const startDate = new Date(tournament.Start); // Converte a string para um objeto Date
+        const formattedStartTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formata para o horário local
+        return {
+          ...tournament,
+          Start: formattedStartTime, // Atualiza o campo Start com a hora formatada
+        };
+      });
+
+      setOrderList(formattedData); // Atualiza o estado com os torneios formatados
+      setOrderDate(formattedData); // Se necessário, atualiza outro estado
     } catch (error) {
       setError(error.message);
     }
@@ -214,7 +242,6 @@ const Main = () => {
     setIsOpenSize((prevState) => !prevState);
   };
 
-  //Filter Buttons
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
   const [orderBuyInFilter, setOrderBuyInFilter] = useState("asc");
   const [orderBlindsFilter, setOrderBlindsFilter] = useState("asc");
@@ -277,24 +304,27 @@ const Main = () => {
     const newOrderStartFilter = orderStartFilter === "asc" ? "desc" : "asc";
 
     newListStart.sort((a, b) => {
-      const timeA = new Date(a.Start).getTime();
-      const timeB = new Date(b.Start).getTime();
+      const timeA = a.Start;
+      const timeB = b.Start;
 
-      return newOrderStartFilter === "asc" ? timeA - timeB : timeB - timeA;
+      if (newOrderStartFilter === "asc") {
+        return timeA > timeB ? 1 : timeA < timeB ? -1 : 0;
+      } else {
+        return timeB > timeA ? 1 : timeB < timeA ? -1 : 0;
+      }
     });
-
-    console.log()
 
     setOrderStartFilter(newOrderStartFilter);
     setOrderList(newListStart);
   };
 
 
+
   const orderedListSite = () => {
     const newListSite = [...orderList];
     newListSite.sort((a, b) => {
-      const siteA = a.site || "";
-      const siteB = b.site || "";
+      const siteA = a.Site || "";
+      const siteB = b.Site || "";
       return orderSiteFilter === "asc"
         ? siteA.localeCompare(siteB)
         : siteB.localeCompare(siteA);
@@ -302,7 +332,6 @@ const Main = () => {
     setOrderList(newListSite);
     setOrderSiteFilter(orderSiteFilter === "asc" ? "desc" : "asc");
   };
-
 
   const orderedListField = () => {
     const newListField = [...orderList];
@@ -312,9 +341,6 @@ const Main = () => {
     setOrderList(newListField);
     setOrderFieldFilter(orderFieldFilter === "asc" ? "desc" : "asc");
   };
-
-
-
 
   const orderedListTableSize = () => {
     const newListTableSize = [...orderList];
@@ -329,12 +355,11 @@ const Main = () => {
     setOrderTableSizeFilter(orderTableSizeFilter === "asc" ? "desc" : "asc");
   };
 
-
   const orderedListPriority = () => {
     const newListPriority = [...orderList];
     newListPriority.sort((a, b) => {
-      const priorityA = a.priority ?? 0;
-      const priorityB = b.priority ?? 0;
+      const priorityA = a.Priority ?? 0;
+      const priorityB = b.Priority ?? 0;
       return orderPriorityFilter === "asc"
         ? priorityA - priorityB
         : priorityB - priorityA;
@@ -343,15 +368,17 @@ const Main = () => {
     setOrderPriorityFiter(orderPriorityFilter === "asc" ? "desc" : "asc");
   };
 
-
   const orderedListMaxReentry = () => {
     const newListMaxReentry = [...orderList];
 
-    const newOrderMaxReentryFilter = orderMaxReentryFilter === "asc" ? "desc" : "asc";
+    const newOrderMaxReentryFilter =
+      orderMaxReentryFilter === "asc" ? "desc" : "asc";
 
     newListMaxReentry.sort((a, b) => {
-      const maxReentryA = a.MaxReentry === "Yes" ? 1 : a.MaxReentry === "No" ? 0 : 0;
-      const maxReentryB = b.MaxReentry === "Yes" ? 1 : b.MaxReentry === "No" ? 0 : 0;
+      const maxReentryA =
+        a.MaxReentry === "Yes" ? 1 : a.MaxReentry === "No" ? 0 : 0;
+      const maxReentryB =
+        b.MaxReentry === "Yes" ? 1 : b.MaxReentry === "No" ? 0 : 0;
 
       return newOrderMaxReentryFilter === "asc"
         ? maxReentryA - maxReentryB
@@ -361,9 +388,6 @@ const Main = () => {
     setOrderList(newListMaxReentry);
     setOrderMaxReentryFilter(newOrderMaxReentryFilter);
   };
-
-
-
 
   const orderedListName = () => {
     if (!orderList || orderList.length === 0) return;
@@ -385,15 +409,13 @@ const Main = () => {
     setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
   };
 
-
-
   const orderedListBuyIn = () => {
     const newListBuyIn = [...orderList];
     newListBuyIn.sort((a, b) =>
       orderBuyInFilter === "asc" ? a.BuyIn - b.BuyIn : b.BuyIn - a.BuyIn
     );
 
-    newListBuyIn[0]
+    newListBuyIn[0];
 
     setOrderList(newListBuyIn);
     setOrderBuyInFilter(orderBuyInFilter === "asc" ? "desc" : "asc");
@@ -407,8 +429,8 @@ const Main = () => {
     newListBlinds.sort((a, b) => {
       const blindsA = a.Blinds ? a.Blinds.toString().toLowerCase() : "";
       const blindsB = b.Blinds ? b.Blinds.toString().toLowerCase() : "";
-      console.log(blindsA)
-      console.log(blindsB)
+      console.log(blindsA);
+      console.log(blindsB);
       return newOrderBlindsFilter === "asc"
         ? blindsA.localeCompare(blindsB)
         : blindsB.localeCompare(blindsA);
@@ -417,8 +439,6 @@ const Main = () => {
     setOrderList(newListBlinds);
     setOrderBlindsFilter(newOrderBlindsFilter);
   };
-
-
 
   //SelecionedFilters
   const [activeFilter, setActiveFilter] = useState(null);
@@ -552,6 +572,8 @@ const Main = () => {
   const [selectedSite, setSelectedSite] = useState();
   const [selectedSpeed, setSelectedSpeed] = useState();
   const [selectedSize, setSelectedSize] = useState();
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState(null);
 
   const handleFilter = () => {
     let filteredList = orderDate;
@@ -560,8 +582,10 @@ const Main = () => {
 
     // Filtro por nome do torneio
     if (searchNameTournaments) {
-      filteredList = filteredList.filter((item) =>
-        item.Name && item.Name.toLowerCase().includes(searchNameTournaments.toLowerCase())
+      filteredList = filteredList.filter(
+        (item) =>
+          item.Name &&
+          item.Name.toLowerCase().includes(searchNameTournaments.toLowerCase())
       );
     }
 
@@ -622,47 +646,46 @@ const Main = () => {
     setOrderList(filteredList);
   };
 
-
+  const isAllSelected =
+    getPaginatedOrders().length > 0 &&
+    selectedItems.length === getPaginatedOrders().length;
   const applyFilters = () => { };
   return (
-    <>
-      <div className={styles.main}>
-        {moreFiltersisOpen && (
-          <MoreFilters
-            closeModal={() => setMoreFiltersisOpen(false)}
-            orderList={orderList}
-            setOrderList={setOrderList}
-            applyFilters={applyFilters}
-          />
-        )}
-        <CostumizeColumns
-          isOpen={isOpenCostumizeColumns}
-          closeModal={() => setIsOpenCostumizeColumns(false)}
-          onColumnsChange={(updatedColumns) =>
-            setAllowedFilters(updatedColumns)
-          }
+    <body className={`${isDarkMode ? "dark-theme" : "light-theme"}`}>
+      {moreFiltersisOpen && (
+        <MoreFilters
+          closeModal={() => setMoreFiltersisOpen(false)}
+          orderList={orderDate}
+          setOrderList={setOrderList}
+          siteData={siteData}
+          applyFilters={applyFilters}
         />
+      )}
+      <CostumizeColumns
+        isOpen={isOpenCostumizeColumns}
+        closeModal={() => setIsOpenCostumizeColumns(false)}
+        onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
+      />
 
-        <div
-          className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
-            ? styles.blur
-            : styles.noBlur
-            }`}
-        >
-          <div className={styles.navbar}>
-            <div className={styles.titlef}>Tournament List</div>
+      <div
+        className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
+          ? styles.blur
+          : styles.noBlur
+          }`}
+      >
+        <div className={styles.navbar}>
+          <div className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle}`}>Tournament List</div>
+          <div className={styles.btns}>
             <div className={styles.btns}>
-              <div className={styles.btns}>
-                <div>
-                  <ToggleThemeBtn />
-                </div>
-                <div>
-                  <Link to="/config">
-                    <button className={styles.navEngineBtn}>
-                      <img src={engine} alt="" />
-                    </button>
-                  </Link>
-                </div>
+              <div>
+                <ToggleThemeBtn />
+              </div>
+              <div>
+                <Link to="/config">
+                  <button className={styles.navEngineBtn}>
+                    <img src={engine} alt="" />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -836,7 +859,13 @@ const Main = () => {
           </div>
         </div>
         <div className={styles.filterbar}>
-          <input type="checkbox" className={styles.filterCheckbox} />
+          <input
+            type="checkbox"
+            className={styles.filterCheckbox}
+            checked={isAllSelected}
+            onChange={(e) => toggleAllItems(e.target.checked)}
+          />
+
           {filterButtons
             .filter(
               (button) =>
@@ -865,17 +894,41 @@ const Main = () => {
             <tr>
               {getPaginatedOrders().map((item, index) => (
                 <div
-                  key={index}
+                  key={item.$id}
                   style={{
-                    backgroundColor:
-                      index % 2 === 0
+                    backgroundColor: isDarkMode
+                      ? index % 2 === 0
                         ? "transparent"
-                        : "rgba(255, 255, 255, 0.05)",
+                        : "rgba(255, 255, 255, 0.05)"
+                      : index % 2 === 0
+                        ? "transparent"
+                        : "#30397D",  // cor para modo claro
+
+                    color: isDarkMode
+                      ? index % 2 === 0
+                        ? "#fff"
+                        : "#fff"
+                      : index % 2 === 0
+                        ? "#404040"
+                        : "#fff",
+
+                    fontWeight: index % 2 === 0
+                      ? isDarkMode
+                        ? ""  // índice par, escuro, font weight 500
+                        : "600"  // índice par, claro, font weight 500
+                      : "normal",  // outros índices têm font-weight normal
                   }}
+
+
+
                 >
                   <td className={styles.stylesCheckboxTable}>
-                    <FavouriteStar className={styles.favouriteStar} />
-                    <input type="checkbox" className={styles.checkBoxTable}
+                    <div onClick={() => handleCreateLobby(5, null, item)}>
+                      <FavouriteStar className={styles.favouriteStar} />
+                    </div>
+                    <input
+                      type="checkbox"
+                      className={styles.checkBoxTable}
                       checked={selectedItems.includes(item)}
                       onChange={() => toggleItem(item)}
                     />
@@ -890,19 +943,15 @@ const Main = () => {
                       {filter === "Site" && item.Site && (
                         <img
                           src={
-                            siteData.find((site) => site.network === item.Site).image
+                            siteData.find((site) => site.network === item.Site)
+                              .image
                           }
                           alt="site logo"
                         />
                       )}
 
                       {filter === "Start" &&
-                        (item.Start
-                          ? new Date(item.Start).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                          : "-")}
+                        (item.Start ? item.Start : "-")}
 
                       {filter === "Buy In" &&
                         (item.BuyIn ? `$${item.BuyIn}` : "-")}
@@ -927,10 +976,7 @@ const Main = () => {
                       {filter === "Mlr" &&
                         (item.Start ? (
                           <Timer
-                            startEvent={new Date(item.Start).toLocaleTimeString(
-                              [],
-                              { hour: "2-digit", minute: "2-digit" }
-                            )}
+                            startEvent={item.Start}
                           />
                         ) : (
                           "-"
@@ -953,7 +999,10 @@ const Main = () => {
                     handlePageChange(currentPage - 1);
                   }
                 }}
-                style={{ cursor: currentPage === 1 ? "not-allowed" : "pointer", color: currentPage === 1 ? "#ccc" : "white" }}
+                style={{
+                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                  color: currentPage === 1 ? "#ccc" : "white",
+                }}
               >
                 Anterior
               </span>
@@ -976,13 +1025,13 @@ const Main = () => {
               <span
                 onClick={() => handlePageChange(currentPage + 1)}
                 style={{
-                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                  cursor:
+                    currentPage === totalPages ? "not-allowed" : "pointer",
                   color: currentPage === totalPages ? "#ccc" : "white",
                 }}
               >
                 Próxima
               </span>
-
             </div>
           </tbody>
         </table>
@@ -992,21 +1041,69 @@ const Main = () => {
             <img
               src={skipped}
               alt="Criar Lobby"
-              onClick={() => handleCreateLobby(1)}
-              style={{ cursor: 'pointer' }}
-            />            <div className={styles.separator}></div>
-            <img src={alarm}
-              onClick={() => handleCreateLobby(4)} />
+              onClick={() => handleCreateLobby(1, null, null)}
+              style={{ cursor: "pointer" }}
+            />{" "}
             <div className={styles.separator}></div>
-            <img src={registered}
-              onClick={() => handleCreateLobby(3)} />
+            <img src={alarm} onClick={() => handleCreateLobby(4, null, null)} />
             <div className={styles.separator}></div>
-            <img src={deleted}
-              onClick={() => handleCreateLobby(2)} />
+            <img src={registered} onClick={() => handleCreateLobby(3, null, null)} />
+            <div className={styles.separator}></div>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <img
+                src={priority}
+                alt="Selecionar Prioridade"
+                onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                style={{ cursor: "pointer" }}
+              />
+              {isPriorityOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "40px",
+                    left: "-90px",
+                    background: "#2c2f48",
+                    padding: "20px",
+                    borderRadius: "8px",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    gap: "10px",
+                    zIndex: 10,
+                  }}
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                    <button
+                      key={number}
+                      onClick={async () => {
+                        setSelectedPriority(number);
+                        setIsPriorityOpen(false);
+
+                        await handleCreateLobby(null, number, null);
+                      }}
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        background: "#4a4e69",
+                        color: "#fff",
+                        fontSize: "16px",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {number}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className={styles.separator}></div>
+            <img src={deleted} onClick={() => handleCreateLobby(2)} />
           </div>
         )}
       </div>
-    </>
+    </body>
   );
 };
 
