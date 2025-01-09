@@ -140,9 +140,20 @@ const Main = () => {
       }
 
       const data = await response.json();
-      console.log(data);
-      setOrderList(data);
-      setOrderDate(data);
+
+      // Formata os horários automaticamente com o fuso horário local do usuário
+      const formattedData = data.map(tournament => {
+        const startDate = new Date(tournament.Start); // Converte a string para um objeto Date
+        const formattedStartTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formata para o horário local
+
+        return {
+          ...tournament,
+          Start: formattedStartTime, // Atualiza o campo Start com a hora formatada
+        };
+      });
+
+      setOrderList(formattedData); // Atualiza o estado com os torneios formatados
+      setOrderDate(formattedData); // Se necessário, atualiza outro estado
     } catch (error) {
       setError(error.message);
     }
@@ -285,17 +296,21 @@ const Main = () => {
     const newOrderStartFilter = orderStartFilter === "asc" ? "desc" : "asc";
 
     newListStart.sort((a, b) => {
-      const timeA = new Date(a.Start).getTime();
-      const timeB = new Date(b.Start).getTime();
+      const timeA = a.Start;
+      const timeB = b.Start;
 
-      return newOrderStartFilter === "asc" ? timeA - timeB : timeB - timeA;
+      if (newOrderStartFilter === "asc") {
+        return timeA > timeB ? 1 : timeA < timeB ? -1 : 0;
+      } else {
+        return timeB > timeA ? 1 : timeB < timeA ? -1 : 0;
+      }
     });
-
-    console.log();
 
     setOrderStartFilter(newOrderStartFilter);
     setOrderList(newListStart);
   };
+
+
 
   const orderedListSite = () => {
     const newListSite = [...orderList];
@@ -624,14 +639,15 @@ const Main = () => {
   const isAllSelected =
     getPaginatedOrders().length > 0 &&
     selectedItems.length === getPaginatedOrders().length;
-  const applyFilters = () => {};
+  const applyFilters = () => { };
   return (
     <>
       {moreFiltersisOpen && (
         <MoreFilters
           closeModal={() => setMoreFiltersisOpen(false)}
-          orderList={orderList}
+          orderList={orderDate}
           setOrderList={setOrderList}
+          siteData={siteData}
           applyFilters={applyFilters}
         />
       )}
@@ -642,11 +658,10 @@ const Main = () => {
       />
 
       <div
-        className={`${styles.main} ${
-          moreFiltersisOpen === true || isOpenCostumizeColumns === true
-            ? styles.blur
-            : styles.noBlur
-        }`}
+        className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
+          ? styles.blur
+          : styles.noBlur
+          }`}
       >
         <div className={styles.navbar}>
           <div className={styles.titlef}>Tournament List</div>
@@ -746,24 +761,24 @@ const Main = () => {
                         selectedSpeed === 1
                           ? slow
                           : selectedSpeed === 2
-                          ? regular
-                          : selectedSpeed === 3
-                          ? turbo
-                          : selectedSpeed === 4
-                          ? hyper
-                          : null
+                            ? regular
+                            : selectedSpeed === 3
+                              ? turbo
+                              : selectedSpeed === 4
+                                ? hyper
+                                : null
                       }
                     ></img>
                     <p>
                       {selectedSpeed === 1
                         ? "Slow"
                         : selectedSpeed === 2
-                        ? "Regular"
-                        : selectedSpeed === 3
-                        ? "Turbo"
-                        : selectedSpeed === 4
-                        ? "Hyper"
-                        : null}
+                          ? "Regular"
+                          : selectedSpeed === 3
+                            ? "Turbo"
+                            : selectedSpeed === 4
+                              ? "Hyper"
+                              : null}
                     </p>
                   </div>
                 ) : (
@@ -787,12 +802,12 @@ const Main = () => {
                     {selectedSize === 1
                       ? "2"
                       : selectedSize === 2
-                      ? "3-5"
-                      : selectedSize === 3
-                      ? "6"
-                      : selectedSize === 4
-                      ? "7 to 10"
-                      : null}
+                        ? "3-5"
+                        : selectedSize === 3
+                          ? "6"
+                          : selectedSize === 4
+                            ? "7 to 10"
+                            : null}
                   </p>
                 ) : (
                   "Size"
@@ -856,9 +871,8 @@ const Main = () => {
             .map((button, index) => (
               <button
                 key={index}
-                className={`${button.className} ${
-                  button.isActive ? styles.active : ""
-                }`}
+                className={`${button.className} ${button.isActive ? styles.active : ""
+                  }`}
                 onClick={button.onClick}
               >
                 {button.label}
@@ -870,7 +884,7 @@ const Main = () => {
             <tr>
               {getPaginatedOrders().map((item, index) => (
                 <div
-                  key={index}
+                  key={item.$id}
                   style={{
                     backgroundColor:
                       index % 2 === 0
@@ -905,12 +919,7 @@ const Main = () => {
                       )}
 
                       {filter === "Start" &&
-                        (item.Start
-                          ? new Date(item.Start).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                          : "-")}
+                        (item.Start ? item.Start : "-")}
 
                       {filter === "Buy In" &&
                         (item.BuyIn ? `$${item.BuyIn}` : "-")}
@@ -935,10 +944,7 @@ const Main = () => {
                       {filter === "Mlr" &&
                         (item.Start ? (
                           <Timer
-                            startEvent={new Date(item.Start).toLocaleTimeString(
-                              [],
-                              { hour: "2-digit", minute: "2-digit" }
-                            )}
+                            startEvent={item.Start}
                           />
                         ) : (
                           "-"

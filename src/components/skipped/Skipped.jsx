@@ -51,8 +51,9 @@ const Registered = () => {
 
             const updatedData = data.map(item => {
                 const date = new Date(item.horarioInicio); // Converte para Date
-                const dateEnd = new Date(item.horarioFim); // Converte para Date
-                const formattedTime = date.toTimeString().slice(0, 5); // Formata a hora e minuto
+                const dateEnd = new Date(item.horarioFim);
+                const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
                 const formattedTimeEnd = dateEnd.toTimeString().slice(0, 5); // Formata a hora e minuto
                 return {
                     ...item,
@@ -74,10 +75,10 @@ const Registered = () => {
 
             const apiUrl = 'http://localhost:3000/api/lobbys/lobbyUpdateOptions';
             const requestBody = JSON.stringify({
-                email,       // E-mail do usuário
-                id,          // ID do lobby a ser atualizado
-                state: state, // Estado que está sendo removido
-                value: false,        // Define como não-favorito
+                email,
+                id,
+                state: state,
+                value: false,
             });
 
             const response = await fetch(apiUrl, {

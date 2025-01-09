@@ -5,9 +5,17 @@ import exit from "../../assets/exit.svg";
 import relogio from "../../assets/relogio.svg";
 import select from "../../assets/selectSite.svg";
 import save from "../../assets/save.svg";
-//imgSites
-const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
-  // Estados para todos os filtros
+import poker888 from "../../assets/888poker.svg";
+import siteWpn from "../../assets/wpn.svg";
+import siteWinamax from "../../assets/siteWinamax.svg";
+import sitePokerStars from "../../assets/sitePokerStars.svg";
+import sitePartyPoker from "../../assets/sitePartyPoker.svg";
+import siteiPoker from "../../assets/siteiPoker.svg";
+import siteGGNetwork from "../../assets/siteGGNetwork.svg";
+import siteChico from "../../assets/siteChico.svg";
+import siteBodog from "../../assets/siteBodog.svg";
+
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, siteData }) => {
   const [network, setNetwork] = useState();
   const [buyInMin, setBuyInMin] = useState();
   const [buyInMax, setBuyInMax] = useState();
@@ -72,22 +80,23 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
 
     //funcionando errado
     if (buyInMin) {
-      filteredList = filteredList.filter((item) => item.BuyIn >= buyInMin);
+      console.log(filteredList.filter((item) => item.buyIn))
+      filteredList = filteredList.filter((item) => Number(item.BuyIn) >= buyInMin);
     }
     //não funciona
     if (buyInMax) {
-      filteredList = filteredList.filter((item) => item.BuyIn <= buyInMax);
+      filteredList = filteredList.filter((item) => Number(item.BuyIn) <= buyInMax);
     }
     //Funcionando
     if (prizePoolMin) {
       filteredList = filteredList.filter(
-        (item) => item.PrizePool >= prizePoolMin
+        (item) => Number(item.PrizePool) >= prizePoolMin
       );
     }
     //Funcionando
     if (prizePoolMax) {
       filteredList = filteredList.filter(
-        (item) => item.PrizePool <= prizePoolMax
+        (item) => Number(item.PrizePool) <= prizePoolMax
       );
     }
     //Funcionando
@@ -135,7 +144,6 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
     if (speed) {
       filteredList = filteredList.filter((item) => item.speed === speed);
     }
-    //condição especial com o item.Name(não consigo enviar o formulário se tiver algum digito)
     if (excludeWords) {
       filteredList = filteredList.filter(
         (item) => !item.Name.toLowerCase().includes(excludeWords)
@@ -167,9 +175,9 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
           }}
         >
           <option value="">Network</option>
-          {orderList.map((item, index) => (
-            <option key={index} value={item.Site}>
-              {item.Site}
+          {siteData.map((item, index) => (
+            <option key={index} value={item.network}>
+              <img src={item.image} /> {item.network}
             </option>
           ))}
         </select>
