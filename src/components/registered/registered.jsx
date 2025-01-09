@@ -16,7 +16,7 @@ const Registered = () => {
     const fetchRegisteredLobbys = async (email, state) => {
         try {
             console.log(state);
-            const response = await fetch('http://localhost:3000/api/lobbys/lobbyAllOptions', {
+            const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const Registered = () => {
 
             console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
 
-            const apiUrl = 'http://localhost:3000/api/lobbys/lobbyUpdateOptions';
+            const apiUrl = 'https://ninja.lobby.ninja/api/api/lobbys/lobbyUpdateOptions';
             const requestBody = JSON.stringify({
                 email,
                 id,
