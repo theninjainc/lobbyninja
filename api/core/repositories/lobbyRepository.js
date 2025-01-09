@@ -112,6 +112,7 @@ const updateLobbyState = async (email, id, state, value) => {
 };
 
 const createLobby = async (
+    ID,
     site,
     horarioInicio,
     horarioFim,
@@ -133,18 +134,17 @@ const createLobby = async (
     alarm,
 ) => {
     try {
-        buyIn = parseFloat(buyIn)
-        jogadoresInscritos = parseFloat(jogadoresInscritos)
-        jogadoresJogando = parseFloat(jogadoresJogando)
+        // Converte valores para os tipos corretos
+        buyIn = parseFloat(buyIn);
+        jogadoresInscritos = parseFloat(jogadoresInscritos);
+        jogadoresJogando = parseFloat(jogadoresJogando);
         jogadoresMesa = jogadoresMesa ? parseFloat(jogadoresMesa) : 0;
-        if (reentrada == "Yes")
-            reentrada = 1;
-        else
-            reentrada = 0
-
+        if (reentrada == "Yes") reentrada = 1;
+        else reentrada = 0;
         blindIntervalo = 0;
 
-        const newLobbys = {
+        // Cria o objeto do novo lobby
+        const newLobby = {
             site,
             horarioInicio,
             horarioFim,
@@ -165,40 +165,48 @@ const createLobby = async (
             registered,
             alarm,
         };
-        console.log(site, horarioInicio,
-            horarioFim,
-            nome,
-            parseFloat(buyIn),
-            premiacaoGarantida,
-            reentrada,
-            blindIntervalo,
-            jogadoresInscritos,
-            jogadoresMesa,
-            jogadoresJogando,
-            bounty,
-            fichasIniciais,
-            apostaForcada,
-            skipped,
-            deleted,
-            favourite,
-            registered,
-            alarm,)
-        console.log("oi", blindIntervalo)
 
-        console.log(reentrada)
-        const createdLobby = await databases.createDocument(
-            DATABASE_ID,
-            LOBBY_COLLECTION_ID,
-            sdk.ID.unique(),
-            newLobbys
-        );
-        console.log("oiiii")
+        let existingLobby;
 
-        return createdLobby;
+        try {
+            // Tenta buscar o lobby existente
+            existingLobby = await databases.getDocument(DATABASE_ID, LOBBY_COLLECTION_ID, ID);
+        } catch (err) {
+            // Se o erro for porque o documento não existe, isso é esperado, e continuamos com a criação
+            if (err.message.includes("not found") || err.message.includes("Document with the requested ID could not be found")) {
+                existingLobby = null;
+            } else {
+                // Caso seja outro erro, lança novamente
+                throw err;
+            }
+        }
+
+        if (existingLobby) {
+            // Se o lobby já existe, atualiza
+            const updatedLobby = await databases.updateDocument(
+                DATABASE_ID,
+                LOBBY_COLLECTION_ID,
+                ID,
+                newLobby
+            );
+            console.log(`Lobby com ID ${ID} atualizado com sucesso.`);
+            return updatedLobby;
+        } else {
+            // Caso o lobby não exista, cria um novo
+            const createdLobby = await databases.createDocument(
+                DATABASE_ID,
+                LOBBY_COLLECTION_ID,
+                ID, // Aqui, o ID pode ser opcional, dependendo de como o banco gera IDs
+                newLobby
+            );
+            console.log(`Lobby com ID ${ID} criado com sucesso.`);
+            return createdLobby;
+        }
     } catch (error) {
-        throw new Error("Erro ao criar lobby: " + error.message);
+        throw new Error("Erro ao criar ou atualizar lobby: " + error.message);
     }
 };
+
 
 const findUserByEmail = async (email) => {
     try {
@@ -244,4 +252,5 @@ module.exports = {
     createLobby,
     findUserByEmail,
     linkLobbyToUser,
+    getLobbysByState,
 };

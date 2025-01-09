@@ -39,7 +39,7 @@ const updateStateHandler = async (req, res) => {
         }
 
         // Atualiza o estado usando o serviço
-        const updatedLobby = await lobbyService.updateLobbyState(email, id, state, value);
+        const updatedLobby = await lobbyService.updateLobbyStatus(email, id, state, value);
 
         if (!updatedLobby) {
             return res.status(404).json({ error: "Lobby não encontrado." });

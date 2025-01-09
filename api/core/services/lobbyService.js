@@ -57,11 +57,13 @@ const createNewLobby = async (email, lobbies) => {
         if (!userDocument) throw new Error("Usuário não encontrado.");
 
         const userId = userDocument.$id;
+        
         console.log("OIIIIIIIIIIIIIIIIIIIIII", lobbies)
         const createdLobbyPromises = lobbies.map(async (lobby) => {
             console.log("Lobby sendo processado:", lobby);
             try {
                 const {
+                    ID,
                     Site, // 'Site' é o campo do lobby
                     Start: horarioInicio, // 'Start' do lobby é mapeado para 'horarioInicio'
                     End: horarioFim, // 'End' do lobby é mapeado para 'horarioFim'
@@ -73,7 +75,6 @@ const createNewLobby = async (email, lobbies) => {
                     Field: jogadoresInscritos, // 'Field' do lobby é mapeado para 'jogadoresInscritos'
                     TableSize: jogadoresMesa, // 'TableSize' do lobby é mapeado para 'jogadoresMesa'
                     Mlr: jogadoresJogando, // 'Mlr' do lobby é mapeado para 'jogadoresJogando'
-                    // O restante você pode passar direto se necessário
                     bounty,
                     fichasIniciais,
                     apostaForcada,
@@ -88,6 +89,7 @@ const createNewLobby = async (email, lobbies) => {
                 console.log("OOOOOOOOOOadadadadaIIII", Site, horarioInicio, horarioFim, nome, buyIn, premiacaoGarantida, reentrada, blindIntervalo, jogadoresInscritos, jogadoresMesa, jogadoresJogando, bounty, fichasIniciais, apostaForcada, skipped, deleted, favourite, registered, alarm);
 
                 const newLobby = await createLobby(
+                    ID,
                     Site,
                     horarioInicio,
                     horarioFim,
