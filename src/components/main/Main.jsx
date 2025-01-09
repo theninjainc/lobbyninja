@@ -23,20 +23,21 @@ import Size from "../../utils/Size/Size";
 import engine from "../../assets/engine.svg";
 import ToggleThemeBtn from "../../utils/ToggleThemeBtn/ToggleThemeBtn";
 import SpeedMap from "../../utils/SpeedMap/SpeedMap";
-import FormatNumber from "../../utils/FormatNumber/FormatValue";
 import CostumizeColumns from "../../utils/CostumizeColumns/CostumizeColumns";
 import MoreFilters from "../../utils/MoreFilters/MoreFilters";
-import NewAlarm from "../../utils/NewAlarm/NewAlarm";
-import ChoosePriority from "../../utils/ChoosePriority/ChoosePriority";
 import { Link } from "react-router-dom";
 import skipped from "../../assets/skipped.svg";
 import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
 import registered from "../../assets/Frame.png";
+import priority from "../../assets/priority.svg";
+import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 
 const PAGE_SIZE = 20;
 
 const Main = () => {
+  const { isDarkMode } = useTheme();
+
   const siteData = [
     { network: "888Poker", image: poker888 },
     { network: "WPN", image: siteWpn },
@@ -55,26 +56,33 @@ const Main = () => {
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleCreateLobby = async (opcao) => {
+  const handleCreateLobby = async (state, priority, itemFavourite) => {
     const client = new Client();
     const account = new Account(client);
     client.setProject("lobbyninja");
-    const user = await account.get();
-    const email = user.email;
-    const lobbyData = {
-      email,
-      lobbies: selectedItems.map((item) => ({
-        ...item,
-        registered: opcao == 3 ? true : false,
-        alarm: opcao == 4 ? true : false,
-        skipped: opcao == 1 ? true : false,
-        deleted: opcao == 2 ? true : false,
-      })),
-    };
-
-    console.log(lobbyData);
 
     try {
+      const user = await account.get();
+      const email = user.email;
+
+      // Verifica se selectedItems está disponível; se não, usa itemFavourite
+      const itemsToUse = selectedItems && selectedItems.length > 0 ? selectedItems : [itemFavourite];
+
+      const lobbyData = {
+        email,
+        lobbies: itemsToUse.map((item) => ({
+          ...item,
+          priority, // Adiciona a prioridade ao objeto
+          registered: state === 3, // Exemplo: pode ajustar a lógica aqui, se necessário
+          alarm: state === 4,
+          skipped: state === 1,
+          deleted: state === 2,
+          favourite: state === 5,
+        })),
+      };
+
+      console.log("Enviando lobbyData:", lobbyData);
+
       const response = await fetch(
         "http://localhost:3000/api/lobbys/lobbyCreate",
         {
@@ -97,6 +105,8 @@ const Main = () => {
       console.error("Erro ao fazer a requisição:", error);
     }
   };
+
+
 
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
@@ -140,12 +150,11 @@ const Main = () => {
       }
 
       const data = await response.json();
-
+      console.log(data)
       // Formata os horários automaticamente com o fuso horário local do usuário
       const formattedData = data.map(tournament => {
         const startDate = new Date(tournament.Start); // Converte a string para um objeto Date
         const formattedStartTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formata para o horário local
-
         return {
           ...tournament,
           Start: formattedStartTime, // Atualiza o campo Start com a hora formatada
@@ -233,7 +242,6 @@ const Main = () => {
     setIsOpenSize((prevState) => !prevState);
   };
 
-  //Filter Buttons
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
   const [orderBuyInFilter, setOrderBuyInFilter] = useState("asc");
   const [orderBlindsFilter, setOrderBlindsFilter] = useState("asc");
@@ -350,8 +358,8 @@ const Main = () => {
   const orderedListPriority = () => {
     const newListPriority = [...orderList];
     newListPriority.sort((a, b) => {
-      const priorityA = a.priority ?? 0;
-      const priorityB = b.priority ?? 0;
+      const priorityA = a.Priority ?? 0;
+      const priorityB = b.Priority ?? 0;
       return orderPriorityFilter === "asc"
         ? priorityA - priorityB
         : priorityB - priorityA;
@@ -564,6 +572,8 @@ const Main = () => {
   const [selectedSite, setSelectedSite] = useState();
   const [selectedSpeed, setSelectedSpeed] = useState();
   const [selectedSize, setSelectedSize] = useState();
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState(null);
 
   const handleFilter = () => {
     let filteredList = orderDate;
@@ -641,7 +651,7 @@ const Main = () => {
     selectedItems.length === getPaginatedOrders().length;
   const applyFilters = () => { };
   return (
-    <>
+    <body className={`${isDarkMode ? "dark-theme" : "light-theme"}`}>
       {moreFiltersisOpen && (
         <MoreFilters
           closeModal={() => setMoreFiltersisOpen(false)}
@@ -664,7 +674,7 @@ const Main = () => {
           }`}
       >
         <div className={styles.navbar}>
-          <div className={styles.titlef}>Tournament List</div>
+          <div className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle}`}>Tournament List</div>
           <div className={styles.btns}>
             <div className={styles.btns}>
               <div>
@@ -886,14 +896,36 @@ const Main = () => {
                 <div
                   key={item.$id}
                   style={{
-                    backgroundColor:
-                      index % 2 === 0
+                    backgroundColor: isDarkMode
+                      ? index % 2 === 0
                         ? "transparent"
-                        : "rgba(255, 255, 255, 0.05)",
+                        : "rgba(255, 255, 255, 0.05)"
+                      : index % 2 === 0
+                        ? "transparent"
+                        : "#30397D",  // cor para modo claro
+
+                    color: isDarkMode
+                      ? index % 2 === 0
+                        ? "#fff"
+                        : "#fff"
+                      : index % 2 === 0
+                        ? "#404040"
+                        : "#fff",
+
+                    fontWeight: index % 2 === 0
+                      ? isDarkMode
+                        ? ""  // índice par, escuro, font weight 500
+                        : "600"  // índice par, claro, font weight 500
+                      : "normal",  // outros índices têm font-weight normal
                   }}
+
+
+
                 >
                   <td className={styles.stylesCheckboxTable}>
-                    <FavouriteStar className={styles.favouriteStar} />
+                    <div onClick={() => handleCreateLobby(5, null, item)}>
+                      <FavouriteStar className={styles.favouriteStar} />
+                    </div>
                     <input
                       type="checkbox"
                       className={styles.checkBoxTable}
@@ -1009,19 +1041,69 @@ const Main = () => {
             <img
               src={skipped}
               alt="Criar Lobby"
-              onClick={() => handleCreateLobby(1)}
+              onClick={() => handleCreateLobby(1, null, null)}
               style={{ cursor: "pointer" }}
             />{" "}
             <div className={styles.separator}></div>
-            <img src={alarm} onClick={() => handleCreateLobby(4)} />
+            <img src={alarm} onClick={() => handleCreateLobby(4, null, null)} />
             <div className={styles.separator}></div>
-            <img src={registered} onClick={() => handleCreateLobby(3)} />
+            <img src={registered} onClick={() => handleCreateLobby(3, null, null)} />
+            <div className={styles.separator}></div>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <img
+                src={priority}
+                alt="Selecionar Prioridade"
+                onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                style={{ cursor: "pointer" }}
+              />
+              {isPriorityOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "40px",
+                    left: "-90px",
+                    background: "#2c2f48",
+                    padding: "20px",
+                    borderRadius: "8px",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    gap: "10px",
+                    zIndex: 10,
+                  }}
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                    <button
+                      key={number}
+                      onClick={async () => {
+                        setSelectedPriority(number);
+                        setIsPriorityOpen(false);
+
+                        await handleCreateLobby(null, number, null);
+                      }}
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        background: "#4a4e69",
+                        color: "#fff",
+                        fontSize: "16px",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {number}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className={styles.separator}></div>
             <img src={deleted} onClick={() => handleCreateLobby(2)} />
           </div>
         )}
       </div>
-    </>
+    </body>
   );
 };
 

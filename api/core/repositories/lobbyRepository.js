@@ -15,7 +15,7 @@ const getLobbysByState = async (email, state) => {
             sdk.Query.equal("email", email),
         ]);
 
-        console.log(usersResponse)
+        console.log("Opaaaa", usersResponse)
 
         if (usersResponse.documents.length === 0) {
             throw new Error("Usuário não encontrado.");
@@ -24,14 +24,12 @@ const getLobbysByState = async (email, state) => {
         // 2. Obtém o primeiro usuário encontrado
         const user = usersResponse.documents[0];
 
-        // 3. Filtra os lobbys com base no estado
         console.log(user.lobby)
+        console.log(user.lobby.filter(lobby => lobby[state] === true))
         const filteredLobbys = user.lobby
-            ? user.lobby.filter(lobby => lobby[state] === true)  // Filtro baseado no estado (favourite, registered, skipped, deleted)
+            ? user.lobby.filter(lobby => lobby[state] === true || lobby.priority) // Filtro baseado no estado (favourite, registered, skipped, deleted)
             : [];
 
-
-        // 4. Retorna os lobbys filtrados pelo estado
         return filteredLobbys;
     } catch (error) {
         throw new Error("Erro ao buscar lobbys pelo estado: " + error.message);
@@ -132,6 +130,7 @@ const createLobby = async (
     favourite,
     registered,
     alarm,
+    priority
 ) => {
     try {
         // Converte valores para os tipos corretos
@@ -164,6 +163,7 @@ const createLobby = async (
             favourite,
             registered,
             alarm,
+            priority
         };
 
         let existingLobby;
@@ -227,12 +227,19 @@ const findUserByEmail = async (email) => {
 
 const linkLobbyToUser = async (userId, lobbyId) => {
     try {
+        // Buscar o usuário atual para pegar o valor do lobby
+        const user = await databases.getDocument(DATABASE_ID, USER_COLLECTION_ID, userId);
+
+        // Adicionar o lobbyId ao array existente, sem sobrescrever
+        const updatedLobby = user.lobby ? [...user.lobby, lobbyId] : [lobbyId];
+
+        // Atualizar o documento com o novo array de lobbies
         const updatedUser = await databases.updateDocument(
             DATABASE_ID,
             USER_COLLECTION_ID,
             userId,
             {
-                lobby: [lobbyId],
+                lobby: updatedLobby,
             }
         );
 
@@ -241,6 +248,7 @@ const linkLobbyToUser = async (userId, lobbyId) => {
         throw new Error("Erro ao vincular lobby ao usuário: " + error.message);
     }
 };
+
 
 module.exports = {
     getFavouriteLobbys,

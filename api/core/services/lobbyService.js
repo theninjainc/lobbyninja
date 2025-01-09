@@ -48,7 +48,7 @@ const getLobbysByStates = async (email, states) => {
 };
 
 
-const createNewLobby = async (email, lobbies) => {
+const createNewLobby = async (email, lobbies, priority) => {
     try {
         if (!email) throw new Error("Email é obrigatório.");
         if (!Array.isArray(lobbies) || lobbies.length === 0) throw new Error("Lobbies inválidos.");
@@ -82,7 +82,8 @@ const createNewLobby = async (email, lobbies) => {
                     deleted,
                     favourite,
                     registered,
-                    alarm
+                    alarm,
+                    priority
                 } = lobby;
 
 
@@ -108,7 +109,8 @@ const createNewLobby = async (email, lobbies) => {
                     deleted,
                     favourite,
                     registered,
-                    alarm
+                    alarm,
+                    priority
                 );
                 console.log(userId, newLobby.$id)
                 await linkLobbyToUser(userId, newLobby.$id);

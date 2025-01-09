@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import styles from "./sidebar.module.css";
 import lobbyNinjaLogo from "../../assets/lobbyNinjaLogo.svg";
@@ -11,14 +11,12 @@ import registered from "../../assets/Frame.png";
 import skipped from "../../assets/skipped.svg";
 import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
+import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 
 const Sidebar = () => {
+  const { isDarkMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState(null);
-
-  const handleLinkClick = (index) => {
-    setActiveLink(index);
-  };
+  const location = useLocation();
 
   const links = [
     { to: "/dashboard", icon: tournaments, label: "Tournaments" },
@@ -32,7 +30,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}
+      className={`${styles.sidebar} ${isOpen ? styles.open : ""} ${isDarkMode ? styles.dark : styles.dark
+        }`}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
@@ -42,21 +41,24 @@ const Sidebar = () => {
 
       <ul>
         {links.map((link, index) => (
-          <li key={index} onClick={() => handleLinkClick(index)} className={`${isOpen === true ? styles.alignementList : ""} ${activeLink !== index && isOpen === true ? styles.marginLeft : ""}`}>
+          <li
+            key={index}
+            className={`${isOpen ? styles.alignementList : ""} ${isOpen && location.pathname !== link.to ? styles.marginLeft : ""
+              }`}
+          >
             <Link to={link.to}>
               <div
-                className={`${
-                  activeLink === index
-                    ? `${styles.bgIcon}`
-                    : ""
-                }`}
+                className={`${location.pathname === link.to ? styles.bgIcon : ""
+                  }`}
               >
                 <img src={link.icon} alt={link.label} width="20px" height="20px" />
               </div>
 
               {isOpen && (
                 <span
-                  className={activeLink === index ? `${styles.colorText}` : ""}
+                  className={
+                    location.pathname === link.to ? `${styles.colorText}` : ""
+                  }
                 >
                   {link.label}
                 </span>

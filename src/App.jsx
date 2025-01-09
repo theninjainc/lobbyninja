@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { ThemeProvider } from "./utils/ThemeContext/ThemeContext";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/sidebar/Sidebar";
 import Main from "./components/main/Main";
@@ -36,21 +37,23 @@ function App() {
   }
 
   return (
-    <div className="app-container">
-      <Sidebar />
-      <div className="main-content">
-        <Routes>
-          <Route path="/dashboard" element={<Main />} />
-          <Route path="/login" element={<Navigate to="/dashboard" />} />
-          <Route path="/alarm" element={<Alarm />} />
-          <Route path="/registered" element={<Registered />} />
-          <Route path="/skipped" element={<Skipped />} />
-          <Route path="/favourites" element={<Favourites />} />
-          <Route path="/deleted" element={<Deleted />} />
-          <Route path="/config" element={<ConfigUser />} />
-        </Routes>
+    <ThemeProvider>
+      <div className="app-container">
+        <Sidebar />
+        <div className="main-content">
+          <Routes>
+            <Route path="/dashboard" element={<Main />} />
+            <Route path="/login" element={<Navigate to="/dashboard" />} />
+            <Route path="/alarm" element={<Alarm />} />
+            <Route path="/registered" element={<Registered />} />
+            <Route path="/skipped" element={<Skipped />} />
+            <Route path="/favourites" element={<Favourites />} />
+            <Route path="/deleted" element={<Deleted />} />
+            <Route path="/config" element={<ConfigUser />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

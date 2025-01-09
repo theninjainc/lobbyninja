@@ -53,7 +53,7 @@ const updateStateHandler = async (req, res) => {
 
 const createLobbyHandler = async (req, res) => {
     try {
-        const { email, lobbies } = req.body;
+        const { email, lobbies, priority } = req.body;
 
         console.log(email, lobbies);
 
@@ -65,7 +65,7 @@ const createLobbyHandler = async (req, res) => {
             return res.status(400).json({ error: "A lista de lobbys é obrigatória e deve conter itens." });
         }
 
-        const createdLobbies = await lobbyService.createNewLobby(email, lobbies);
+        const createdLobbies = await lobbyService.createNewLobby(email, lobbies, priority);
 
         if (!createdLobbies) {
             return res.status(500).json({ error: "Erro ao criar os lobbies." });
