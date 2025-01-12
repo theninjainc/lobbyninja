@@ -547,7 +547,6 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
         <button onClick={handleApplyFilters} className={styles.applyColumns}>
           Apply Columns
         </button>
-        {console.log(endTime)}
       </div>
     </div>
   );

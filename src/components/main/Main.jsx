@@ -34,6 +34,9 @@ import alarm from "../../assets/alarm.svg";
 import deleted from "../../assets/deleted.svg";
 import registered from "../../assets/Frame.png";
 import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
+import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
+import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
+
 
 const PAGE_SIZE = 20;
 
@@ -1037,6 +1040,8 @@ const Main = () => {
             <img src={deleted} onClick={() => handleCreateLobby(2)} />
           </div>
         )}
+      <SaveMoreFilters />
+      <YourFilters />
       </div>
     </>
   );

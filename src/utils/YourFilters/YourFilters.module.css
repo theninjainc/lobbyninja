@@ -1,0 +1,103 @@
+.yourFilters {
+  display: flex;
+  flex-direction: column;
+  background-color: #191934;
+  color: #fff;
+  width: 400px;
+  height: auto;
+  padding-top: 18px;
+  border-radius: 10px;
+}
+.head {
+  border-bottom: solid 2px rgb(255, 255, 255, 0.08);
+}
+.head > span {
+  color: #fff;
+  margin-top: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 24px 10px 15px;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+.selectFilters {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.selectFilters label{
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+.btns {
+  margin: 20px 15px 25px 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.applyFilterBtn {
+  color: #fff;
+  background-color: #191934;
+  border: solid 2px #555454;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  height: 50px;
+  border-radius: 9px;
+  width: 150px;
+}
+.applyFilterBtn:hover {
+  background-color: #1e1e3e;
+}
+
+.cancelBtn {
+  color: #fff;
+  border: solid 2px #8b0000;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  height: 50px;
+  border-radius: 9px;
+  width: 150px;
+  background-color: #a00000;
+}
+.cancelBtn:hover {
+  background-color: #b22222;
+}
+
+.selectFilters select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgb(255, 255, 255, 0.08);
+  border-radius: 9px;
+  height: 35px;
+  border: solid 2px #5d5c5c;
+  font-size: 14px;
+  color: #8f8c8c;
+  cursor: pointer;
+  padding: 0px 15px 0px 15px;
+  height: 48px;
+}
+.selectFilters select:focus {
+  outline: none;
+  color: #fff;
+}
+.selectFilters > select > option {
+  background-color: #191934;
+  cursor: pointer;
+  color: #fff;
+}
+.selectIcon {
+  width: 16px;
+  position: relative;
+  left: 340px;
+  bottom: 35px;
+}
