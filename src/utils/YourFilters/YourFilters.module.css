@@ -7,6 +7,10 @@
   height: auto;
   padding-top: 18px;
   border-radius: 10px;
+  position: absolute;
+  z-index: 20000;
+  left: 500px;
+  top: 200px;
 }
 .head {
   border-bottom: solid 2px rgb(255, 255, 255, 0.08);

@@ -36,7 +36,7 @@ import registered from "../../assets/Frame.png";
 import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
 import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
-
+import past from "../../assets/past.png";
 
 const PAGE_SIZE = 20;
 
@@ -208,15 +208,6 @@ const Main = () => {
   const [isOpenSize, setIsOpenSize] = useState(false);
   const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
   const [moreFiltersisOpen, setMoreFiltersisOpen] = useState(false);
-  const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
-
-  const openNewAlarm = () => {
-    setIsOpenNewAlarm(true);
-  };
-
-  const closeNewAlarm = () => {
-    setIsOpenNewAlarm(false);
-  };
 
   const toggleOpen = () => {
     setIsOpen((prevState) => !prevState);
@@ -631,6 +622,13 @@ const Main = () => {
     getPaginatedOrders().length > 0 &&
     selectedItems.length === getPaginatedOrders().length;
   const applyFilters = () => {};
+
+  const [yourFiltersIsOpen, setYourFiltersIsOpen] = useState(false);
+
+  const toggleYourFiltersOpen = () => {
+    setYourFiltersIsOpen((prevState) => !prevState);
+  };
+
   return (
     <>
       {moreFiltersisOpen && (
@@ -646,16 +644,28 @@ const Main = () => {
         closeModal={() => setIsOpenCostumizeColumns(false)}
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
-
+      {yourFiltersIsOpen && (
+        <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
+      )}
       <div
-        className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"} ${
-          moreFiltersisOpen === true || isOpenCostumizeColumns === true
+        className={`${styles.main} ${
+          isDarkMode ? "dark-theme" : "light-theme"
+        } ${
+          moreFiltersisOpen === true ||
+          isOpenCostumizeColumns === true ||
+          yourFiltersIsOpen
             ? styles.blur
             : styles.noBlur
         }`}
       >
         <div className={styles.navbar}>
-          <div className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle}`}>Tournament List</div>
+          <div
+            className={`${styles.titlef} ${
+              isDarkMode ? styles.darkTitle : styles.lightTitle
+            }`}
+          >
+            Tournament List
+          </div>
           <div className={styles.btns}>
             <div className={styles.btns}>
               <div>
@@ -817,6 +827,9 @@ const Main = () => {
             <button className={styles.saveBtn}>
               <img src={save} alt="Save icon" />
             </button>
+            <button className={styles.saveBtn} onClick={toggleYourFiltersOpen}>
+              <img src={past} alt="Past Icon" width="19px" />
+            </button>
           </div>
           <div className={styles.searchRight}>
             <button
@@ -884,25 +897,23 @@ const Main = () => {
                         : "rgba(255, 255, 255, 0.05)"
                       : index % 2 === 0
                       ? "transparent"
-                      : "#30397D",  // cor para modo claro
-                    
+                      : "#30397D", // cor para modo claro
+
                     color: isDarkMode
                       ? index % 2 === 0
                         ? "#fff"
                         : "#fff"
                       : index % 2 === 0
-                      ? "#404040" 
+                      ? "#404040"
                       : "#fff",
-                  
-                    fontWeight: index % 2 === 0
-                      ? isDarkMode
-                        ? ""  // índice par, escuro, font weight 500
-                        : "600"  // índice par, claro, font weight 500
-                      : "normal",  // outros índices têm font-weight normal
+
+                    fontWeight:
+                      index % 2 === 0
+                        ? isDarkMode
+                          ? "" // índice par, escuro, font weight 500
+                          : "600" // índice par, claro, font weight 500
+                        : "normal", // outros índices têm font-weight normal
                   }}
-                  
-                  
-                  
                 >
                   <td className={styles.stylesCheckboxTable}>
                     <FavouriteStar className={styles.favouriteStar} />
@@ -1040,8 +1051,6 @@ const Main = () => {
             <img src={deleted} onClick={() => handleCreateLobby(2)} />
           </div>
         )}
-      <SaveMoreFilters />
-      <YourFilters />
       </div>
     </>
   );

@@ -1,7 +1,8 @@
 import styles from "./SaveMoreFilters.module.css";
 import { useState } from "react";
 
-const SaveMoreFilters = () => {
+// eslint-disable-next-line react/prop-types
+const SaveMoreFilters = ({close}) => {
   const [nameFilter, setNameFilter] = useState();
 
   return (
@@ -21,7 +22,7 @@ const SaveMoreFilters = () => {
       </div>
       <div className={styles.btns}>
         <button className={styles.saveFilterBtn}>Save Filter</button>
-        <button className={styles.cancelBtn}>Cancel</button>
+        <button className={styles.cancelBtn} onClick={close}>Cancel</button>
       </div>
       {console.log(nameFilter)}
     </div>

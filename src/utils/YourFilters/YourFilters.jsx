@@ -1,6 +1,7 @@
 import styles from "./YourFilters.module.css";
 import select from "../../assets/selectSite.svg";
-const YourFilters = () => {
+// eslint-disable-next-line react/prop-types
+const YourFilters = ({ closeModal }) => {
   return (
     <div className={styles.yourFilters}>
       <div className={styles.head}>
@@ -17,7 +18,7 @@ const YourFilters = () => {
       </div>
       <div className={styles.btns}>
         <button className={styles.applyFilterBtn}>Apply Filter</button>
-        <button className={styles.cancelBtn}>Cancel</button>
+        <button className={styles.cancelBtn} onClick={closeModal}>Cancel</button>
       </div>
     </div>
   );
