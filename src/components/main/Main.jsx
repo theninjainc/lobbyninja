@@ -101,7 +101,7 @@ const Main = () => {
 
 
     try {
-      loadingToast = iziToast.info({
+      iziToast.info({
         title: 'Aguarde',
         message: 'Estamos criando o lobby...',
         timeout: 5000,
@@ -214,6 +214,7 @@ const Main = () => {
         "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
+        setIsLoading(false)
         throw new Error("Erro ao buscar os dados");
       }
 
@@ -230,7 +231,9 @@ const Main = () => {
 
       setOrderList(formattedData);
       setOrderDate(formattedData);
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
       setError(error.message);
     }
   };
@@ -294,6 +297,7 @@ const Main = () => {
   const [itemHover, setItemHover] = useState([]);
   const [isMenuLateral, setIsMenuLateralVisible] = useState(false)
   const [isMenuHovered, setIsMenuHovered] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const handleMouseOver = (item, event) => {
     const rect = event.currentTarget.getBoundingClientRect();
     console.log(window.scrollY)
@@ -1037,219 +1041,226 @@ const Main = () => {
         <table>
           <tbody>
             <tr>
-              {getPaginatedOrders().map((item, index) => (
-                <div
-                  key={item.ID}
-                  onMouseOver={(event) => handleMouseOver(item, event)}
-                  onMouseOut={handleMouseOut}
-                  style={{
-                    backgroundColor: isDarkMode
-                      ? index % 2 === 0
-                        ? "transparent"
-                        : "rgba(255, 255, 255, 0.05)"
-                      : index % 2 === 0
-                        ? "transparent"
-                        : "#30397D",  // cor para modo claro
-
-                    color: isDarkMode
-                      ? index % 2 === 0
-                        ? "#fff"
-                        : "#fff"
-                      : index % 2 === 0
-                        ? "#404040"
-                        : "#fff",
-
-                    fontWeight: index % 2 === 0
-                      ? isDarkMode
-                        ? ""
-                        : "600"
-                      : "normal",
-
-                  }}
-                >
-                  <td className={styles.stylesCheckboxTable}>
-                    <div onClick={() => handleCreateLobby(5, null, item)}>
-                      <FavouriteStar className={styles.favouriteStar} />
-                    </div>
-                    <input
-                      type="checkbox"
-                      className={styles.checkBoxTable}
-                      checked={selectedItems.includes(item)}
-                      onChange={() => toggleItem(item)}
-                    />
-                  </td>
-                  {(allowedFilters || allFilters).map((filter) => (
-                    <td
-                      key={filter}
-                      className={
-                        styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]
-                      }
-                    >
-                      {filter === "Site" && item.Site && (
-                        <img
-                          src={
-                            siteData.find((site) => site.network === item.Site)
-                              .image
-                          }
-                          alt="site logo"
-                        />
-                      )}
-
-                      {filter === "Start" &&
-                        (item.Start ? item.Start : "-")}
-
-                      {filter === "Buy In" &&
-                        (item.BuyIn ? `$${item.BuyIn}` : "-")}
-
-                      {filter === "Name" && (item.Name ? item.Name : "-")}
-
-                      {filter === "Prize Pool" &&
-                        (item.PrizePool ? `$${item.PrizePool}` : "-")}
-
-                      {filter === "Max Reentry" &&
-                        (item.MaxReentry ? item.MaxReentry : "-")}
-
-                      {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
-
-                      {filter === "Speed" &&
-                        (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
-
-                      {filter === "Field" && (item.Field ? item.Field : "-")}
-
-                      {filter === "End" && (item.End ? item.End : "-")}
-
-                      {filter === "Mlr" &&
-                        (item.Start ? (
-                          <Timer
-                            startEvent={item.Start}
-                          />
-                        ) : (
-                          "-"
-                        ))}
-
-                      {filter === "TableSize" &&
-                        (item.TableSize ? item.TableSize : "-")}
-
-                      {filter === "Priority" && (
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          {item.Priority ? (
-                            <div
-                              style={{
-                                width: "24px",
-                                height: "24px",
-                                borderRadius: "50%",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor: `${getPriorityBackgroundColor(item.Priority)}`,
-                                color: `${getPriorityTextColor(item.Priority)}`,
-                                fontWeight: "bold",
-                                fontSize: "14px",
-                              }}
-                            >
-                              {item.Priority}
-                            </div>
-                          ) : (
-                            "-"
-                          )}
-                        </div>
-                      )}
-                    </td>
-                  ))}
-                  {isMenuLateral && hoveredItem?.id === item.ID && hoveredItem && (
-                    <div
-                      className={styles.bottomMenuLateral}
-                      onMouseEnter={handleMenuMouseEnter}
-                      onMouseLeave={handleMenuMouseLeave}
-                      style={{
-                        position: "absolute",
-                        top: `${hoveredItem.position.top}px`,
-                        left: `${hoveredItem.position.left}px`,
-                        zIndex: 1000, // Garantir que o menu principal esteja no topo
-                      }}
-                    >
-                      <img
-                        src={skipped}
-                        alt="Criar Lobby"
-                        onClick={() => handleCreateLobby(1, null, null)}
-                        style={{ cursor: "pointer" }}
-                      />
-                      <div className={styles.separator}></div>
-                      <img
-                        src={alarm}
-                        onClick={() => handleCreateLobby(4, null, null)}
-                        style={{ cursor: "pointer" }}
-                      />
-                      <div className={styles.separator}></div>
-                      <img
-                        src={registered}
-                        onClick={() => handleCreateLobby(3, null, null)}
-                        style={{ cursor: "pointer" }}
-                      />
-                      <div className={styles.separator}></div>
-                      <img
-                        src={priority}
-                        alt="Selecionar Prioridade"
-                        onClick={() => setIsPriorityOpen(!isPriorityOpen)}
-                        style={{ cursor: "pointer" }}
-                      />
-                      {isPriorityOpen && (
-                        <div
-                          style={{
-                            position: "absolute", // Agora, o menu de prioridade fica absoluto dentro do contêiner pai
-                            bottom: "50px",          // Posicione o menu abaixo do ícone de prioridade
-                            left: "100px",          // Alinhe o menu de prioridade com o ícone
-                            background: "#2c2f48",
-                            padding: "20px",
-                            borderRadius: "8px",
-                            display: "grid",
-                            gridTemplateColumns: "repeat(4, 1fr)",
-                            gap: "10px",
-                            zIndex: 1001, // Garantir que o menu de prioridade fique no topo
-                          }}
-                        >
-                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
-                            <button
-                              key={number}
-                              onClick={async () => {
-                                setSelectedPriority(number);
-                                setIsPriorityOpen(false);
-                                await handleCreateLobby(null, number, null);
-                              }}
-                              style={{
-                                width: "40px",
-                                height: "40px",
-                                borderRadius: "50%",
-                                background: "#4a4e69",
-                                color: "#fff",
-                                fontSize: "16px",
-                                border: "none",
-                                cursor: "pointer",
-                              }}
-                            >
-                              {number}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-
-                      <div className={styles.separator}></div>
-                      <img
-                        src={deleted}
-                        onClick={() => handleCreateLobby(2)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                  )}
-
+              {isLoading ? (
+                <div className={styles.spinnerContainer}>
+                  <div className={styles.spinner}></div>
+                  <p style={{ color: "#6366f1", fontSize: "16px", marginTop: "10px" }}>
+                    Carregando...
+                  </p>
                 </div>
-              ))}
+              ) : getPaginatedOrders().length > 0 ? (
+                getPaginatedOrders().map((item, index) => (
+                  <div
+                    key={item.ID}
+                    onMouseOver={(event) => handleMouseOver(item, event)}
+                    onMouseOut={handleMouseOut}
+                    style={{
+                      backgroundColor: isDarkMode
+                        ? index % 2 === 0
+                          ? "transparent"
+                          : "rgba(255, 255, 255, 0.05)"
+                        : index % 2 === 0
+                          ? "transparent"
+                          : "#30397D", // cor para modo claro
+
+                      color: isDarkMode
+                        ? index % 2 === 0
+                          ? "#fff"
+                          : "#fff"
+                        : index % 2 === 0
+                          ? "#404040"
+                          : "#fff",
+
+                      fontWeight: index % 2 === 0
+                        ? isDarkMode
+                          ? ""
+                          : "600"
+                        : "normal",
+                    }}
+                  >
+                    <td className={styles.stylesCheckboxTable}>
+                      <div onClick={() => handleCreateLobby(5, null, item)}>
+                        <FavouriteStar className={styles.favouriteStar} />
+                      </div>
+                      <input
+                        type="checkbox"
+                        className={styles.checkBoxTable}
+                        checked={selectedItems.includes(item)}
+                        onChange={() => toggleItem(item)}
+                      />
+                    </td>
+                    {(allowedFilters || allFilters).map((filter) => (
+                      <td
+                        key={filter}
+                        className={
+                          styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]
+                        }
+                      >
+                        {filter === "Site" && item.Site && (
+                          <img
+                            src={
+                              siteData.find((site) => site.network === item.Site).image
+                            }
+                            alt="site logo"
+                          />
+                        )}
+
+                        {filter === "Start" && (item.Start ? item.Start : "-")}
+
+                        {filter === "Buy In" && (item.BuyIn ? `$${item.BuyIn}` : "-")}
+
+                        {filter === "Name" && (item.Name ? item.Name : "-")}
+
+                        {filter === "Prize Pool" &&
+                          (item.PrizePool ? `$${item.PrizePool}` : "-")}
+
+                        {filter === "Max Reentry" &&
+                          (item.MaxReentry ? item.MaxReentry : "-")}
+
+                        {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
+
+                        {filter === "Speed" &&
+                          (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
+
+                        {filter === "Field" && (item.Field ? item.Field : "-")}
+
+                        {filter === "End" && (item.End ? item.End : "-")}
+
+                        {filter === "Mlr" &&
+                          (item.Start ? <Timer startEvent={item.Start} /> : "-")}
+
+                        {filter === "TableSize" &&
+                          (item.TableSize ? item.TableSize : "-")}
+
+                        {filter === "Priority" && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            {item.Priority ? (
+                              <div
+                                style={{
+                                  width: "24px",
+                                  height: "24px",
+                                  borderRadius: "50%",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: `${getPriorityBackgroundColor(
+                                    item.Priority
+                                  )}`,
+                                  color: `${getPriorityTextColor(item.Priority)}`,
+                                  fontWeight: "bold",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {item.Priority}
+                              </div>
+                            ) : (
+                              "-"
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    ))}
+                    {isMenuLateral && hoveredItem?.id === item.ID && hoveredItem && (
+                      <div
+                        className={styles.bottomMenuLateral}
+                        onMouseEnter={handleMenuMouseEnter}
+                        onMouseLeave={handleMenuMouseLeave}
+                        style={{
+                          position: "absolute",
+                          top: `${hoveredItem.position.top}px`,
+                          left: `${hoveredItem.position.left}px`,
+                          zIndex: 1000, // Garantir que o menu principal esteja no topo
+                        }}
+                      >
+                        <img
+                          src={skipped}
+                          alt="Criar Lobby"
+                          onClick={() => handleCreateLobby(1, null, null)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className={styles.separator}></div>
+                        <img
+                          src={alarm}
+                          alt="Alarme"
+                          onClick={() => handleCreateLobby(4, null, null)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className={styles.separator}></div>
+                        <img
+                          src={registered}
+                          alt="Registrado"
+                          onClick={() => handleCreateLobby(3, null, null)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className={styles.separator}></div>
+                        <img
+                          src={priority}
+                          alt="Selecionar Prioridade"
+                          onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        {isPriorityOpen && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: "50px",
+                              left: "100px",
+                              background: "#2c2f48",
+                              padding: "20px",
+                              borderRadius: "8px",
+                              display: "grid",
+                              gridTemplateColumns: "repeat(4, 1fr)",
+                              gap: "10px",
+                              zIndex: 1001,
+                            }}
+                          >
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                              <button
+                                key={number}
+                                onClick={async () => {
+                                  setSelectedPriority(number);
+                                  setIsPriorityOpen(false);
+                                  await handleCreateLobby(null, number, null);
+                                }}
+                                style={{
+                                  width: "40px",
+                                  height: "40px",
+                                  borderRadius: "50%",
+                                  background: "#4a4e69",
+                                  color: "#fff",
+                                  fontSize: "16px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {number}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className={styles.separator}></div>
+                        <img
+                          src={deleted}
+                          alt="Deletar"
+                          onClick={() => handleCreateLobby(2)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>Nenhum item encontrado.</p>
+              )}
+
+
             </tr>
             <div className="pagination">
               <span
