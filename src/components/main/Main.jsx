@@ -32,6 +32,9 @@ import deleted from "../../assets/deleted.svg";
 import registered from "../../assets/Frame.png";
 import priority from "../../assets/priority.svg";
 import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
+import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
+import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
+import past from "../../assets/past.png";
 
 const PAGE_SIZE = 20;
 
@@ -279,7 +282,6 @@ const Main = () => {
     console.log(event.currentTarget)
     console.log(event.relatedTarget)
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      // Verifica se o mouse saiu para fora da div, não apenas dentro dos filhos
       setIsMenuLateralVisible(false);
       setHoveredItem(null);
     }
@@ -291,7 +293,7 @@ const Main = () => {
 
   const handleMenuMouseLeave = () => {
     setIsMenuHovered(false);
-    setIsMenuLateralVisible(false); // Agora, só fecha quando o mouse sai de ambos
+    setIsMenuLateralVisible(false);
   };
 
 
@@ -743,6 +745,11 @@ const Main = () => {
     document.body.style.backgroundColor = "#f9fafc";
     document.body.style.color = "#2c3e50";
   }
+  const [yourFiltersIsOpen, setYourFiltersIsOpen] = useState(false);
+
+  const toggleYourFiltersOpen = () => {
+    setYourFiltersIsOpen((prevState) => !prevState);
+  };
 
   return (
     <body className={`${isDarkMode ? "dark-theme" : "light-theme"}`}>
@@ -760,15 +767,28 @@ const Main = () => {
         closeModal={() => setIsOpenCostumizeColumns(false)}
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
-
+      {yourFiltersIsOpen && (
+        <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
+      )}
       <div
-        className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
-          ? styles.blur
-          : styles.noBlur
-          }`}
+        className={`${styles.main} ${
+          isDarkMode ? "dark-theme" : "light-theme"
+        } ${
+          moreFiltersisOpen === true ||
+          isOpenCostumizeColumns === true ||
+          yourFiltersIsOpen
+            ? styles.blur
+            : styles.noBlur
+        }`}
       >
         <div className={styles.navbar}>
-          <div className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle}`}>Tournament List</div>
+          <div
+            className={`${styles.titlef} ${
+              isDarkMode ? styles.darkTitle : styles.lightTitle
+            }`}
+          >
+            Tournament List
+          </div>
           <div className={styles.btns}>
             <div className={styles.btns}>
               <div>
@@ -929,6 +949,9 @@ const Main = () => {
             </button>
             <button className={styles.saveBtn}>
               <img src={save} alt="Save icon" />
+            </button>
+            <button className={styles.saveBtn} onClick={toggleYourFiltersOpen}>
+              <img src={past} alt="Past Icon" width="19px" />
             </button>
           </div>
           <div className={styles.searchRight}>

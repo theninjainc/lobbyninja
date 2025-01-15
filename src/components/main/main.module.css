@@ -587,7 +587,6 @@ table {
   position: relative;
   top: -3.5px;
   left: 7.7px;
-  width: 75px;
 }
 
 .favouriteStar {
@@ -767,7 +766,7 @@ table {
 
 .priorityTable {
   height: 38px;
-  width: 115px;
+  width: 40px;
 }
 
 .priorityTableRegistered {
