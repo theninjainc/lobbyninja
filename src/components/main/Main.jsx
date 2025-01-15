@@ -35,6 +35,8 @@ import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
 import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
 import past from "../../assets/past.png";
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const PAGE_SIZE = 20;
 
@@ -97,14 +99,23 @@ const Main = () => {
     const account = new Account(client);
     client.setProject("lobbyninja");
 
+
     try {
+      loadingToast = iziToast.info({
+        title: 'Aguarde',
+        message: 'Estamos criando o lobby...',
+        timeout: 5000,
+        position: 'topRight',
+        id: 'loading-toast',
+      });
+
       const user = await account.get();
       const email = user.email;
 
       const itemsToUse = (selectedItems && selectedItems.length > 0)
         ? selectedItems
         : (itemHover ? [itemHover] : [itemFavourite]);
-      console.log(itemHover)
+
       const lobbyData = {
         email,
         lobbies: itemsToUse.map((item) => ({
@@ -128,17 +139,37 @@ const Main = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(lobbyData),
-        }
-      );
+        });
 
       const data = await response.json();
 
       if (response.ok) {
+        // Exibe sucesso
+        iziToast.success({
+          title: 'Sucesso',
+          message: 'Lobby criado com sucesso!',
+          position: 'topRight',
+          timeout: 5000,
+        });
         console.log("Lobby criado com sucesso:", data);
       } else {
+        // Exibe erro
+        iziToast.error({
+          title: 'Erro',
+          message: data.error || 'Não foi possível criar o lobby.',
+          position: 'topRight',
+          timeout: 5000,
+        });
         console.error("Erro ao criar lobby:", data.error);
       }
     } catch (error) {
+
+      iziToast.error({
+        title: 'Erro',
+        message: 'Ocorreu um erro ao criar o lobby. Tente novamente.',
+        position: 'topRight',
+        timeout: 5000,
+      });
       console.error("Erro ao fazer a requisição:", error);
     }
   };
@@ -771,21 +802,18 @@ const Main = () => {
         <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
       )}
       <div
-        className={`${styles.main} ${
-          isDarkMode ? "dark-theme" : "light-theme"
-        } ${
-          moreFiltersisOpen === true ||
-          isOpenCostumizeColumns === true ||
-          yourFiltersIsOpen
+        className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
+          } ${moreFiltersisOpen === true ||
+            isOpenCostumizeColumns === true ||
+            yourFiltersIsOpen
             ? styles.blur
             : styles.noBlur
-        }`}
+          }`}
       >
         <div className={styles.navbar}>
           <div
-            className={`${styles.titlef} ${
-              isDarkMode ? styles.darkTitle : styles.lightTitle
-            }`}
+            className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle
+              }`}
           >
             Tournament List
           </div>
