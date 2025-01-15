@@ -1,7 +1,7 @@
 import styles from "../../components/main/main.module.css"
 import { useState } from "react";
 
-const FavouriteStar = ({favourites}) => {
+const FavouriteStar = ({ favourites }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const toggleClick = () => {
@@ -15,6 +15,7 @@ const FavouriteStar = ({favourites}) => {
       viewBox="0 0 18 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={styles.hoverStar}
     >
       <mask id="path-1-inside-1_1_526" fill="white">
         <path d="M8.56 0.155365L6.21 5.91537L0 6.37537L4.76 10.3954L3.27 16.4354L8.56 13.1554M8.56 0.155365L10.91 5.91537L17.12 6.37537L12.36 10.3954L13.85 16.4354L8.56 13.1554" />
