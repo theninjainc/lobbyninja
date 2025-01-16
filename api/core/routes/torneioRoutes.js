@@ -109,7 +109,6 @@ router.get("/api/activeTournaments", async (req, res) => {
                     if (matchedLobby) {
                         console.log(matchedLobby.priority);
                     }
-                    console.log(tournamentStart.toUTCString(), tournament["@name"])
                     return {
                         ID: id,
                         Site: tournament["@network"],
@@ -119,7 +118,13 @@ router.get("/api/activeTournaments", async (req, res) => {
                         PrizePool: prizePool,
                         MaxReentry: tournament["@flags"]?.includes("R") ? "Yes" : "No",
                         Blinds: tournament["@structure"],
-                        Speed: null,
+                        Speed: tournament["@filterString"]?.includes("ST")
+                            ? 4
+                            : tournament["@filterString"]?.includes("T")
+                                ? 3
+                                : tournament["@filterString"]?.includes("D")
+                                    ? 1
+                                    : 2,
                         Field: tournament["@totalEntrants"],
                         End: null,
                         Mlr: null,
