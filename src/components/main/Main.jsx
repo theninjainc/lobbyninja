@@ -37,6 +37,10 @@ import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
 import past from "../../assets/past.png";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
+import slow from "../../assets/Slow.svg";
+import regular from "../../assets/regular.svg";
+import hyper from "../../assets/hyper.svg";
+import turbo from "../../assets/turbo.svg";
 
 const PAGE_SIZE = 20;
 
@@ -119,15 +123,34 @@ const Main = () => {
 
       const lobbyData = {
         email,
-        lobbies: itemsToUse.map((item) => ({
-          ...item,
-          priority,
-          registered: state === 3,
-          alarm: state === 4,
-          skipped: state === 1,
-          deleted: state === 2,
-          favourite: state === 5,
-        })),
+        lobbies: itemsToUse.map((item, index) => {
+          const baseLobby = {
+            ...item,
+            index,
+            priority: undefined,
+            registered: false,
+            alarm: false,
+            skipped: false,
+            deleted: false,
+            favourite: false,
+            favouriteStar: false,
+          };
+
+          if (state === 3) baseLobby.registered = true;
+          else if (state === 4) baseLobby.alarm = true;
+          else if (state === 1) baseLobby.skipped = true;
+          else if (state === 2) baseLobby.deleted = true;
+          else if (state === 5) {
+            baseLobby.favourite = true;
+            baseLobby.favouriteStar = true;
+          }
+
+          if (priority) {
+            baseLobby.priority = priority;
+          }
+
+          return baseLobby;
+        }),
       };
 
       console.log("Enviando lobbyData:", lobbyData);
@@ -146,7 +169,6 @@ const Main = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Exibe sucesso
         iziToast.success({
           title: "Sucesso",
           message: "Lobby criado com sucesso!",
@@ -154,8 +176,25 @@ const Main = () => {
           timeout: 5000,
         });
         console.log("Lobby criado com sucesso:", data);
+
+        setOrderList((prevOrderList) =>
+          prevOrderList.map((item, index) => {
+            const updatedItem = lobbyData.lobbies.find(
+              (lobby) => lobby.ID === item.ID
+            );
+
+            if (updatedItem) {
+              return { ...item, Priority: updatedItem.priority || item.Priority };
+            }
+
+            if (updatedItem && state != 5) {
+              return null;
+            }
+
+            return item;
+          }).filter(Boolean)
+        );
       } else {
-        // Exibe erro
         iziToast.error({
           title: "Erro",
           message: data.error || "Não foi possível criar o lobby.",
@@ -164,6 +203,8 @@ const Main = () => {
         });
         console.error("Erro ao criar lobby:", data.error);
       }
+      setSelectedItems([]);
+
     } catch (error) {
       iziToast.error({
         title: "Erro",
@@ -174,6 +215,7 @@ const Main = () => {
       console.error("Erro ao fazer a requisição:", error);
     }
   };
+
 
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
@@ -300,6 +342,7 @@ const Main = () => {
   const [isMenuLateral, setIsMenuLateralVisible] = useState(false);
   const [isMenuHovered, setIsMenuHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   const handleMouseOver = (item, event) => {
     const rect = event.currentTarget.getBoundingClientRect();
     console.log(window.scrollY);
@@ -380,7 +423,7 @@ const Main = () => {
     const newListSpeed = [...orderList];
 
     newListSpeed.sort((a, b) =>
-      orderSpeedFilter === "asc" ? a.speed - b.speed : b.speed - a.speed
+      orderSpeedFilter === "asc" ? a.Speed - b.Speed : b.Speed - a.Speed
     );
 
     setOrderList(newListSpeed);
@@ -776,9 +819,14 @@ const Main = () => {
     document.body.style.color = "#2c3e50";
   }
   const [yourFiltersIsOpen, setYourFiltersIsOpen] = useState(false);
+  const [saveFilterIsOpen, setSaveFilterIsOpen] = useState(false);
 
   const toggleYourFiltersOpen = () => {
     setYourFiltersIsOpen((prevState) => !prevState);
+  };
+
+  const toggleOpenSaveFilter = () => {
+    setSaveFilterIsOpen((prevState) => !prevState);
   };
 
   return (
@@ -792,6 +840,11 @@ const Main = () => {
           applyFilters={applyFilters}
         />
       )}
+
+      {saveFilterIsOpen && (
+        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
+      )}
+
       <CostumizeColumns
         isOpen={isOpenCostumizeColumns}
         closeModal={() => setIsOpenCostumizeColumns(false)}
@@ -975,12 +1028,13 @@ const Main = () => {
               <img src={lupa} alt="Lupa icon" />{" "}
             </button>
             <button className={styles.saveBtn}>
-              <img src={save} alt="Save icon" />
+              <img src={save} alt="Save icon" onClick={toggleOpenSaveFilter} />
             </button>
             <button className={styles.saveBtn} onClick={toggleYourFiltersOpen}>
               <img src={past} alt="Past Icon" width="19px" />
             </button>
           </div>
+          
           <div className={styles.searchRight}>
             <button
               className={styles.manageColumnsBtn}

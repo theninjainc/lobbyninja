@@ -118,7 +118,13 @@ router.get("/api/activeTournaments", async (req, res) => {
                         PrizePool: prizePool,
                         MaxReentry: tournament["@flags"]?.includes("R") ? "Yes" : "No",
                         Blinds: tournament["@structure"],
-                        Speed: null,
+                        Speed: tournament["@filterString"]?.includes("ST")
+                            ? 4
+                            : tournament["@filterString"]?.includes("T")
+                                ? 3
+                                : tournament["@filterString"]?.includes("D")
+                                    ? 1
+                                    : 2,
                         Field: tournament["@totalEntrants"],
                         End: null,
                         Mlr: null,
