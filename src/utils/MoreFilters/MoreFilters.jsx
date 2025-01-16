@@ -5,17 +5,10 @@ import exit from "../../assets/exit.svg";
 import relogio from "../../assets/relogio.svg";
 import select from "../../assets/selectSite.svg";
 import save from "../../assets/save.svg";
-import poker888 from "../../assets/888poker.svg";
-import siteWpn from "../../assets/wpn.svg";
-import siteWinamax from "../../assets/siteWinamax.svg";
-import sitePokerStars from "../../assets/sitePokerStars.svg";
-import sitePartyPoker from "../../assets/sitePartyPoker.svg";
-import siteiPoker from "../../assets/siteiPoker.svg";
-import siteGGNetwork from "../../assets/siteGGNetwork.svg";
-import siteChico from "../../assets/siteChico.svg";
-import siteBodog from "../../assets/siteBodog.svg";
-
-const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, siteData }) => {
+import SaveMoreFilters from "../SaveMoreFilters/SaveMoreFilters";
+//imgSites
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
+  // Estados para todos os filtros
   const [network, setNetwork] = useState();
   const [buyInMin, setBuyInMin] = useState();
   const [buyInMax, setBuyInMax] = useState();
@@ -41,7 +34,11 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, siteDa
   const [maxAbility, setMaxAbility] = useState("20");
   const [maxLate, setMaxLate] = useState(false);
   const [includeClosed, setIncludeClosed] = useState(false);
+  const [saveFilterIsOpen, setSaveFilterIsOpen] = useState(false);
 
+  const toggleOpenSaveFilter = () => {
+    setSaveFilterIsOpen((prevState) => !prevState);
+  };
   const handleApplyFilters = () => {
     applyFilters({
       network,
@@ -133,13 +130,9 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, siteDa
     }
     //Funcionando
     if (reEntry === "allowed") {
-      filteredList = filteredList.filter(
-        (item) => item.MaxReentry === "Yes"
-      );
+      filteredList = filteredList.filter((item) => item.MaxReentry === "Yes");
     } else if (reEntry === "notAllowed") {
-      filteredList = filteredList.filter(
-        (item) => item.MaxReentry === "No"
-      );
+      filteredList = filteredList.filter((item) => item.MaxReentry === "No");
     }
     if (speed) {
       filteredList = filteredList.filter((item) => item.speed === speed);
@@ -157,407 +150,415 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, siteDa
   };
 
   return (
-    <div className={styles.moreFilters}>
-      <div className={styles.title}>
-        <p>Filters</p>{" "}
-        <button onClick={closeModal}>
-          <img src={exit} alt="Exit" />
-        </button>
-      </div>
-
-      <div className={styles.network}>
-        <label htmlFor="">Network</label>
-        <select
-          name="Network"
-          id=""
-          onChange={(e) => {
-            setNetwork(e.target.value);
-          }}
-        >
-          <option value="">Network</option>
-          {siteData.map((item, index) => (
-            <option key={index} value={item.network}>
-              <img src={item.image} /> {item.network}
-            </option>
-          ))}
-        </select>
-        {console.log(network)}
-        <img src={select} alt="Select icon" className={styles.selectIcon} />
-      </div>
-      <div className={styles.buyIn}>
-        <label>Buy In</label>
-        <div>
-          <input
-            type="number"
-            value={buyInMin}
-            onChange={(e) => setBuyInMin(e.target.value)}
-            placeholder="Min"
-          />
-          <input
-            type="number"
-            value={buyInMax}
-            onChange={(e) => setBuyInMax(e.target.value)}
-            placeholder="Max"
-          />
+    <>
+      {saveFilterIsOpen && (
+        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
+      )}
+      <div
+        className={`${styles.moreFilters} ${
+          saveFilterIsOpen === true ? styles.blur : styles.noBlur
+        }`}
+      >
+        <div className={styles.title}>
+          <p>Filters</p>{" "}
+          <button onClick={closeModal}>
+            <img src={exit} alt="Exit" />
+          </button>
         </div>
-      </div>
 
-      <div className={styles.fromToTime}>
-        <div className={styles.fromTime}>
-          <label>From Time</label>
-          <input
-            type="time"
-            value={fromTime}
-            onChange={(e) => setFromTime(e.target.value)}
-          />
-          <img src={relogio} alt="Clock icon" className={styles.relogio} />
+        <div className={styles.network}>
+          <label htmlFor="">Network</label>
+          <select
+            name="Network"
+            id=""
+            onChange={(e) => {
+              setNetwork(e.target.value);
+            }}
+          >
+            <option value="">Network</option>
+            {orderList.map((item, index) => (
+              <option key={index} value={item.Site}>
+                {item.Site}
+              </option>
+            ))}
+          </select>
+          {console.log(network)}
+          <img src={select} alt="Select icon" className={styles.selectIcon} />
         </div>
-        <div className={styles.toTime}>
-          <label>To Time</label>
-          <input
-            type="time"
-            value={toTime}
-            onChange={(e) => setToTime(e.target.value)}
-          />
-          <img src={relogio} alt="Clock icon" className={styles.relogio} />
+        <div className={styles.buyIn}>
+          <label>Buy In</label>
+          <div>
+            <input
+              type="number"
+              value={buyInMin}
+              onChange={(e) => setBuyInMin(e.target.value)}
+              placeholder="Min"
+            />
+            <input
+              type="number"
+              value={buyInMax}
+              onChange={(e) => setBuyInMax(e.target.value)}
+              placeholder="Max"
+            />
+          </div>
         </div>
-      </div>
 
-      <div className={styles.registering}>
-        <label>Registering</label>
-        <div className={styles.orderInputs}>
-          <div className={styles.registeringFromTime}>
-            <span>From</span>
+        <div className={styles.fromToTime}>
+          <div className={styles.fromTime}>
+            <label>From Time</label>
             <input
               type="time"
-              value={registeringFromTime}
-              onChange={(e) => setRegisteringFromTime(e.target.value)}
+              value={fromTime}
+              onChange={(e) => setFromTime(e.target.value)}
             />
             <img src={relogio} alt="Clock icon" className={styles.relogio} />
           </div>
-          <div className={styles.registeringToTime}>
-            <span>To</span>
+          <div className={styles.toTime}>
+            <label>To Time</label>
             <input
               type="time"
-              value={registeringToTime}
-              onChange={(e) => setRegisteringToTime(e.target.value)}
+              value={toTime}
+              onChange={(e) => setToTime(e.target.value)}
             />
             <img src={relogio} alt="Clock icon" className={styles.relogio} />
           </div>
         </div>
-      </div>
 
-      <div className={styles.prizePool}>
-        <label>Prize Pool</label>
-        <div>
-          <input
-            type="number"
-            value={prizePoolMin}
-            onChange={(e) => setPrizePoolMin(e.target.value)}
-            placeholder="Min"
-          />
-          <span className={styles.$}>$</span>
-          <input
-            type="number"
-            value={prizePoolMax}
-            onChange={(e) => setPrizePoolMax(e.target.value)}
-            placeholder="Max"
-          />
-          <span className={styles.$}>$</span>
+        <div className={styles.registering}>
+          <label>Registering</label>
+          <div className={styles.orderInputs}>
+            <div className={styles.registeringFromTime}>
+              <span>From</span>
+              <input
+                type="time"
+                value={registeringFromTime}
+                onChange={(e) => setRegisteringFromTime(e.target.value)}
+              />
+              <img src={relogio} alt="Clock icon" className={styles.relogio} />
+            </div>
+            <div className={styles.registeringToTime}>
+              <span>To</span>
+              <input
+                type="time"
+                value={registeringToTime}
+                onChange={(e) => setRegisteringToTime(e.target.value)}
+              />
+              <img src={relogio} alt="Clock icon" className={styles.relogio} />
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className={styles.excludeWords}>
-        <label>Exclude Words</label>
-        <input
-          type="text"
-          value={excludeWords}
-          onChange={(e) => setExcludeWords(e.target.value)}
-          placeholder="Type here..."
-        />
-      </div>
-
-      <div className={styles.participants}>
-        <label>Participants</label>
-        <div>
-          <input
-            type="number"
-            value={participantsMin}
-            onChange={(e) => setParticipantsMin(e.target.value)}
-            placeholder="Min"
-          />
-          <input
-            type="number"
-            value={participantsMax}
-            onChange={(e) => setParticipantsMax(e.target.value)}
-            placeholder="Max"
-          />
-        </div>
-      </div>
-
-      <div className={styles.tableSize}>
-        <label>Table Size</label>
-        <div>
-          <button onClick={() => setTableSize()}>Any</button>
-          <button onClick={() => setTableSize(4)}>7to10(Full Ring)</button>
-          <button onClick={() => setTableSize(3)}>6-Max</button>
-          <button onClick={() => setTableSize(2)}>3-5</button>
-          <button onClick={() => setTableSize(1)}>2(HU)</button>
-        </div>
-      </div>
-
-      <div className={styles.blinds}>
-        <label>Blinds</label>
-        <div>
-          <input
-            type="number"
-            value={blindsMin}
-            onChange={(e) => setBlindsMin(e.target.value)}
-            placeholder="Min"
-          />
-          <input
-            type="number"
-            value={blindsMax}
-            onChange={(e) => setBlindsMax(e.target.value)}
-            placeholder="Max"
-          />
-        </div>
-      </div>
-
-      <div className={styles.priority}>
-        <label>Priority</label>
-        <select
-          value={priority}
-          onChange={(e) => setPriority(Number(e.target.value))}
-        >
-          <option value="">Choose Priority</option>
-          {[...Array(10)].map((_, index) => (
-            <option key={index} value={index + 1}>
-              {index + 1}
-            </option>
-          ))}
-        </select>
-        <img src={select} alt="Select icon" className={styles.selectIcon} />
-      </div>
-      {console.log(priority)}
-      <div className={styles.endTime}>
-        <label>End Time</label>
-        <input
-          type="time"
-          value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
-        />
-        <img src={relogio} alt="ClockIcon" className={styles.relogio} />
-      </div>
-
-      <div className={styles.dayOfWeek}>
-        <label>Day of the Week</label>
-        <div>
-          <button value={"All"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            All
-          </button>
-          <button value={"Mon"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Mon
-          </button>
-          <button value={"Tue"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Tue
-          </button>
-          <button value={"Wed"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Wed
-          </button>
-          <button value={"Thu"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Thu
-          </button>
-          <button value={"Fri"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Fri
-          </button>
-          <button value={"Sat"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Sat
-          </button>
-          <button value={"Sun"} onClick={(e) => setDayOfWeek(e.target.value)}>
-            Sun
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.reEntry}>
-        <label>Re-entry</label>
-        <div>
-          <input
-            type="radio"
-            name="reEntry"
-            value="allowed"
-            checked={reEntry === "allowed"}
-            onChange={() => setReEntry("allowed")}
-          />
-          Allowed
-        </div>
-        <div>
-          <input
-            type="radio"
-            name="reEntry"
-            value="notAllowed"
-            checked={reEntry === "notAllowed"}
-            onChange={() => setReEntry("notAllowed")}
-          />
-          Not Allowed
-        </div>
-      </div>
-
-      <div className={styles.speed}>
-        <label>Speed</label>
-        <div>
-          <button
-            onClick={() => setSpeed(null)}
-            className={speed === null ? styles.active : ""}
-          >
-            Any
-          </button>
-          <button
-            onClick={() => setSpeed(1)}
-            className={speed === 1 ? styles.active : ""}
-          >
-            Slow
-          </button>
-          <button
-            onClick={() => setSpeed(2)}
-            className={speed === 2 ? styles.active : ""}
-          >
-            Regular
-          </button>
-          <button
-            onClick={() => setSpeed(3)}
-            className={speed === 3 ? styles.active : ""}
-          >
-            Turbo
-          </button>
-          <button
-            onClick={() => setSpeed(4)}
-            className={speed === 4 ? styles.active : ""}
-          >
-            Hyper Turbo
-          </button>
-        </div>
-      </div>
-      <div className={styles.game}>
-        <label>Game</label>
-        <div>
-          <button
-            onClick={() => setGame("any")}
-            className={game === "any" ? styles.active : ""}
-          >
-            Any
-          </button>
-          <button
-            onClick={() => setGame("nlh")}
-            className={game === "nlh" ? styles.active : ""}
-          >
-            NLH
-          </button>
-          <button
-            onClick={() => setGame("plo4")}
-            className={game === "plo4" ? styles.active : ""}
-          >
-            PLO4
-          </button>
-          <button
-            onClick={() => setGame("plo5")}
-            className={game === "plo5" ? styles.active : ""}
-          >
-            PLO5
-          </button>
-          <button
-            onClick={() => setGame("plo6")}
-            className={game === "plo6" ? styles.active : ""}
-          >
-            PLO6
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.variant}>
-        <label>Variant</label>
-        <div>
-          <button
-            onClick={() => setVariant("any")}
-            className={variant === "any" ? styles.active : ""}
-          >
-            Any
-          </button>
-          <button
-            onClick={() => setVariant("regular")}
-            className={variant === "regular" ? styles.active : ""}
-          >
-            Regular
-          </button>
-          <button
-            onClick={() => setVariant("knockout")}
-            className={variant === "knockout" ? styles.active : ""}
-          >
-            Knockout
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.maxAbility}>
-        <label>Max Ability</label>
-        <div>
-          <input
-            type="number"
-            value={maxAbility}
-            onChange={(e) => setMaxAbility(e.target.value)}
-          />
-          <div className={styles.maxAbilityRange}>
-            <span>0</span>
+        <div className={styles.prizePool}>
+          <label>Prize Pool</label>
+          <div>
             <input
-              type="range"
-              min="0"
-              max="100"
+              type="number"
+              value={prizePoolMin}
+              onChange={(e) => setPrizePoolMin(e.target.value)}
+              placeholder="Min"
+            />
+            <span className={styles.$}>$</span>
+            <input
+              type="number"
+              value={prizePoolMax}
+              onChange={(e) => setPrizePoolMax(e.target.value)}
+              placeholder="Max"
+            />
+            <span className={styles.$}>$</span>
+          </div>
+        </div>
+
+        <div className={styles.excludeWords}>
+          <label>Exclude Words</label>
+          <input
+            type="text"
+            value={excludeWords}
+            onChange={(e) => setExcludeWords(e.target.value)}
+            placeholder="Type here..."
+          />
+        </div>
+
+        <div className={styles.participants}>
+          <label>Participants</label>
+          <div>
+            <input
+              type="number"
+              value={participantsMin}
+              onChange={(e) => setParticipantsMin(e.target.value)}
+              placeholder="Min"
+            />
+            <input
+              type="number"
+              value={participantsMax}
+              onChange={(e) => setParticipantsMax(e.target.value)}
+              placeholder="Max"
+            />
+          </div>
+        </div>
+
+        <div className={styles.tableSize}>
+          <label>Table Size</label>
+          <div>
+            <button onClick={() => setTableSize()}>Any</button>
+            <button onClick={() => setTableSize(4)}>7to10(Full Ring)</button>
+            <button onClick={() => setTableSize(3)}>6-Max</button>
+            <button onClick={() => setTableSize(2)}>3-5</button>
+            <button onClick={() => setTableSize(1)}>2(HU)</button>
+          </div>
+        </div>
+
+        <div className={styles.blinds}>
+          <label>Blinds</label>
+          <div>
+            <input
+              type="number"
+              value={blindsMin}
+              onChange={(e) => setBlindsMin(e.target.value)}
+              placeholder="Min"
+            />
+            <input
+              type="number"
+              value={blindsMax}
+              onChange={(e) => setBlindsMax(e.target.value)}
+              placeholder="Max"
+            />
+          </div>
+        </div>
+
+        <div className={styles.priority}>
+          <label>Priority</label>
+          <select
+            value={priority}
+            onChange={(e) => setPriority(Number(e.target.value))}
+          >
+            <option value="">Choose Priority</option>
+            {[...Array(10)].map((_, index) => (
+              <option key={index} value={index + 1}>
+                {index + 1}
+              </option>
+            ))}
+          </select>
+          <img src={select} alt="Select icon" className={styles.selectIcon} />
+        </div>
+        {console.log(priority)}
+        <div className={styles.endTime}>
+          <label>End Time</label>
+          <input
+            type="time"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+          />
+          <img src={relogio} alt="ClockIcon" className={styles.relogio} />
+        </div>
+
+        <div className={styles.dayOfWeek}>
+          <label>Day of the Week</label>
+          <div>
+            <button value={"All"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              All
+            </button>
+            <button value={"Mon"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Mon
+            </button>
+            <button value={"Tue"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Tue
+            </button>
+            <button value={"Wed"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Wed
+            </button>
+            <button value={"Thu"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Thu
+            </button>
+            <button value={"Fri"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Fri
+            </button>
+            <button value={"Sat"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Sat
+            </button>
+            <button value={"Sun"} onClick={(e) => setDayOfWeek(e.target.value)}>
+              Sun
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.reEntry}>
+          <label>Re-entry</label>
+          <div>
+            <input
+              type="radio"
+              name="reEntry"
+              value="allowed"
+              checked={reEntry === "allowed"}
+              onChange={() => setReEntry("allowed")}
+            />
+            Allowed
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="reEntry"
+              value="notAllowed"
+              checked={reEntry === "notAllowed"}
+              onChange={() => setReEntry("notAllowed")}
+            />
+            Not Allowed
+          </div>
+        </div>
+
+        <div className={styles.speed}>
+          <label>Speed</label>
+          <div>
+            <button
+              onClick={() => setSpeed(null)}
+              className={speed === null ? styles.active : ""}
+            >
+              Any
+            </button>
+            <button
+              onClick={() => setSpeed(1)}
+              className={speed === 1 ? styles.active : ""}
+            >
+              Slow
+            </button>
+            <button
+              onClick={() => setSpeed(2)}
+              className={speed === 2 ? styles.active : ""}
+            >
+              Regular
+            </button>
+            <button
+              onClick={() => setSpeed(3)}
+              className={speed === 3 ? styles.active : ""}
+            >
+              Turbo
+            </button>
+            <button
+              onClick={() => setSpeed(4)}
+              className={speed === 4 ? styles.active : ""}
+            >
+              Hyper Turbo
+            </button>
+          </div>
+        </div>
+        <div className={styles.game}>
+          <label>Game</label>
+          <div>
+            <button
+              onClick={() => setGame("any")}
+              className={game === "any" ? styles.active : ""}
+            >
+              Any
+            </button>
+            <button
+              onClick={() => setGame("nlh")}
+              className={game === "nlh" ? styles.active : ""}
+            >
+              NLH
+            </button>
+            <button
+              onClick={() => setGame("plo4")}
+              className={game === "plo4" ? styles.active : ""}
+            >
+              PLO4
+            </button>
+            <button
+              onClick={() => setGame("plo5")}
+              className={game === "plo5" ? styles.active : ""}
+            >
+              PLO5
+            </button>
+            <button
+              onClick={() => setGame("plo6")}
+              className={game === "plo6" ? styles.active : ""}
+            >
+              PLO6
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.variant}>
+          <label>Variant</label>
+          <div>
+            <button
+              onClick={() => setVariant("any")}
+              className={variant === "any" ? styles.active : ""}
+            >
+              Any
+            </button>
+            <button
+              onClick={() => setVariant("regular")}
+              className={variant === "regular" ? styles.active : ""}
+            >
+              Regular
+            </button>
+            <button
+              onClick={() => setVariant("knockout")}
+              className={variant === "knockout" ? styles.active : ""}
+            >
+              Knockout
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.maxAbility}>
+          <label>Max Ability</label>
+          <div>
+            <input
+              type="number"
               value={maxAbility}
               onChange={(e) => setMaxAbility(e.target.value)}
-              style={{
-                "--value": `${maxAbility}%`,
-              }}
             />
-            <span>100</span>
+            <div className={styles.maxAbilityRange}>
+              <span>0</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={maxAbility}
+                onChange={(e) => setMaxAbility(e.target.value)}
+                style={{
+                  "--value": `${maxAbility}%`,
+                }}
+              />
+              <span>100</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.maxLate}>
-        <label>Max Late</label>
-        <div>
-          <input
-            type="checkbox"
-            checked={maxLate}
-            onChange={() => setMaxLate(!maxLate)}
-          />
-          <span>Only max late tournaments</span>
+        <div className={styles.maxLate}>
+          <label>Max Late</label>
+          <div>
+            <input
+              type="checkbox"
+              checked={maxLate}
+              onChange={() => setMaxLate(!maxLate)}
+            />
+            <span>Only max late tournaments</span>
+          </div>
+        </div>
+
+        <div className={styles.includeClosed}>
+          <label>Include Closed</label>
+          <div>
+            <input
+              type="checkbox"
+              checked={includeClosed}
+              onChange={() => setIncludeClosed(!includeClosed)}
+            />
+            <span>Include closed tournaments</span>
+          </div>
+        </div>
+        <div className={styles.modalActions}>
+          <button className={styles.saveBtn} onClick={toggleOpenSaveFilter}>
+            <img src={save} alt="SaveIcon" className={styles.saveIcon} />
+            Save Filter
+          </button>
+          <button onClick={handleApplyFilters} className={styles.applyColumns}>
+            Apply Columns
+          </button>
         </div>
       </div>
-
-      <div className={styles.includeClosed}>
-        <label>Include Closed</label>
-        <div>
-          <input
-            type="checkbox"
-            checked={includeClosed}
-            onChange={() => setIncludeClosed(!includeClosed)}
-          />
-          <span>Include closed tournaments</span>
-        </div>
-      </div>
-      <div className={styles.modalActions}>
-        <button className={styles.saveBtn}>
-          <img src={save} alt="SaveIcon" className={styles.saveIcon} />
-          Save Filter
-        </button>
-        <button onClick={handleApplyFilters} className={styles.applyColumns}>
-          Apply Columns
-        </button>
-        {console.log(endTime)}
-      </div>
-    </div>
+    </>
   );
 };
 

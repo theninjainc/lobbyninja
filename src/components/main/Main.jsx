@@ -32,6 +32,11 @@ import deleted from "../../assets/deleted.svg";
 import registered from "../../assets/Frame.png";
 import priority from "../../assets/priority.svg";
 import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
+import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
+import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
+import past from "../../assets/past.png";
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const PAGE_SIZE = 20;
 
@@ -50,6 +55,39 @@ const Main = () => {
     { network: "Chico", image: siteChico },
     { network: "Bodog", image: siteBodog },
   ];
+  const getPriorityBackgroundColor = (priority) => {
+    const colors = {
+      1: "rgba(76, 104, 244, 0.2)",
+      2: "rgba(0, 144, 255, 0.2)",
+      3: "rgba(0, 255, 255, 0.2)",
+      4: "rgba(0, 255, 144, 0.2)",
+      5: "rgba(0, 255, 42, 0.2)",
+      6: "rgba(144, 255, 0, 0.2)",
+      7: "rgba(255, 255, 0, 0.2)",
+      8: "rgba(255, 144, 0, 0.2)",
+      9: "rgba(255, 91, 0, 0.2)",
+      10: "rgba(255, 0, 0, 0.2)",
+    };
+    return colors[priority] || "rgba(0, 0, 0, 0.1)";
+  };
+
+  const getPriorityTextColor = (priority) => {
+    const colors = {
+      1: "#4C68F4",
+      2: "#0090FF",
+      3: "#00FFFF",
+      4: "#00FF90",
+      5: "#00FF2A",
+      6: "#90FF00",
+      7: "#FFFF00",
+      8: "#FF9000",
+      9: "#FF5B00",
+      10: "#FF0000",
+    };
+    return colors[priority] || "#000";
+  };
+
+
   const [orderList, setOrderList] = useState([]);
   const [orderDate, setOrderDate] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,19 +99,29 @@ const Main = () => {
     const account = new Account(client);
     client.setProject("lobbyninja");
 
+
     try {
+      iziToast.info({
+        title: 'Aguarde',
+        message: 'Estamos criando o lobby...',
+        timeout: 5000,
+        position: 'topRight',
+        id: 'loading-toast',
+      });
+
       const user = await account.get();
       const email = user.email;
 
-      // Verifica se selectedItems está disponível; se não, usa itemFavourite
-      const itemsToUse = selectedItems && selectedItems.length > 0 ? selectedItems : [itemFavourite];
+      const itemsToUse = (selectedItems && selectedItems.length > 0)
+        ? selectedItems
+        : (itemHover ? [itemHover] : [itemFavourite]);
 
       const lobbyData = {
         email,
         lobbies: itemsToUse.map((item) => ({
           ...item,
-          priority, // Adiciona a prioridade ao objeto
-          registered: state === 3, // Exemplo: pode ajustar a lógica aqui, se necessário
+          priority,
+          registered: state === 3,
           alarm: state === 4,
           skipped: state === 1,
           deleted: state === 2,
@@ -91,17 +139,37 @@ const Main = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(lobbyData),
-        }
-      );
+        });
 
       const data = await response.json();
 
       if (response.ok) {
+        // Exibe sucesso
+        iziToast.success({
+          title: 'Sucesso',
+          message: 'Lobby criado com sucesso!',
+          position: 'topRight',
+          timeout: 5000,
+        });
         console.log("Lobby criado com sucesso:", data);
       } else {
+        // Exibe erro
+        iziToast.error({
+          title: 'Erro',
+          message: data.error || 'Não foi possível criar o lobby.',
+          position: 'topRight',
+          timeout: 5000,
+        });
         console.error("Erro ao criar lobby:", data.error);
       }
     } catch (error) {
+
+      iziToast.error({
+        title: 'Erro',
+        message: 'Ocorreu um erro ao criar o lobby. Tente novamente.',
+        position: 'topRight',
+        timeout: 5000,
+      });
       console.error("Erro ao fazer a requisição:", error);
     }
   };
@@ -146,24 +214,26 @@ const Main = () => {
         "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
+        setIsLoading(false)
         throw new Error("Erro ao buscar os dados");
       }
 
       const data = await response.json();
       console.log(data)
-      // Formata os horários automaticamente com o fuso horário local do usuário
       const formattedData = data.map(tournament => {
-        const startDate = new Date(tournament.Start); // Converte a string para um objeto Date
-        const formattedStartTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formata para o horário local
+        const startDate = new Date(tournament.Start);
+        const formattedStartTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         return {
           ...tournament,
-          Start: formattedStartTime, // Atualiza o campo Start com a hora formatada
+          Start: formattedStartTime,
         };
       });
 
-      setOrderList(formattedData); // Atualiza o estado com os torneios formatados
-      setOrderDate(formattedData); // Se necessário, atualiza outro estado
+      setOrderList(formattedData);
+      setOrderDate(formattedData);
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
       setError(error.message);
     }
   };
@@ -223,6 +293,45 @@ const Main = () => {
   const [isOpenCostumizeColumns, setIsOpenCostumizeColumns] = useState(false);
   const [moreFiltersisOpen, setMoreFiltersisOpen] = useState(false);
   const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [itemHover, setItemHover] = useState([]);
+  const [isMenuLateral, setIsMenuLateralVisible] = useState(false)
+  const [isMenuHovered, setIsMenuHovered] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const handleMouseOver = (item, event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    console.log(window.scrollY)
+    setHoveredItem({
+      id: item.ID,
+      position: {
+        top: rect.top + window.scrollY,
+        left: rect.left + window.scrollX + rect.width - 340,
+      },
+    });
+    setItemHover(item)
+    setIsMenuLateralVisible(true);
+  };
+
+
+  const handleMouseOut = (event) => {
+    console.log(event.currentTarget)
+    console.log(event.relatedTarget)
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsMenuLateralVisible(false);
+      setHoveredItem(null);
+    }
+  };
+
+  const handleMenuMouseEnter = () => {
+    setIsMenuHovered(true);
+  };
+
+  const handleMenuMouseLeave = () => {
+    setIsMenuHovered(false);
+    setIsMenuLateralVisible(false);
+  };
+
+
 
   const openNewAlarm = () => {
     setIsOpenNewAlarm(true);
@@ -646,10 +755,37 @@ const Main = () => {
     setOrderList(filteredList);
   };
 
+  useEffect(() => {
+    handleFilter();
+  }, [
+    searchNameTournaments,
+    minBuyIn,
+    maxBuyIn,
+    selectedSite,
+    selectedSpeed,
+    selectedSize,
+    activeFilter,
+    selectedPriority
+  ]);
+
   const isAllSelected =
     getPaginatedOrders().length > 0 &&
     selectedItems.length === getPaginatedOrders().length;
   const applyFilters = () => { };
+
+  if (isDarkMode) {
+    document.body.style.backgroundColor = "#02061e";
+    document.body.style.color = "#ffffff";
+  } else {
+    document.body.style.backgroundColor = "#f9fafc";
+    document.body.style.color = "#2c3e50";
+  }
+  const [yourFiltersIsOpen, setYourFiltersIsOpen] = useState(false);
+
+  const toggleYourFiltersOpen = () => {
+    setYourFiltersIsOpen((prevState) => !prevState);
+  };
+
   return (
     <body className={`${isDarkMode ? "dark-theme" : "light-theme"}`}>
       {moreFiltersisOpen && (
@@ -666,15 +802,25 @@ const Main = () => {
         closeModal={() => setIsOpenCostumizeColumns(false)}
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
-
+      {yourFiltersIsOpen && (
+        <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
+      )}
       <div
-        className={`${styles.main} ${moreFiltersisOpen === true || isOpenCostumizeColumns === true
-          ? styles.blur
-          : styles.noBlur
+        className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
+          } ${moreFiltersisOpen === true ||
+            isOpenCostumizeColumns === true ||
+            yourFiltersIsOpen
+            ? styles.blur
+            : styles.noBlur
           }`}
       >
         <div className={styles.navbar}>
-          <div className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle}`}>Tournament List</div>
+          <div
+            className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle
+              }`}
+          >
+            Tournament List
+          </div>
           <div className={styles.btns}>
             <div className={styles.btns}>
               <div>
@@ -836,6 +982,9 @@ const Main = () => {
             <button className={styles.saveBtn}>
               <img src={save} alt="Save icon" />
             </button>
+            <button className={styles.saveBtn} onClick={toggleYourFiltersOpen}>
+              <img src={past} alt="Past Icon" width="19px" />
+            </button>
           </div>
           <div className={styles.searchRight}>
             <button
@@ -892,105 +1041,226 @@ const Main = () => {
         <table>
           <tbody>
             <tr>
-              {getPaginatedOrders().map((item, index) => (
-                <div
-                  key={item.$id}
-                  style={{
-                    backgroundColor: isDarkMode
-                      ? index % 2 === 0
-                        ? "transparent"
-                        : "rgba(255, 255, 255, 0.05)"
-                      : index % 2 === 0
-                        ? "transparent"
-                        : "#30397D",  // cor para modo claro
-
-                    color: isDarkMode
-                      ? index % 2 === 0
-                        ? "#fff"
-                        : "#fff"
-                      : index % 2 === 0
-                        ? "#404040"
-                        : "#fff",
-
-                    fontWeight: index % 2 === 0
-                      ? isDarkMode
-                        ? ""  // índice par, escuro, font weight 500
-                        : "600"  // índice par, claro, font weight 500
-                      : "normal",  // outros índices têm font-weight normal
-                  }}
-
-
-
-                >
-                  <td className={styles.stylesCheckboxTable}>
-                    <div onClick={() => handleCreateLobby(5, null, item)}>
-                      <FavouriteStar className={styles.favouriteStar} />
-                    </div>
-                    <input
-                      type="checkbox"
-                      className={styles.checkBoxTable}
-                      checked={selectedItems.includes(item)}
-                      onChange={() => toggleItem(item)}
-                    />
-                  </td>
-                  {(allowedFilters || allFilters).map((filter) => (
-                    <td
-                      key={filter}
-                      className={
-                        styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]
-                      }
-                    >
-                      {filter === "Site" && item.Site && (
-                        <img
-                          src={
-                            siteData.find((site) => site.network === item.Site)
-                              .image
-                          }
-                          alt="site logo"
-                        />
-                      )}
-
-                      {filter === "Start" &&
-                        (item.Start ? item.Start : "-")}
-
-                      {filter === "Buy In" &&
-                        (item.BuyIn ? `$${item.BuyIn}` : "-")}
-
-                      {filter === "Name" && (item.Name ? item.Name : "-")}
-
-                      {filter === "Prize Pool" &&
-                        (item.PrizePool ? `$${item.PrizePool}` : "-")}
-
-                      {filter === "Max Reentry" &&
-                        (item.MaxReentry ? item.MaxReentry : "-")}
-
-                      {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
-
-                      {filter === "Speed" &&
-                        (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
-
-                      {filter === "Field" && (item.Field ? item.Field : "-")}
-
-                      {filter === "End" && (item.End ? item.End : "-")}
-
-                      {filter === "Mlr" &&
-                        (item.Start ? (
-                          <Timer
-                            startEvent={item.Start}
-                          />
-                        ) : (
-                          "-"
-                        ))}
-
-                      {filter === "TableSize" &&
-                        (item.TableSize ? item.TableSize : "-")}
-
-                      {filter === "Priority" &&
-                        (item.Priority ? item.Priority : "-")}
-                    </td>
-                  ))}
+              {isLoading ? (
+                <div className={styles.spinnerContainer}>
+                  <div className={styles.spinner}></div>
+                  <p style={{ color: "#6366f1", fontSize: "16px", marginTop: "10px" }}>
+                    Carregando...
+                  </p>
                 </div>
-              ))}
+              ) : getPaginatedOrders().length > 0 ? (
+                getPaginatedOrders().map((item, index) => (
+                  <div
+                    key={item.ID}
+                    onMouseOver={(event) => handleMouseOver(item, event)}
+                    onMouseOut={handleMouseOut}
+                    style={{
+                      backgroundColor: isDarkMode
+                        ? index % 2 === 0
+                          ? "transparent"
+                          : "rgba(255, 255, 255, 0.05)"
+                        : index % 2 === 0
+                          ? "transparent"
+                          : "#30397D", // cor para modo claro
+
+                      color: isDarkMode
+                        ? index % 2 === 0
+                          ? "#fff"
+                          : "#fff"
+                        : index % 2 === 0
+                          ? "#404040"
+                          : "#fff",
+
+                      fontWeight: index % 2 === 0
+                        ? isDarkMode
+                          ? ""
+                          : "600"
+                        : "normal",
+                    }}
+                  >
+                    <td className={styles.stylesCheckboxTable}>
+                      <div onClick={() => handleCreateLobby(5, null, item)}>
+                        <FavouriteStar className={styles.favouriteStar} />
+                      </div>
+                      <input
+                        type="checkbox"
+                        className={styles.checkBoxTable}
+                        checked={selectedItems.includes(item)}
+                        onChange={() => toggleItem(item)}
+                      />
+                    </td>
+                    {(allowedFilters || allFilters).map((filter) => (
+                      <td
+                        key={filter}
+                        className={
+                          styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]
+                        }
+                      >
+                        {filter === "Site" && item.Site && (
+                          <img
+                            src={
+                              siteData.find((site) => site.network === item.Site).image
+                            }
+                            alt="site logo"
+                          />
+                        )}
+
+                        {filter === "Start" && (item.Start ? item.Start : "-")}
+
+                        {filter === "Buy In" && (item.BuyIn ? `$${item.BuyIn}` : "-")}
+
+                        {filter === "Name" && (item.Name ? item.Name : "-")}
+
+                        {filter === "Prize Pool" &&
+                          (item.PrizePool ? `$${item.PrizePool}` : "-")}
+
+                        {filter === "Max Reentry" &&
+                          (item.MaxReentry ? item.MaxReentry : "-")}
+
+                        {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
+
+                        {filter === "Speed" &&
+                          (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
+
+                        {filter === "Field" && (item.Field ? item.Field : "-")}
+
+                        {filter === "End" && (item.End ? item.End : "-")}
+
+                        {filter === "Mlr" &&
+                          (item.Start ? <Timer startEvent={item.Start} /> : "-")}
+
+                        {filter === "TableSize" &&
+                          (item.TableSize ? item.TableSize : "-")}
+
+                        {filter === "Priority" && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            {item.Priority ? (
+                              <div
+                                style={{
+                                  width: "24px",
+                                  height: "24px",
+                                  borderRadius: "50%",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: `${getPriorityBackgroundColor(
+                                    item.Priority
+                                  )}`,
+                                  color: `${getPriorityTextColor(item.Priority)}`,
+                                  fontWeight: "bold",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {item.Priority}
+                              </div>
+                            ) : (
+                              "-"
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    ))}
+                    {isMenuLateral && hoveredItem?.id === item.ID && hoveredItem && (
+                      <div
+                        className={styles.bottomMenuLateral}
+                        onMouseEnter={handleMenuMouseEnter}
+                        onMouseLeave={handleMenuMouseLeave}
+                        style={{
+                          position: "absolute",
+                          top: `${hoveredItem.position.top}px`,
+                          left: `${hoveredItem.position.left}px`,
+                          zIndex: 1000, // Garantir que o menu principal esteja no topo
+                        }}
+                      >
+                        <img
+                          src={skipped}
+                          alt="Criar Lobby"
+                          onClick={() => handleCreateLobby(1, null, null)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className={styles.separator}></div>
+                        <img
+                          src={alarm}
+                          alt="Alarme"
+                          onClick={() => handleCreateLobby(4, null, null)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className={styles.separator}></div>
+                        <img
+                          src={registered}
+                          alt="Registrado"
+                          onClick={() => handleCreateLobby(3, null, null)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className={styles.separator}></div>
+                        <img
+                          src={priority}
+                          alt="Selecionar Prioridade"
+                          onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                          style={{ cursor: "pointer" }}
+                        />
+                        {isPriorityOpen && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: "50px",
+                              left: "100px",
+                              background: "#2c2f48",
+                              padding: "20px",
+                              borderRadius: "8px",
+                              display: "grid",
+                              gridTemplateColumns: "repeat(4, 1fr)",
+                              gap: "10px",
+                              zIndex: 1001,
+                            }}
+                          >
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                              <button
+                                key={number}
+                                onClick={async () => {
+                                  setSelectedPriority(number);
+                                  setIsPriorityOpen(false);
+                                  await handleCreateLobby(null, number, null);
+                                }}
+                                style={{
+                                  width: "40px",
+                                  height: "40px",
+                                  borderRadius: "50%",
+                                  background: "#4a4e69",
+                                  color: "#fff",
+                                  fontSize: "16px",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {number}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className={styles.separator}></div>
+                        <img
+                          src={deleted}
+                          alt="Deletar"
+                          onClick={() => handleCreateLobby(2)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>Nenhum item encontrado.</p>
+              )}
+
+
             </tr>
             <div className="pagination">
               <span
