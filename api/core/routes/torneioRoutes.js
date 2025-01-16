@@ -72,28 +72,36 @@ router.get("/api/activeTournaments", async (req, res) => {
             }
         };
 
-        // Função para processar torneios e adicionar informações
         const processTournaments = (tournamentsData, lobbys) => {
             const today = new Date();
+            const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
 
             return tournamentsData
                 .map((tournament) => {
-                    const tournamentStart = new Date(
-                        parseInt(tournament["@scheduledStartDate"]) * 1000
-                    );
+                    const tournamentStartTimestamp = parseInt(tournament["@scheduledStartDate"]) * 1000;
+                    const tournamentStart = new Date(tournamentStartTimestamp);
+
+                    // Criar a data UTC comparável para hoje e para o torneio
+                    const tournamentStartUTC = new Date(Date.UTC(
+                        tournamentStart.getUTCFullYear(),
+                        tournamentStart.getUTCMonth(),
+                        tournamentStart.getUTCDate()
+                    ));
 
                     if (
-                        tournamentStart.toDateString() !== today.toDateString() ||
-                        tournamentStart < today
+                        tournamentStartUTC.toDateString() != todayUTC.toDateString() ||
+                        tournamentStart <= today
                     ) {
                         return null;
                     }
 
+                    // Calcular Buy-In e Prize Pool
                     const buyIn = parseInt(tournament["@stake"]) + parseInt(tournament["@rake"]);
                     const prizePool = parseInt(tournament["@guarantee"]);
 
+                    // Gerar hash para ID único
                     const hash = crypto.createHash("md5");
-                    const idString = `${tournament["@name"]}-${tournament["@network"]}-${tournamentStart}`;
+                    const idString = `${tournament["@name"]}-${tournament["@network"]}-${tournamentStart.toUTCString()}`;
                     const id = hash.update(idString).digest("hex");
 
                     // Buscar o lobby correspondente e logar prioridade
@@ -104,7 +112,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                     return {
                         ID: id,
                         Site: tournament["@network"],
-                        Start: tournamentStart.toLocaleString(),
+                        Start: tournamentStart.toUTCString(), // Garantir UTC na data de início
                         BuyIn: `${buyIn}`,
                         Name: tournament["@name"],
                         PrizePool: prizePool,
@@ -115,7 +123,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                         End: null,
                         Mlr: null,
                         TableSize: tournament["@playersPerTable"],
-                        Priority: lobbys.find((lobby) => lobby.$id == id)?.priority || null,
+                        Priority: matchedLobby?.priority || null,
                     };
                 })
                 .filter(Boolean);
