@@ -35,8 +35,8 @@ import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
 import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
 import past from "../../assets/past.png";
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
 const PAGE_SIZE = 20;
 
@@ -87,7 +87,6 @@ const Main = () => {
     return colors[priority] || "#000";
   };
 
-
   const [orderList, setOrderList] = useState([]);
   const [orderDate, setOrderDate] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,22 +98,24 @@ const Main = () => {
     const account = new Account(client);
     client.setProject("lobbyninja");
 
-
     try {
       iziToast.info({
-        title: 'Aguarde',
-        message: 'Estamos criando o lobby...',
+        title: "Aguarde",
+        message: "Estamos criando o lobby...",
         timeout: 5000,
-        position: 'topRight',
-        id: 'loading-toast',
+        position: "topRight",
+        id: "loading-toast",
       });
 
       const user = await account.get();
       const email = user.email;
 
-      const itemsToUse = (selectedItems && selectedItems.length > 0)
-        ? selectedItems
-        : (itemHover ? [itemHover] : [itemFavourite]);
+      const itemsToUse =
+        selectedItems && selectedItems.length > 0
+          ? selectedItems
+          : itemHover
+          ? [itemHover]
+          : [itemFavourite];
 
       const lobbyData = {
         email,
@@ -139,42 +140,40 @@ const Main = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(lobbyData),
-        });
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         // Exibe sucesso
         iziToast.success({
-          title: 'Sucesso',
-          message: 'Lobby criado com sucesso!',
-          position: 'topRight',
+          title: "Sucesso",
+          message: "Lobby criado com sucesso!",
+          position: "topRight",
           timeout: 5000,
         });
         console.log("Lobby criado com sucesso:", data);
       } else {
         // Exibe erro
         iziToast.error({
-          title: 'Erro',
-          message: data.error || 'Não foi possível criar o lobby.',
-          position: 'topRight',
+          title: "Erro",
+          message: data.error || "Não foi possível criar o lobby.",
+          position: "topRight",
           timeout: 5000,
         });
         console.error("Erro ao criar lobby:", data.error);
       }
     } catch (error) {
-
       iziToast.error({
-        title: 'Erro',
-        message: 'Ocorreu um erro ao criar o lobby. Tente novamente.',
-        position: 'topRight',
+        title: "Erro",
+        message: "Ocorreu um erro ao criar o lobby. Tente novamente.",
+        position: "topRight",
         timeout: 5000,
       });
       console.error("Erro ao fazer a requisição:", error);
     }
   };
-
-
 
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
@@ -214,15 +213,18 @@ const Main = () => {
         "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
-        setIsLoading(false)
+        setIsLoading(false);
         throw new Error("Erro ao buscar os dados");
       }
 
       const data = await response.json();
-      console.log(data)
-      const formattedData = data.map(tournament => {
+      console.log(data);
+      const formattedData = data.map((tournament) => {
         const startDate = new Date(tournament.Start);
-        const formattedStartTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const formattedStartTime = startDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
         return {
           ...tournament,
           Start: formattedStartTime,
@@ -231,9 +233,9 @@ const Main = () => {
 
       setOrderList(formattedData);
       setOrderDate(formattedData);
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       setError(error.message);
     }
   };
@@ -295,12 +297,12 @@ const Main = () => {
   const [isOpenNewAlarm, setIsOpenNewAlarm] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [itemHover, setItemHover] = useState([]);
-  const [isMenuLateral, setIsMenuLateralVisible] = useState(false)
-  const [isMenuHovered, setIsMenuHovered] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isMenuLateral, setIsMenuLateralVisible] = useState(false);
+  const [isMenuHovered, setIsMenuHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const handleMouseOver = (item, event) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    console.log(window.scrollY)
+    console.log(window.scrollY);
     setHoveredItem({
       id: item.ID,
       position: {
@@ -308,14 +310,13 @@ const Main = () => {
         left: rect.left + window.scrollX + rect.width - 340,
       },
     });
-    setItemHover(item)
+    setItemHover(item);
     setIsMenuLateralVisible(true);
   };
 
-
   const handleMouseOut = (event) => {
-    console.log(event.currentTarget)
-    console.log(event.relatedTarget)
+    console.log(event.currentTarget);
+    console.log(event.relatedTarget);
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setIsMenuLateralVisible(false);
       setHoveredItem(null);
@@ -330,8 +331,6 @@ const Main = () => {
     setIsMenuHovered(false);
     setIsMenuLateralVisible(false);
   };
-
-
 
   const openNewAlarm = () => {
     setIsOpenNewAlarm(true);
@@ -426,8 +425,6 @@ const Main = () => {
     setOrderStartFilter(newOrderStartFilter);
     setOrderList(newListStart);
   };
-
-
 
   const orderedListSite = () => {
     const newListSite = [...orderList];
@@ -765,13 +762,13 @@ const Main = () => {
     selectedSpeed,
     selectedSize,
     activeFilter,
-    selectedPriority
+    selectedPriority,
   ]);
 
   const isAllSelected =
     getPaginatedOrders().length > 0 &&
     selectedItems.length === getPaginatedOrders().length;
-  const applyFilters = () => { };
+  const applyFilters = () => {};
 
   if (isDarkMode) {
     document.body.style.backgroundColor = "#02061e";
@@ -806,18 +803,21 @@ const Main = () => {
         <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
       )}
       <div
-        className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
-          } ${moreFiltersisOpen === true ||
-            isOpenCostumizeColumns === true ||
-            yourFiltersIsOpen
+        className={`${styles.main} ${
+          isDarkMode ? "dark-theme" : "light-theme"
+        } ${
+          moreFiltersisOpen === true ||
+          isOpenCostumizeColumns === true ||
+          yourFiltersIsOpen
             ? styles.blur
             : styles.noBlur
-          }`}
+        }`}
       >
         <div className={styles.navbar}>
           <div
-            className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle
-              }`}
+            className={`${styles.titlef} ${
+              isDarkMode ? styles.darkTitle : styles.lightTitle
+            }`}
           >
             Tournament List
           </div>
@@ -917,24 +917,24 @@ const Main = () => {
                         selectedSpeed === 1
                           ? slow
                           : selectedSpeed === 2
-                            ? regular
-                            : selectedSpeed === 3
-                              ? turbo
-                              : selectedSpeed === 4
-                                ? hyper
-                                : null
+                          ? regular
+                          : selectedSpeed === 3
+                          ? turbo
+                          : selectedSpeed === 4
+                          ? hyper
+                          : null
                       }
                     ></img>
                     <p>
                       {selectedSpeed === 1
                         ? "Slow"
                         : selectedSpeed === 2
-                          ? "Regular"
-                          : selectedSpeed === 3
-                            ? "Turbo"
-                            : selectedSpeed === 4
-                              ? "Hyper"
-                              : null}
+                        ? "Regular"
+                        : selectedSpeed === 3
+                        ? "Turbo"
+                        : selectedSpeed === 4
+                        ? "Hyper"
+                        : null}
                     </p>
                   </div>
                 ) : (
@@ -958,12 +958,12 @@ const Main = () => {
                     {selectedSize === 1
                       ? "2"
                       : selectedSize === 2
-                        ? "3-5"
-                        : selectedSize === 3
-                          ? "6"
-                          : selectedSize === 4
-                            ? "7 to 10"
-                            : null}
+                      ? "3-5"
+                      : selectedSize === 3
+                      ? "6"
+                      : selectedSize === 4
+                      ? "7 to 10"
+                      : null}
                   </p>
                 ) : (
                   "Size"
@@ -1030,8 +1030,9 @@ const Main = () => {
             .map((button, index) => (
               <button
                 key={index}
-                className={`${button.className} ${button.isActive ? styles.active : ""
-                  }`}
+                className={`${button.className} ${
+                  button.isActive ? styles.active : ""
+                }`}
                 onClick={button.onClick}
               >
                 {button.label}
@@ -1044,7 +1045,13 @@ const Main = () => {
               {isLoading ? (
                 <div className={styles.spinnerContainer}>
                   <div className={styles.spinner}></div>
-                  <p style={{ color: "#6366f1", fontSize: "16px", marginTop: "10px" }}>
+                  <p
+                    style={{
+                      color: "#6366f1",
+                      fontSize: "16px",
+                      marginTop: "10px",
+                    }}
+                  >
                     Carregando...
                   </p>
                 </div>
@@ -1060,46 +1067,49 @@ const Main = () => {
                           ? "transparent"
                           : "rgba(255, 255, 255, 0.05)"
                         : index % 2 === 0
-                          ? "transparent"
-                          : "#30397D", // cor para modo claro
+                        ? "transparent"
+                        : "#30397D", // cor para modo claro
 
                       color: isDarkMode
                         ? index % 2 === 0
                           ? "#fff"
                           : "#fff"
                         : index % 2 === 0
-                          ? "#404040"
-                          : "#fff",
+                        ? "#404040"
+                        : "#fff",
 
-                      fontWeight: index % 2 === 0
-                        ? isDarkMode
-                          ? ""
-                          : "600"
-                        : "normal",
+                      fontWeight:
+                        index % 2 === 0 ? (isDarkMode ? "" : "600") : "normal",
                     }}
                   >
                     <td className={styles.stylesCheckboxTable}>
                       <div onClick={() => handleCreateLobby(5, null, item)}>
                         <FavouriteStar className={styles.favouriteStar} />
                       </div>
-                      <input
-                        type="checkbox"
-                        className={styles.checkBoxTable}
-                        checked={selectedItems.includes(item)}
-                        onChange={() => toggleItem(item)}
-                      />
+                      <div>
+                        <input
+                          type="checkbox"
+                          className={styles.checkBoxTable}
+                          checked={selectedItems.includes(item)}
+                          onChange={() => toggleItem(item)}
+                        />
+                      </div>
                     </td>
                     {(allowedFilters || allFilters).map((filter) => (
                       <td
                         key={filter}
                         className={
-                          styles[`${filter.toLowerCase().replace(/ /g, "")}Table`]
+                          styles[
+                            `${filter.toLowerCase().replace(/ /g, "")}Table`
+                          ]
                         }
                       >
                         {filter === "Site" && item.Site && (
                           <img
                             src={
-                              siteData.find((site) => site.network === item.Site).image
+                              siteData.find(
+                                (site) => site.network === item.Site
+                              ).image
                             }
                             alt="site logo"
                           />
@@ -1107,7 +1117,8 @@ const Main = () => {
 
                         {filter === "Start" && (item.Start ? item.Start : "-")}
 
-                        {filter === "Buy In" && (item.BuyIn ? `$${item.BuyIn}` : "-")}
+                        {filter === "Buy In" &&
+                          (item.BuyIn ? `$${item.BuyIn}` : "-")}
 
                         {filter === "Name" && (item.Name ? item.Name : "-")}
 
@@ -1117,7 +1128,8 @@ const Main = () => {
                         {filter === "Max Reentry" &&
                           (item.MaxReentry ? item.MaxReentry : "-")}
 
-                        {filter === "Blinds" && (item.Blinds ? item.Blinds : "-")}
+                        {filter === "Blinds" &&
+                          (item.Blinds ? item.Blinds : "-")}
 
                         {filter === "Speed" &&
                           (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
@@ -1127,7 +1139,11 @@ const Main = () => {
                         {filter === "End" && (item.End ? item.End : "-")}
 
                         {filter === "Mlr" &&
-                          (item.Start ? <Timer startEvent={item.Start} /> : "-")}
+                          (item.Start ? (
+                            <Timer startEvent={item.Start} />
+                          ) : (
+                            "-"
+                          ))}
 
                         {filter === "TableSize" &&
                           (item.TableSize ? item.TableSize : "-")}
@@ -1152,7 +1168,9 @@ const Main = () => {
                                   backgroundColor: `${getPriorityBackgroundColor(
                                     item.Priority
                                   )}`,
-                                  color: `${getPriorityTextColor(item.Priority)}`,
+                                  color: `${getPriorityTextColor(
+                                    item.Priority
+                                  )}`,
                                   fontWeight: "bold",
                                   fontSize: "14px",
                                 }}
@@ -1166,101 +1184,101 @@ const Main = () => {
                         )}
                       </td>
                     ))}
-                    {isMenuLateral && hoveredItem?.id === item.ID && hoveredItem && (
-                      <div
-                        className={styles.bottomMenuLateral}
-                        onMouseEnter={handleMenuMouseEnter}
-                        onMouseLeave={handleMenuMouseLeave}
-                        style={{
-                          position: "absolute",
-                          top: `${hoveredItem.position.top}px`,
-                          left: `${hoveredItem.position.left}px`,
-                          zIndex: 1000, // Garantir que o menu principal esteja no topo
-                        }}
-                      >
-                        <img
-                          src={skipped}
-                          alt="Criar Lobby"
-                          onClick={() => handleCreateLobby(1, null, null)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        <div className={styles.separator}></div>
-                        <img
-                          src={alarm}
-                          alt="Alarme"
-                          onClick={() => handleCreateLobby(4, null, null)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        <div className={styles.separator}></div>
-                        <img
-                          src={registered}
-                          alt="Registrado"
-                          onClick={() => handleCreateLobby(3, null, null)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        <div className={styles.separator}></div>
-                        <img
-                          src={priority}
-                          alt="Selecionar Prioridade"
-                          onClick={() => setIsPriorityOpen(!isPriorityOpen)}
-                          style={{ cursor: "pointer" }}
-                        />
-                        {isPriorityOpen && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              bottom: "50px",
-                              left: "100px",
-                              background: "#2c2f48",
-                              padding: "20px",
-                              borderRadius: "8px",
-                              display: "grid",
-                              gridTemplateColumns: "repeat(4, 1fr)",
-                              gap: "10px",
-                              zIndex: 1001,
-                            }}
-                          >
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
-                              <button
-                                key={number}
-                                onClick={async () => {
-                                  setSelectedPriority(number);
-                                  setIsPriorityOpen(false);
-                                  await handleCreateLobby(null, number, null);
-                                }}
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  borderRadius: "50%",
-                                  background: "#4a4e69",
-                                  color: "#fff",
-                                  fontSize: "16px",
-                                  border: "none",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                {number}
-                              </button>
-                            ))}
-                          </div>
-                        )}
+                    {isMenuLateral &&
+                      hoveredItem?.id === item.ID &&
+                      hoveredItem && (
+                        <div
+                          className={styles.bottomMenuLateral}
+                          onMouseEnter={handleMenuMouseEnter}
+                          onMouseLeave={handleMenuMouseLeave}
+                          style={{
+                            position: "absolute",
+                            top: `${hoveredItem.position.top}px`,
+                            left: `${hoveredItem.position.left}px`,
+                            zIndex: 1000, // Garantir que o menu principal esteja no topo
+                          }}
+                        >
+                          <img
+                            src={skipped}
+                            alt="Criar Lobby"
+                            onClick={() => handleCreateLobby(1, null, null)}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <div className={styles.separator}></div>
+                          <img
+                            src={alarm}
+                            alt="Alarme"
+                            onClick={() => handleCreateLobby(4, null, null)}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <div className={styles.separator}></div>
+                          <img
+                            src={registered}
+                            alt="Registrado"
+                            onClick={() => handleCreateLobby(3, null, null)}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <div className={styles.separator}></div>
+                          <img
+                            src={priority}
+                            alt="Selecionar Prioridade"
+                            onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                            style={{ cursor: "pointer" }}
+                          />
+                          {isPriorityOpen && (
+                            <div
+                              style={{
+                                position: "absolute",
+                                bottom: "50px",
+                                left: "100px",
+                                background: "#2c2f48",
+                                padding: "20px",
+                                borderRadius: "8px",
+                                display: "grid",
+                                gridTemplateColumns: "repeat(4, 1fr)",
+                                gap: "10px",
+                                zIndex: 1001,
+                              }}
+                            >
+                              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                                <button
+                                  key={number}
+                                  onClick={async () => {
+                                    setSelectedPriority(number);
+                                    setIsPriorityOpen(false);
+                                    await handleCreateLobby(null, number, null);
+                                  }}
+                                  style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    borderRadius: "50%",
+                                    background: "#4a4e69",
+                                    color: "#fff",
+                                    fontSize: "16px",
+                                    border: "none",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  {number}
+                                </button>
+                              ))}
+                            </div>
+                          )}
 
-                        <div className={styles.separator}></div>
-                        <img
-                          src={deleted}
-                          alt="Deletar"
-                          onClick={() => handleCreateLobby(2)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </div>
-                    )}
+                          <div className={styles.separator}></div>
+                          <img
+                            src={deleted}
+                            alt="Deletar"
+                            onClick={() => handleCreateLobby(2)}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>
+                      )}
                   </div>
                 ))
               ) : (
                 <p>Nenhum item encontrado.</p>
               )}
-
-
             </tr>
             <div className="pagination">
               <span
@@ -1317,7 +1335,10 @@ const Main = () => {
             <div className={styles.separator}></div>
             <img src={alarm} onClick={() => handleCreateLobby(4, null, null)} />
             <div className={styles.separator}></div>
-            <img src={registered} onClick={() => handleCreateLobby(3, null, null)} />
+            <img
+              src={registered}
+              onClick={() => handleCreateLobby(3, null, null)}
+            />
             <div className={styles.separator}></div>
             <div style={{ position: "relative", display: "inline-block" }}>
               <img
@@ -1367,7 +1388,6 @@ const Main = () => {
                 </div>
               )}
             </div>
-
             <div className={styles.separator}></div>
             <img src={deleted} onClick={() => handleCreateLobby(2)} />
           </div>

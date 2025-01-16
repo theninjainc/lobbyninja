@@ -165,7 +165,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.labelMaxMinValue>div {
+.labelMaxMinValue > div {
   width: 50px;
   height: 44px;
   font-size: 12px;
@@ -280,10 +280,12 @@ input[type="number"]::-webkit-inner-spin-button {
 .searchBtn {
   width: 44px;
   height: 44px;
-  background: radial-gradient(ellipse at 60% 10%,
-      #ffdead -10%,
-      #fa6e49 40%,
-      #c314d4 110%);
+  background: radial-gradient(
+    ellipse at 60% 10%,
+    #ffdead -10%,
+    #fa6e49 40%,
+    #c314d4 110%
+  );
   border-radius: 50px;
   border: none;
   cursor: pointer;
@@ -585,9 +587,19 @@ table {
 
 .stylesCheckboxTable {
   position: relative;
-  top: -3.5px;
+  top: 10px;
   left: 7.7px;
+  width: 75px;
 }
+.stylesCheckboxTable div:first-child {
+  float: left;
+  margin-right: 2px;
+}
+
+.stylesCheckboxTable div:last-child {
+  float: left;
+}
+
 
 .favouriteStar {
   cursor: pointer;
@@ -598,9 +610,6 @@ table {
 }
 
 .checkBoxTable {
-  margin-top: 15px;
-  margin-left: 10px;
-  margin-right: 22px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -631,7 +640,6 @@ table {
 }
 
 .hoverStar {
-
   cursor: pointer;
   pointer-events: visiblePainted;
   transition: fill 0.3s ease;
@@ -645,21 +653,17 @@ table {
   filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
 }
 
-
 .siteTable {
   height: 38px;
   width: 69px;
-
 }
 
 .startTable {
-
   height: 38px;
   width: 68px;
 }
 
 .buyinTable {
-
   height: 38px;
   width: 68px;
 }
@@ -667,31 +671,26 @@ table {
 .nameTable {
   height: 38px;
   width: 220px;
-
 }
 
 .prizepoolTable {
   height: 38px;
   width: 90px;
-
 }
 
 .maxreentryTable {
   height: 38px;
   width: 110px;
-
 }
 
 .blindsTable {
   height: 38px;
   width: 71px;
-
 }
 
 .speedTable {
   height: 38px;
   width: 73px;
-
 }
 
 .speedTableImgRegular {
@@ -737,31 +736,27 @@ table {
 .fieldTable {
   height: 38px;
   width: 78px;
-
 }
 
 .endTable {
   height: 38px;
   width: 64px;
-
 }
 
 .mlrTable {
   height: 38px;
   width: 81px;
-
 }
 
 .tableSizeTableRegistered {
   height: 38px;
   width: 90px;
-
 }
 
 .tablesizeTable {
   height: 38px;
-  width: 96px;
-
+  width: 66px;
+  padding-left: 20px;
 }
 
 .priorityTable {
@@ -772,7 +767,6 @@ table {
 .priorityTableRegistered {
   height: 38px;
   width: 70px;
-
 }
 
 .siteTable,
@@ -818,10 +812,12 @@ table {
 
 .active {
   color: transparent;
-  background-image: radial-gradient(ellipse at 30% 30%,
-      #ffdead 0%,
-      #fa6e49 27%,
-      #c314d4 90%);
+  background-image: radial-gradient(
+    ellipse at 30% 30%,
+    #ffdead 0%,
+    #fa6e49 27%,
+    #c314d4 90%
+  );
   background-clip: text;
   -webkit-background-clip: text;
 }
@@ -893,7 +889,6 @@ table {
   z-index: 100;
 }
 
-
 h4 {
   font-weight: 400;
   color: rgba(255, 255, 255, 0.5);
@@ -931,7 +926,6 @@ h4 {
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
-
 
 @keyframes spin {
   0% {
