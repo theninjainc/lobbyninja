@@ -133,7 +133,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "http://localhost:3000/api/lobbys/lobbyCreate",
+        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -210,7 +210,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/torneios/api/activeTournaments"
+        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
