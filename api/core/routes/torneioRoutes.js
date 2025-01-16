@@ -42,7 +42,7 @@ router.get("/api/activeTournaments", async (req, res) => {
     };
 
     try {
-        const email = "usuario@exemplo.com";
+        const email = "emersin7x@gmail.com";
         const states = ["favourite", "registered", "skipped", "deleted", "alarm"];
 
         // Função para carregar lobbys por estados
@@ -60,6 +60,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                     `${apiConfig.url}/${network}/activeTournaments?filter=Type:H,NL;Type!:SAT,HU,FPP,TI,TR,SO,DN,TN,W,C,RH,L;Class:SCHEDULED`,
                     { headers: apiConfig.headers }
                 );
+
 
                 return (
                     response.data.Response?.RegisteringTournamentsResponse?.RegisteringTournaments
@@ -116,7 +117,6 @@ router.get("/api/activeTournaments", async (req, res) => {
                 .filter(Boolean);
         };
 
-        // Carregar lobbys e torneios
         const lobbys = await loadLobbys();
         const lobbyIds = new Set(
             lobbys
@@ -140,12 +140,10 @@ router.get("/api/activeTournaments", async (req, res) => {
 
         const allTournaments = (await Promise.all(tournamentsPromises)).flat();
 
-        // Remover torneios já registrados nos lobbys
         const filteredTournaments = allTournaments.filter(
             (tournament) => !lobbyIds.has(tournament.ID)
         );
 
-        // Adicionar torneios com prioridade
         const tournamentsWithPriority = filteredTournaments.filter(
             (tournament) => tournament.Priority != null
         );
@@ -154,7 +152,6 @@ router.get("/api/activeTournaments", async (req, res) => {
             `Torneios com prioridade encontrados: ${tournamentsWithPriority.length}`
         );
 
-        // Ordenar por prioridade
         filteredTournaments.sort((a, b) => (a.Priority || Infinity) - (b.Priority || Infinity));
 
         res.status(200).json(filteredTournaments);

@@ -58,9 +58,9 @@ li.open {
 .bgIcon {
   transition: 0.2s;
   background: radial-gradient(ellipse at 50% 1%, #bba5f4 -30%, #5f33d6 50%);
-  border-radius: 12px;
-  width: 38px;
-  height: 38px;
+  border-radius: 7px;
+  width: 31px;
+  height: 31px;
   display: flex;
   align-items: center;
   justify-content: center;
