@@ -95,8 +95,12 @@ router.get("/api/activeTournaments", async (req, res) => {
                     const hash = crypto.createHash("md5");
                     const idString = `${tournament["@name"]}-${tournament["@network"]}-${tournamentStart}`;
                     const id = hash.update(idString).digest("hex");
-                    if (lobbys.find((lobby) => lobby.$id === id))
-                        console.log(lobbys.find((lobby) => lobby.$id == id)?.priority)
+
+                    // Buscar o lobby correspondente e logar prioridade
+                    const matchedLobby = lobbys.find((lobby) => lobby.$id === id);
+                    if (matchedLobby) {
+                        console.log(matchedLobby.priority);
+                    }
                     return {
                         ID: id,
                         Site: tournament["@network"],
