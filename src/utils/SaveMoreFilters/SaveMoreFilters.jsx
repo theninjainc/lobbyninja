@@ -1,7 +1,22 @@
 import styles from "./SaveMoreFilters.module.css";
 import { useState } from "react";
 
-const SaveMoreFilters = ({ close, activeFilters, email }) => {
+const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
+  const stylesByOrigin = {
+    MoreFilters: {
+      position: "absolute",
+      top: "1800px",
+      left: "490px",
+    },
+    Main: {
+      position: "absolute",
+      top: "250px",
+      left: "490px",
+    },
+  };
+
+  const modalStyle = stylesByOrigin[origin] || {};
+
   const [nameFilter, setNameFilter] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
@@ -45,7 +60,7 @@ const SaveMoreFilters = ({ close, activeFilters, email }) => {
   };
 
   return (
-    <div className={styles.saveMoreFilters}>
+    <div className={styles.saveMoreFilters}  style={modalStyle}>
       <div className={styles.head}>
         <span>Save Filter</span>
       </div>

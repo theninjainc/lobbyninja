@@ -77,12 +77,16 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
 
     //funcionando errado
     if (buyInMin) {
-      console.log(filteredList.filter((item) => item.buyIn))
-      filteredList = filteredList.filter((item) => Number(item.BuyIn) >= buyInMin);
+      console.log(filteredList.filter((item) => item.buyIn));
+      filteredList = filteredList.filter(
+        (item) => Number(item.BuyIn) >= buyInMin
+      );
     }
     //não funciona
     if (buyInMax) {
-      filteredList = filteredList.filter((item) => Number(item.BuyIn) <= buyInMax);
+      filteredList = filteredList.filter(
+        (item) => Number(item.BuyIn) <= buyInMax
+      );
     }
     //Funcionando
     if (prizePoolMin) {
@@ -152,7 +156,10 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   return (
     <>
       {saveFilterIsOpen && (
-        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
+        <SaveMoreFilters
+          close={() => setSaveFilterIsOpen(false)}
+          origin="MoreFilters"
+        />
       )}
       <div
         className={`${styles.moreFilters} ${

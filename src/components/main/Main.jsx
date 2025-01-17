@@ -110,12 +110,11 @@ const Main = () => {
       } catch (error) {
         console.error("Erro ao obter o usuário:", error);
       }
-    }
+    };
     fetchUser();
   }, []);
 
   const handleCreateLobby = async (state, priority, itemFavourite) => {
-
     try {
       iziToast.info({
         title: "Aguarde",
@@ -129,8 +128,8 @@ const Main = () => {
         selectedItems && selectedItems.length > 0
           ? selectedItems
           : itemHover
-            ? [itemHover]
-            : [itemFavourite];
+          ? [itemHover]
+          : [itemFavourite];
 
       const lobbyData = {
         email,
@@ -189,21 +188,26 @@ const Main = () => {
         console.log("Lobby criado com sucesso:", data);
 
         setOrderList((prevOrderList) =>
-          prevOrderList.map((item, index) => {
-            const updatedItem = lobbyData.lobbies.find(
-              (lobby) => lobby.ID === item.ID
-            );
+          prevOrderList
+            .map((item, index) => {
+              const updatedItem = lobbyData.lobbies.find(
+                (lobby) => lobby.ID === item.ID
+              );
 
-            if (updatedItem) {
-              return { ...item, Priority: updatedItem.priority || item.Priority };
-            }
+              if (updatedItem) {
+                return {
+                  ...item,
+                  Priority: updatedItem.priority || item.Priority,
+                };
+              }
 
-            if (updatedItem && state != 5) {
-              return null;
-            }
+              if (updatedItem && state != 5) {
+                return null;
+              }
 
-            return item;
-          }).filter(Boolean)
+              return item;
+            })
+            .filter(Boolean)
         );
       } else {
         iziToast.error({
@@ -215,7 +219,6 @@ const Main = () => {
         console.error("Erro ao criar lobby:", data.error);
       }
       setSelectedItems([]);
-
     } catch (error) {
       iziToast.error({
         title: "Erro",
@@ -226,7 +229,6 @@ const Main = () => {
       console.error("Erro ao fazer a requisição:", error);
     }
   };
-
 
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
@@ -820,7 +822,7 @@ const Main = () => {
   const isAllSelected =
     getPaginatedOrders().length > 0 &&
     selectedItems.length === getPaginatedOrders().length;
-  const applyFilters = () => { };
+  const applyFilters = () => {};
 
   if (isDarkMode) {
     document.body.style.backgroundColor = "#02061e";
@@ -863,8 +865,10 @@ const Main = () => {
             selectedSpeed,
             selectedSize,
           }}
-          email={email} // Passa o email do usuário
-        />)}
+          email={email}
+          origin="Main"
+        />
+      )}
 
       <CostumizeColumns
         isOpen={isOpenCostumizeColumns}
@@ -882,18 +886,22 @@ const Main = () => {
         />
       )}
       <div
-        className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
-          } ${moreFiltersisOpen === true ||
-            isOpenCostumizeColumns === true ||
-            yourFiltersIsOpen
+        className={`${styles.main} ${
+          isDarkMode ? "dark-theme" : "light-theme"
+        } ${
+          moreFiltersisOpen === true ||
+          isOpenCostumizeColumns === true ||
+          yourFiltersIsOpen === true ||
+          saveFilterIsOpen
             ? styles.blur
             : styles.noBlur
-          }`}
+        }`}
       >
         <div className={styles.navbar}>
           <div
-            className={`${styles.titlef} ${isDarkMode ? styles.darkTitle : styles.lightTitle
-              }`}
+            className={`${styles.titlef} ${
+              isDarkMode ? styles.darkTitle : styles.lightTitle
+            }`}
           >
             Tournament List
           </div>
@@ -993,24 +1001,24 @@ const Main = () => {
                         selectedSpeed === 1
                           ? slow
                           : selectedSpeed === 2
-                            ? regular
-                            : selectedSpeed === 3
-                              ? turbo
-                              : selectedSpeed === 4
-                                ? hyper
-                                : null
+                          ? regular
+                          : selectedSpeed === 3
+                          ? turbo
+                          : selectedSpeed === 4
+                          ? hyper
+                          : null
                       }
                     ></img>
                     <p>
                       {selectedSpeed === 1
                         ? "Slow"
                         : selectedSpeed === 2
-                          ? "Regular"
-                          : selectedSpeed === 3
-                            ? "Turbo"
-                            : selectedSpeed === 4
-                              ? "Hyper"
-                              : null}
+                        ? "Regular"
+                        : selectedSpeed === 3
+                        ? "Turbo"
+                        : selectedSpeed === 4
+                        ? "Hyper"
+                        : null}
                     </p>
                   </div>
                 ) : (
@@ -1034,12 +1042,12 @@ const Main = () => {
                     {selectedSize === 1
                       ? "2"
                       : selectedSize === 2
-                        ? "3-5"
-                        : selectedSize === 3
-                          ? "6"
-                          : selectedSize === 4
-                            ? "7 to 10"
-                            : null}
+                      ? "3-5"
+                      : selectedSize === 3
+                      ? "6"
+                      : selectedSize === 4
+                      ? "7 to 10"
+                      : null}
                   </p>
                 ) : (
                   "Size"
@@ -1107,8 +1115,9 @@ const Main = () => {
             .map((button, index) => (
               <button
                 key={index}
-                className={`${button.className} ${button.isActive ? styles.active : ""
-                  }`}
+                className={`${button.className} ${
+                  button.isActive ? styles.active : ""
+                }`}
                 onClick={button.onClick}
               >
                 {button.label}
@@ -1143,16 +1152,16 @@ const Main = () => {
                           ? "transparent"
                           : "rgba(255, 255, 255, 0.05)"
                         : index % 2 === 0
-                          ? "transparent"
-                          : "#30397D", // cor para modo claro
+                        ? "transparent"
+                        : "#30397D", // cor para modo claro
 
                       color: isDarkMode
                         ? index % 2 === 0
                           ? "#fff"
                           : "#fff"
                         : index % 2 === 0
-                          ? "#404040"
-                          : "#fff",
+                        ? "#404040"
+                        : "#fff",
 
                       fontWeight:
                         index % 2 === 0 ? (isDarkMode ? "" : "600") : "normal",
@@ -1176,7 +1185,7 @@ const Main = () => {
                         key={filter}
                         className={
                           styles[
-                          `${filter.toLowerCase().replace(/ /g, "")}Table`
+                            `${filter.toLowerCase().replace(/ /g, "")}Table`
                           ]
                         }
                       >
