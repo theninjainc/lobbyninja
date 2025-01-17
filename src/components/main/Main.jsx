@@ -96,11 +96,25 @@ const Main = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [email, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const client = new Client();
+        client.setProject("lobbyninja");
+
+        const account = new Account(client);
+        const user = await account.get();
+        setUserEmail(user.email);
+      } catch (error) {
+        console.error("Erro ao obter o usuário:", error);
+      }
+    }
+    fetchUser();
+  }, []);
 
   const handleCreateLobby = async (state, priority, itemFavourite) => {
-    const client = new Client();
-    const account = new Account(client);
-    client.setProject("lobbyninja");
 
     try {
       iziToast.info({
@@ -110,9 +124,6 @@ const Main = () => {
         position: "topRight",
         id: "loading-toast",
       });
-
-      const user = await account.get();
-      const email = user.email;
 
       const itemsToUse =
         selectedItems && selectedItems.length > 0
@@ -156,7 +167,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
+        "http://localhost:3000/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -252,7 +263,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -842,8 +853,18 @@ const Main = () => {
       )}
 
       {saveFilterIsOpen && (
-        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
-      )}
+        <SaveMoreFilters
+          close={() => setSaveFilterIsOpen(false)}
+          activeFilters={{
+            searchNameTournaments,
+            minBuyIn,
+            maxBuyIn,
+            selectedSite,
+            selectedSpeed,
+            selectedSize,
+          }}
+          email={email} // Passa o email do usuário
+        />)}
 
       <CostumizeColumns
         isOpen={isOpenCostumizeColumns}
@@ -851,7 +872,14 @@ const Main = () => {
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
       {yourFiltersIsOpen && (
-        <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
+        <YourFilters
+          closeModal={() => setYourFiltersIsOpen(false)}
+          email={email}
+          orderList={orderDate}
+          setOrderList={setOrderList}
+          siteData={siteData}
+          applyFilters={applyFilters}
+        />
       )}
       <div
         className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
@@ -1034,7 +1062,7 @@ const Main = () => {
               <img src={past} alt="Past Icon" width="19px" />
             </button>
           </div>
-          
+
           <div className={styles.searchRight}>
             <button
               className={styles.manageColumnsBtn}

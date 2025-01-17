@@ -1,7 +1,73 @@
 const { databases } = require('../config/appwriteClient');
+const sdk = require('node-appwrite');
+const { Query } = sdk;
 
 const DATABASE_ID = '6759f9f40015f31d86bb';
 const COLLECTION_ID = 'lobby';
+const USER_COLLECTION_ID = 'user';
+
+const saveFilterToDB = async (email, filters) => {
+    try {
+        filters.Site = filters.Site.network;
+        console.log(email, filters);
+
+        // Buscar o usuário pelo e-mail
+        const userList = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID, [
+            sdk.Query.equal("email", email)
+        ]);
+        console.log(userList)
+
+        // Verifica se o usuário foi encontrado
+        if (userList.documents.length === 0) {
+            throw new Error("Usuário não encontrado com o e-mail fornecido.");
+        }
+
+        const user = userList.documents[0];
+        console.log(filters.Site)
+
+        console.log("cheguei daqui")
+        // Criação do documento de filtro na coleção apropriada
+        const filterDocument = await databases.createDocument(
+            DATABASE_ID,
+            'filters',
+            'unique()',
+            filters
+        );
+        console.log("passei daqui")
+        console.log(user.$id)
+        const updatedUser = await databases.updateDocument(
+            DATABASE_ID,
+            USER_COLLECTION_ID,
+            user.$id,
+            { filters: [filterDocument.$id] }
+        );
+        console.log("Deu certo")
+        return updatedUser;
+    } catch (error) {
+        throw new Error("Erro ao salvar os filtros no banco: " + error.message);
+    }
+};
+
+
+const getFiltersByEmail = async (email) => {
+    try {
+        // Busca o documento do usuário pelo e-mail
+        const userList = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID, [
+            Query.equal("email", email) // Filtra pelo campo "email"
+        ]);
+
+        if (userList.documents.length === 0) {
+            return null; // Retorna null se o usuário não foi encontrado
+        }
+
+        const user = userList.documents[0]; // Seleciona o primeiro documento encontrado
+
+        return user.filters || null; // Retorna os filtros ou null caso não existam
+    } catch (error) {
+        throw new Error("Erro ao buscar filtros: " + error.message);
+    }
+};
+
 
 const getAllTorneios = async () => {
     try {
@@ -58,4 +124,7 @@ const deleteTorneio = async (id) => {
     }
 };
 
-module.exports = { getAllTorneios, createTorneio, getTorneioById, updateTorneio, deleteTorneio };
+module.exports = {
+    getAllTorneios, createTorneio, getTorneioById, updateTorneio, deleteTorneio, saveFilterToDB,
+    getFiltersByEmail,
+};
