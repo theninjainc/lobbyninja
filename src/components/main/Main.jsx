@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import Timer from "../../utils/Timer/Timer";
 import styles from "./main.module.css";
 import lupa from "../../assets/Lupa.svg";
@@ -96,12 +96,25 @@ const Main = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [email, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const client = new Client();
+        client.setProject("lobbyninja");
+
+        const account = new Account(client);
+        const user = await account.get();
+        setUserEmail(user.email);
+      } catch (error) {
+        console.error("Erro ao obter o usuário:", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleCreateLobby = async (state, priority, itemFavourite) => {
-    const client = new Client();
-    const account = new Account(client);
-    client.setProject("lobbyninja");
-
     try {
       iziToast.info({
         title: "Aguarde",
@@ -110,9 +123,6 @@ const Main = () => {
         position: "topRight",
         id: "loading-toast",
       });
-
-      const user = await account.get();
-      const email = user.email;
 
       const itemsToUse =
         selectedItems && selectedItems.length > 0
@@ -148,11 +158,11 @@ const Main = () => {
           if (priority) {
             baseLobby.priority = priority;
           }
-
           return baseLobby;
         }),
       };
 
+      console.log("AHASDJGSJHDGAHJSDGSAJGDHGAHSDGHJASDGAJSGHSGHDAJGSDH", lobbyData.lobbies)
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
@@ -177,23 +187,20 @@ const Main = () => {
         });
         console.log("Lobby criado com sucesso:", data);
 
-        setOrderList((prevOrderList) =>
-          prevOrderList.map((item, index) => {
+        setOrderList(
+          orderList.map((item) => {
             const updatedItem = lobbyData.lobbies.find(
               (lobby) => lobby.ID === item.ID
             );
 
             if (updatedItem) {
-              return { ...item, Priority: updatedItem.priority || item.Priority };
-            }
-
-            if (updatedItem && state != 5) {
-              return null;
+              return { ...item, Priority: priority };
             }
 
             return item;
-          }).filter(Boolean)
+          })
         );
+
       } else {
         iziToast.error({
           title: "Erro",
@@ -204,7 +211,6 @@ const Main = () => {
         console.error("Erro ao criar lobby:", data.error);
       }
       setSelectedItems([]);
-
     } catch (error) {
       iziToast.error({
         title: "Erro",
@@ -215,7 +221,6 @@ const Main = () => {
       console.error("Erro ao fazer a requisição:", error);
     }
   };
-
 
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
@@ -505,8 +510,8 @@ const Main = () => {
   const orderedListPriority = () => {
     const newListPriority = [...orderList];
     newListPriority.sort((a, b) => {
-      const priorityA = a.priority ?? 0;
-      const priorityB = b.priority ?? 0;
+      const priorityA = a.Priority ?? 0;
+      const priorityB = b.Priority ?? 0;
       return orderPriorityFilter === "asc"
         ? priorityA - priorityB
         : priorityB - priorityA;
@@ -721,6 +726,36 @@ const Main = () => {
   const [selectedSize, setSelectedSize] = useState();
   const [isPriorityOpen, setIsPriorityOpen] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState(null);
+  const sizeRef = useRef(null);
+  const speedRef = useRef(null);
+  const siteRef = useRef(null);
+
+  const closeAllDropdowns = () => {
+    setIsOpenSize(false);
+    setIsOpenSpeed(false);
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sizeRef.current &&
+        !sizeRef.current.contains(event.target) &&
+        speedRef.current &&
+        !speedRef.current.contains(event.target) &&
+        siteRef.current &&
+        !siteRef.current.contains(event.target)
+      ) {
+        closeAllDropdowns();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleFilter = () => {
     let filteredList = orderDate;
@@ -838,11 +873,24 @@ const Main = () => {
           setOrderList={setOrderList}
           siteData={siteData}
           applyFilters={applyFilters}
+          email={email}
         />
       )}
 
       {saveFilterIsOpen && (
-        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
+        <SaveMoreFilters
+          close={() => setSaveFilterIsOpen(false)}
+          activeFilters={{
+            searchNameTournaments,
+            minBuyIn,
+            maxBuyIn,
+            selectedSite,
+            selectedSpeed,
+            selectedSize,
+          }}
+          email={email}
+          origin="Main"
+        />
       )}
 
       <CostumizeColumns
@@ -851,13 +899,21 @@ const Main = () => {
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
       {yourFiltersIsOpen && (
-        <YourFilters closeModal={() => setYourFiltersIsOpen(false)} />
+        <YourFilters
+          closeModal={() => setYourFiltersIsOpen(false)}
+          email={email}
+          orderList={orderDate}
+          setOrderList={setOrderList}
+          siteData={siteData}
+          applyFilters={applyFilters}
+        />
       )}
       <div
         className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
           } ${moreFiltersisOpen === true ||
             isOpenCostumizeColumns === true ||
-            yourFiltersIsOpen
+            yourFiltersIsOpen === true ||
+            saveFilterIsOpen
             ? styles.blur
             : styles.noBlur
           }`}
@@ -896,7 +952,7 @@ const Main = () => {
                 id="search"
               />
             </label>
-            <label htmlFor="site" className={styles.labelSelectSite}>
+            <label htmlFor="site" className={styles.labelSelectSite} ref={siteRef}>
               <button
                 name="site"
                 id="site"
@@ -915,12 +971,12 @@ const Main = () => {
                   "Select Site"
                 )}
               </button>
+              <SelectSite
+                isOpen={isOpen}
+                setSelectedSite={setSelectedSite}
+                siteData={siteData}
+              />
             </label>
-            <SelectSite
-              isOpen={isOpen}
-              setSelectedSite={setSelectedSite}
-              siteData={siteData}
-            />
             <div className={styles.maxMinSearch}>
               <label htmlFor="min-value" className={styles.labelMaxMinValue}>
                 <div>Min $</div>
@@ -951,7 +1007,7 @@ const Main = () => {
                 />
               </label>
             </div>
-            <label htmlFor="speed" className={styles.labelSelectSpeed}>
+            <label htmlFor="speed" className={styles.labelSelectSpeed} ref={speedRef}>
               <button
                 name="speed"
                 id="speed"
@@ -989,12 +1045,12 @@ const Main = () => {
                   "Speed"
                 )}
               </button>
+              <Speed
+                isOpenSpeed={isOpenSpeed}
+                setSelectedSpeed={setSelectedSpeed}
+              />
             </label>
-            <Speed
-              isOpenSpeed={isOpenSpeed}
-              setSelectedSpeed={setSelectedSpeed}
-            />
-            <label htmlFor="size" className={styles.labelSelectSize}>
+            <label htmlFor="size" className={styles.labelSelectSize} ref={sizeRef}>
               <button
                 name="size"
                 id="size"
@@ -1017,8 +1073,8 @@ const Main = () => {
                   "Size"
                 )}
               </button>
+              <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
             </label>
-            <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
             <button
               className={styles.searchBtn}
               onClick={() => {
@@ -1034,7 +1090,7 @@ const Main = () => {
               <img src={past} alt="Past Icon" width="19px" />
             </button>
           </div>
-          
+
           <div className={styles.searchRight}>
             <button
               className={styles.manageColumnsBtn}

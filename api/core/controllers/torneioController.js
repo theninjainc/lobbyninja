@@ -1,5 +1,40 @@
 const torneioService = require('../services/torneioService');
 
+const saveFilter = async (req, res) => {
+    try {
+        const { email, filters } = req.body;
+        console.log(email, filters)
+        if (!email) {
+            return res.status(400).json({ error: "O ID do usuário é obrigatório." });
+        }
+
+        if (!filters || typeof filters !== "object") {
+            return res.status(400).json({ error: "Os filtros são obrigatórios e devem ser um objeto." });
+        }
+
+        const savedFilter = await torneioService.saveUserFilter(email, filters);
+        res.status(201).json({ message: "Filtro salvo com sucesso.", filter: savedFilter });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const applyFilter = async (req, res) => {
+    try {
+        const { email } = req.body;
+        console.log(email)
+        if (!email) {
+            return res.status(400).json({ error: "O ID do usuário é obrigatório." });
+        }
+
+        const filteredLobbies = await torneioService.getFilteredLobbies(email);
+        console.log(filteredLobbies)
+        res.status(200).json(filteredLobbies);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const getAllTorneiosHandler = async (req, res) => {
     try {
         const torneios = await torneioService.getAllTorneios();
@@ -51,4 +86,6 @@ module.exports = {
     getTorneioByIdHandler,
     updateTorneioHandler,
     deleteTorneioHandler,
+    saveFilter,
+    applyFilter,
 };

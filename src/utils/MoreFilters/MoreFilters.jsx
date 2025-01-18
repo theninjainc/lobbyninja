@@ -6,9 +6,17 @@ import relogio from "../../assets/relogio.svg";
 import select from "../../assets/selectSite.svg";
 import save from "../../assets/save.svg";
 import SaveMoreFilters from "../SaveMoreFilters/SaveMoreFilters";
-//imgSites
-const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
-  // Estados para todos os filtros
+import poker888 from "../../assets/888poker.svg";
+import siteWpn from "../../assets/wpn.svg";
+import siteWinamax from "../../assets/siteWinamax.svg";
+import sitePokerStars from "../../assets/sitePokerStars.svg";
+import sitePartyPoker from "../../assets/sitePartyPoker.svg";
+import siteiPoker from "../../assets/siteiPoker.svg";
+import siteGGNetwork from "../../assets/siteGGNetwork.svg";
+import siteChico from "../../assets/siteChico.svg";
+import siteBodog from "../../assets/siteBodog.svg";
+
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email }) => {
   const [network, setNetwork] = useState();
   const [buyInMin, setBuyInMin] = useState();
   const [buyInMax, setBuyInMax] = useState();
@@ -35,6 +43,18 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   const [maxLate, setMaxLate] = useState(false);
   const [includeClosed, setIncludeClosed] = useState(false);
   const [saveFilterIsOpen, setSaveFilterIsOpen] = useState(false);
+  const siteData = [
+    { network: "888Poker", image: poker888 },
+    { network: "WPN", image: siteWpn },
+    { network: "Winamax", image: siteWinamax },
+    { network: "Winamax.fr", image: siteWinamax },
+    { network: "PokerStars", image: sitePokerStars },
+    { network: "PartyPoker", image: sitePartyPoker },
+    { network: "iPoker", image: siteiPoker },
+    { network: "GGNetwork", image: siteGGNetwork },
+    { network: "Chico", image: siteChico },
+    { network: "Bodog", image: siteBodog },
+  ];
 
   const toggleOpenSaveFilter = () => {
     setSaveFilterIsOpen((prevState) => !prevState);
@@ -77,12 +97,16 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
 
     //funcionando errado
     if (buyInMin) {
-      console.log(filteredList.filter((item) => item.buyIn))
-      filteredList = filteredList.filter((item) => Number(item.BuyIn) >= buyInMin);
+      console.log(filteredList.filter((item) => item.buyIn));
+      filteredList = filteredList.filter(
+        (item) => Number(item.BuyIn) >= buyInMin
+      );
     }
     //não funciona
     if (buyInMax) {
-      filteredList = filteredList.filter((item) => Number(item.BuyIn) <= buyInMax);
+      filteredList = filteredList.filter(
+        (item) => Number(item.BuyIn) <= buyInMax
+      );
     }
     //Funcionando
     if (prizePoolMin) {
@@ -152,12 +176,42 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   return (
     <>
       {saveFilterIsOpen && (
-        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
+        <SaveMoreFilters
+          close={() => setSaveFilterIsOpen(false)}
+          activeFilters={{
+            selectedSite: network,
+            buyInMin,
+            buyInMax,
+            fromTime,
+            toTime,
+            registeringFromTime,
+            registeringToTime,
+            prizePoolMin,
+            prizePoolMax,
+            excludeWords,
+            participantsMin,
+            participantsMax,
+            tableSize,
+            blindsMin,
+            blindsMax,
+            priority,
+            endTime,
+            dayOfWeek,
+            reEntry,
+            speed,
+            game,
+            variant,
+            maxAbility,
+            maxLate,
+            includeClosed,
+          }}
+          email={email}
+          origin="MoreFilters"
+        />
       )}
       <div
-        className={`${styles.moreFilters} ${
-          saveFilterIsOpen === true ? styles.blur : styles.noBlur
-        }`}
+        className={`${styles.moreFilters} ${saveFilterIsOpen === true ? styles.blur : styles.noBlur
+          }`}
       >
         <div className={styles.title}>
           <p>Filters</p>{" "}
@@ -176,9 +230,9 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
             }}
           >
             <option value="">Network</option>
-            {orderList.map((item, index) => (
-              <option key={index} value={item.Site}>
-                {item.Site}
+            {siteData.map((item, index) => (
+              <option key={index} value={item.network}>
+                {item.network}
               </option>
             ))}
           </select>

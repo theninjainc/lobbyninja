@@ -7,6 +7,8 @@ const {
     getTorneioByIdHandler,
     updateTorneioHandler,
     deleteTorneioHandler,
+    saveFilter,
+    applyFilter,
 } = require("../controllers/torneioController");
 const { getLobbysByState } = require("../repositories/lobbyRepository");
 
@@ -17,6 +19,8 @@ router.post("/", createTorneioHandler);
 router.get("/:id", getTorneioByIdHandler);
 router.put("/:id", updateTorneioHandler);
 router.delete("/:id", deleteTorneioHandler);
+router.post("/save", saveFilter);
+router.post("/apply", applyFilter);
 
 router.get("/api/activeTournaments", async (req, res) => {
     const networks = [
