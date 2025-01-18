@@ -47,6 +47,8 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
   const handleApplyFilter = () => {
     let filteredList = orderList;
 
+    console.log(selectedFilters)
+
     if (selectedFilters.Site) {
       filteredList = filteredList.filter((item) => item.Site === selectedFilters.Site);
     }
@@ -72,7 +74,26 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
       filteredList = filteredList.filter((item) => Number(item.PrizePool) <= selectedFilters.PrizePoolMax);
     }
     if (selectedFilters.Size) {
-      filteredList = filteredList.filter((item) => item.TableSize === selectedFilters.Size);
+      switch (selectedFilters.Size) {
+        case 1:
+          filteredList = filteredList.filter((item) => item.TableSize === 2);
+          break;
+        case 2:
+          filteredList = filteredList.filter(
+            (item) => item.TableSize >= 3 && item.TableSize <= 5
+          );
+          break;
+        case 3:
+          filteredList = filteredList.filter((item) => item.TableSize >= 6);
+          break;
+        case 4:
+          filteredList = filteredList.filter(
+            (item) => item.TableSize >= 7 && item.TableSize <= 10
+          );
+          break;
+        default:
+          filteredList;
+      }
     }
     if (selectedFilters.BlindsMin) {
       filteredList = filteredList.filter((item) => item.Blinds >= selectedFilters.BlindsMin);
