@@ -159,11 +159,11 @@ const Main = () => {
           if (priority) {
             baseLobby.priority = priority;
           }
-
           return baseLobby;
         }),
       };
 
+      console.log("AHASDJGSJHDGAHJSDGSAJGDHGAHSDGHJASDGAJSGHSGHDAJGSDH", lobbyData.lobbies)
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
@@ -188,23 +188,20 @@ const Main = () => {
         });
         console.log("Lobby criado com sucesso:", data);
 
-        setOrderList((prevOrderList) =>
-          prevOrderList.map((item, index) => {
+        setOrderList(
+          orderList.map((item) => {
             const updatedItem = lobbyData.lobbies.find(
               (lobby) => lobby.ID === item.ID
             );
 
             if (updatedItem) {
-              return { ...item, Priority: updatedItem.priority || item.Priority };
-            }
-
-            if (updatedItem && state != 5) {
-              return null;
+              return { ...item, Priority: priority };
             }
 
             return item;
-          }).filter(Boolean)
+          })
         );
+
       } else {
         iziToast.error({
           title: "Erro",
@@ -849,6 +846,7 @@ const Main = () => {
           setOrderList={setOrderList}
           siteData={siteData}
           applyFilters={applyFilters}
+          email={email}
         />
       )}
 

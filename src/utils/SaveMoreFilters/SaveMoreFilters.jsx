@@ -12,16 +12,23 @@ const SaveMoreFilters = ({ close, activeFilters, email }) => {
     }
 
     setIsSaving(true);
-
+    console.log(activeFilters);
     const filterData = {
       NameFilter: nameFilter,
       SearchNameTournaments: activeFilters.searchNameTournaments,
-      MinBuyIn: activeFilters.minBuyIn,
-      MaxBuyIn: activeFilters.maxBuyIn,
+      MinBuyIn: Number(activeFilters.buyInMin),
+      MaxBuyIn: Number(activeFilters.buyInMax),
       Site: activeFilters.selectedSite,
       Speed: activeFilters.selectedSpeed,
       Size: activeFilters.selectedSize,
+      BlindsMin: activeFilters.blindsMin,
+      BlindsMax: activeFilters.blindsMax,
+      ExcludeWords: activeFilters.excludeWords,
+      ReEntry: activeFilters.reentry,
+      PrizePoolMin: activeFilters.prizePoolMin,
+      PrizePoolMax: activeFilters.prizePoolMax,
     };
+    console.log(filterData)
 
     try {
       const response = await fetch("http://localhost:3000/api/torneios/save", {

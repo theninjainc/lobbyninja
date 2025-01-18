@@ -8,7 +8,8 @@ const USER_COLLECTION_ID = 'user';
 
 const saveFilterToDB = async (email, filters) => {
     try {
-        filters.Site = filters.Site.network;
+        if (filters.Site.network)
+            filters.Site = filters.Site.network;
         console.log(email, filters);
 
         // Buscar o usuário pelo e-mail

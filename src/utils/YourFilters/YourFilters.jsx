@@ -4,12 +4,11 @@ import select from "../../assets/selectSite.svg";
 
 // eslint-disable-next-line react/prop-types
 const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
-  const [filters, setFilters] = useState([]); // Estado para armazenar os filtros
-  const [selectedFilters, setSelectedFilters] = useState({}); // Estado para armazenar o filtro selecionado
-  const [error, setError] = useState(""); // Para exibir erros
+  const [filters, setFilters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Função para buscar os filtros ao carregar o componente
     const fetchFilters = async () => {
       try {
         const response = await fetch("http://localhost:3000/api/torneios/apply", {
@@ -23,30 +22,29 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
         const data = await response.json();
 
         if (response.ok) {
-          setFilters(data); // Atualiza o estado com os filtros recebidos
-          setError(""); // Limpa o erro
+          setFilters(data);
+          setError("");
         } else {
-          setError(data.error); // Exibe o erro se algo der errado
+          setError(data.error);
         }
       } catch (error) {
-        setError("Erro ao carregar os filtros: " + error.message); // Erro de rede ou outro
+        setError("Erro ao carregar os filtros: " + error.message);
       }
     };
 
-    fetchFilters(); // Chama a função para buscar os filtros
-  }, [email]); // Só chama isso novamente se o email mudar
+    fetchFilters();
+  }, [email]);
 
   const handleFilterSelection = (e) => {
-    const selectedFilterId = e.target.value; // ID do filtro selecionado
-    const selectedFilter = filters.find((filter) => filter.$id === selectedFilterId); // Busca no array de filtros
+    const selectedFilterId = e.target.value;
+    const selectedFilter = filters.find((filter) => filter.$id === selectedFilterId);
 
     if (selectedFilter) {
-      setSelectedFilters(selectedFilter); // Atualiza o estado com todos os dados do filtro selecionado
+      setSelectedFilters(selectedFilter);
     }
   };
 
   const handleApplyFilter = () => {
-    // Filtrando a lista de torneios com base nos filtros selecionados
     let filteredList = orderList;
 
     if (selectedFilters.Site) {
@@ -61,14 +59,14 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
       );
     }
 
-    if (selectedFilters.BuyInMin) {
-      filteredList = filteredList.filter((item) => Number(item.BuyIn) >= selectedFilters.BuyInMin);
+    if (selectedFilters.MinBuyIn) {
+      filteredList = filteredList.filter((item) => Number(item.BuyIn) >= selectedFilters.MinBuyIn);
     }
-    if (selectedFilters.BuyInMax) {
-      filteredList = filteredList.filter((item) => Number(item.BuyIn) <= selectedFilters.bByInMax);
+    if (selectedFilters.MaxBuyIn) {
+      filteredList = filteredList.filter((item) => Number(item.BuyIn) <= selectedFilters.MaxBuyIn);
     }
     if (selectedFilters.PrizePoolMin) {
-      filteredList = filteredList.filter((item) => Number(item.PrizePool) >= selectedFilters.prizePoolMin);
+      filteredList = filteredList.filter((item) => Number(item.PrizePool) >= selectedFilters.PrizePoolMin);
     }
     if (selectedFilters.PrizePoolMax) {
       filteredList = filteredList.filter((item) => Number(item.PrizePool) <= selectedFilters.PrizePoolMax);
@@ -98,6 +96,9 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
     if (selectedFilters.EndTime) {
       filteredList = filteredList.filter((item) => item.end === selectedFilters.EndTime);
     }
+    if (selectedFilters.Priority) {
+      filteredList = filteredList.filter((item) => item.priority === selectedFilters.Priority);
+    }
 
     setOrderList(filteredList);
     closeModal();
@@ -115,7 +116,7 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
           {Array.isArray(filters) && filters.length > 0 ? (
             filters.map((filter) => (
               <option key={filter.$id} value={filter.$id}>
-                {filter.NameFilter} {/* Exibe o nome do filtro */}
+                {filter.NameFilter}
               </option>
             ))
           ) : (
@@ -131,7 +132,7 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
           Cancel
         </button>
       </div>
-      {error && <div className={styles.error}>{error}</div>} {/* Exibe o erro, se houver */}
+      {error && <div className={styles.error}>{error}</div>}
     </div>
   );
 };

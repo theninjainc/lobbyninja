@@ -7,7 +7,7 @@ import select from "../../assets/selectSite.svg";
 import save from "../../assets/save.svg";
 import SaveMoreFilters from "../SaveMoreFilters/SaveMoreFilters";
 //imgSites
-const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email }) => {
   // Estados para todos os filtros
   const [network, setNetwork] = useState();
   const [buyInMin, setBuyInMin] = useState();
@@ -152,12 +152,41 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList }) => {
   return (
     <>
       {saveFilterIsOpen && (
-        <SaveMoreFilters close={() => setSaveFilterIsOpen(false)} />
+        <SaveMoreFilters
+          close={() => setSaveFilterIsOpen(false)}
+          activeFilters={{
+            selectedSite: network,
+            buyInMin,
+            buyInMax,
+            fromTime,
+            toTime,
+            registeringFromTime,
+            registeringToTime,
+            prizePoolMin,
+            prizePoolMax,
+            excludeWords,
+            participantsMin,
+            participantsMax,
+            tableSize,
+            blindsMin,
+            blindsMax,
+            priority,
+            endTime,
+            dayOfWeek,
+            reEntry,
+            speed,
+            game,
+            variant,
+            maxAbility,
+            maxLate,
+            includeClosed,
+          }}
+          email={email}
+        />
       )}
       <div
-        className={`${styles.moreFilters} ${
-          saveFilterIsOpen === true ? styles.blur : styles.noBlur
-        }`}
+        className={`${styles.moreFilters} ${saveFilterIsOpen === true ? styles.blur : styles.noBlur
+          }`}
       >
         <div className={styles.title}>
           <p>Filters</p>{" "}
