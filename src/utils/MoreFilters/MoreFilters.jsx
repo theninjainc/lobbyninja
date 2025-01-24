@@ -26,6 +26,8 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
   const [registeringToTime, setRegisteringToTime] = useState("");
   const [prizePoolMin, setPrizePoolMin] = useState();
   const [prizePoolMax, setPrizePoolMax] = useState();
+  const [priorityMin, setPriorityMin] = useState();
+  const [priorityMax, setPriorityMax] = useState();
   const [excludeWords, setExcludeWords] = useState("");
   const [participantsMin, setParticipantsMin] = useState();
   const [participantsMax, setParticipantsMax] = useState();
@@ -35,7 +37,7 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
   const [priority, setPriority] = useState();
   const [endTime, setEndTime] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("All");
-  const [reEntry, setReEntry] = useState("allowed");
+  const [reEntry, setReEntry] = useState("");
   const [speed, setSpeed] = useState(null);
   const [game, setGame] = useState("any");
   const [variant, setVariant] = useState("any");
@@ -353,46 +355,40 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
         <div className={styles.tableSize}>
           <label>Table Size</label>
           <div>
-            <button onClick={() => setTableSize()}>Any</button>
-            <button onClick={() => setTableSize(4)}>7to10(Full Ring)</button>
-            <button onClick={() => setTableSize(3)}>6-Max</button>
-            <button onClick={() => setTableSize(2)}>3-5</button>
-            <button onClick={() => setTableSize(1)}>2(HU)</button>
-          </div>
-        </div>
-
-        <div className={styles.blinds}>
-          <label>Blinds</label>
-          <div>
-            <input
-              type="number"
-              value={blindsMin}
-              onChange={(e) => setBlindsMin(e.target.value)}
-              placeholder="Min"
-            />
-            <input
-              type="number"
-              value={blindsMax}
-              onChange={(e) => setBlindsMax(e.target.value)}
-              placeholder="Max"
-            />
+            <button onClick={() => setTableSize()}
+              className={tableSize == null ? styles.active : ""}
+            >Any</button>
+            <button onClick={() => setTableSize(4)}
+              className={tableSize === 4 ? styles.active : ""}
+            >7to10(Full Ring)</button>
+            <button onClick={() => setTableSize(3)}
+              className={tableSize === 3 ? styles.active : ""}
+            >6-Max</button>
+            <button onClick={() => setTableSize(2)}
+              className={tableSize === 2 ? styles.active : ""}
+            >3-5</button>
+            <button onClick={() => setTableSize(1)}
+              className={tableSize === 1 ? styles.active : ""}
+            >2(HU)</button>
           </div>
         </div>
 
         <div className={styles.priority}>
           <label>Priority</label>
-          <select
-            value={priority}
-            onChange={(e) => setPriority(Number(e.target.value))}
-          >
-            <option value="">Choose Priority</option>
-            {[...Array(10)].map((_, index) => (
-              <option key={index} value={index + 1}>
-                {index + 1}
-              </option>
-            ))}
-          </select>
-          <img src={select} alt="Select icon" className={styles.selectIcon} />
+          <div>
+            <input
+              type="number"
+              value={priorityMin}
+              onChange={(e) => setPriorityMin(e.target.value)}
+              placeholder="Min"
+            />
+            <input
+              type="number"
+              value={priorityMax}
+              onChange={(e) => setPriorityMax(e.target.value)}
+              placeholder="Max"
+            />
+          </div>
         </div>
         {console.log(priority)}
         <div className={styles.endTime}>
@@ -494,51 +490,10 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
             </button>
           </div>
         </div>
-        <div className={styles.game}>
-          <label>Game</label>
-          <div>
-            <button
-              onClick={() => setGame("any")}
-              className={game === "any" ? styles.active : ""}
-            >
-              Any
-            </button>
-            <button
-              onClick={() => setGame("nlh")}
-              className={game === "nlh" ? styles.active : ""}
-            >
-              NLH
-            </button>
-            <button
-              onClick={() => setGame("plo4")}
-              className={game === "plo4" ? styles.active : ""}
-            >
-              PLO4
-            </button>
-            <button
-              onClick={() => setGame("plo5")}
-              className={game === "plo5" ? styles.active : ""}
-            >
-              PLO5
-            </button>
-            <button
-              onClick={() => setGame("plo6")}
-              className={game === "plo6" ? styles.active : ""}
-            >
-              PLO6
-            </button>
-          </div>
-        </div>
 
         <div className={styles.variant}>
           <label>Variant</label>
           <div>
-            <button
-              onClick={() => setVariant("any")}
-              className={variant === "any" ? styles.active : ""}
-            >
-              Any
-            </button>
             <button
               onClick={() => setVariant("regular")}
               className={variant === "regular" ? styles.active : ""}
@@ -554,54 +509,6 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
           </div>
         </div>
 
-        <div className={styles.maxAbility}>
-          <label>Max Ability</label>
-          <div>
-            <input
-              type="number"
-              value={maxAbility}
-              onChange={(e) => setMaxAbility(e.target.value)}
-            />
-            <div className={styles.maxAbilityRange}>
-              <span>0</span>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={maxAbility}
-                onChange={(e) => setMaxAbility(e.target.value)}
-                style={{
-                  "--value": `${maxAbility}%`,
-                }}
-              />
-              <span>100</span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.maxLate}>
-          <label>Max Late</label>
-          <div>
-            <input
-              type="checkbox"
-              checked={maxLate}
-              onChange={() => setMaxLate(!maxLate)}
-            />
-            <span>Only max late tournaments</span>
-          </div>
-        </div>
-
-        <div className={styles.includeClosed}>
-          <label>Include Closed</label>
-          <div>
-            <input
-              type="checkbox"
-              checked={includeClosed}
-              onChange={() => setIncludeClosed(!includeClosed)}
-            />
-            <span>Include closed tournaments</span>
-          </div>
-        </div>
         <div className={styles.modalActions}>
           <button className={styles.saveBtn} onClick={toggleOpenSaveFilter}>
             <img src={save} alt="SaveIcon" className={styles.saveIcon} />

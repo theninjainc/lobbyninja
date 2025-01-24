@@ -1,4 +1,4 @@
-.size{
+.size {
     width: 199px;
     height: 94px;
     background-color: #191934;
@@ -9,7 +9,7 @@
     border-radius: 10px;
 }
 
-.size button{
+.size button {
     border-radius: 44px;
     border: 1px solid rgb(255, 255, 255, 0.21);
     background-color: transparent;
@@ -18,32 +18,37 @@
     cursor: pointer;
 }
 
-.size button:hover{
-    background: radial-gradient(circle at top,#BBA5F4, #5F33D6);
+.selectedButton {
+    background: radial-gradient(circle at top, #BBA5F4, #5F33D6);
+    color: white;
+}
+
+.size button:hover {
+    background: radial-gradient(circle at top, #BBA5F4, #5F33D6);
 
 }
 
-.firstButton{
+.firstButton {
     width: 43px;
     height: 32px;
 }
 
-.secondButton{
+.secondButton {
     width: 49px;
     height: 32px;
 }
 
-.thirdButton{
+.thirdButton {
     width: 43px;
     height: 32px;
 }
 
-.fourthButton{
+.fourthButton {
     width: 64px;
     height: 32px;
 }
 
-.size div{
+.size div {
     margin: 10px 16px 10px 16px;
 
 }

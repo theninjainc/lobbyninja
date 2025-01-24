@@ -134,7 +134,7 @@ const Favourites = () => {
     return (
         <div className={styles.main}>
             <div className={styles.navbar}>
-                <p className={styles.title}>Tournament favourites</p>
+                <p className={styles.title}>Tournament favorites</p>
             </div>
             <div className={styles.filterbar}>
                 <input type="checkbox" className={styles.filterCheckbox} />

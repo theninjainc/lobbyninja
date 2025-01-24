@@ -10,7 +10,7 @@ const {
     linkLobbyToUser,
 } = require('../repositories/lobbyRepository');
 
-const getLobbysByStates = async (email, states) => {
+const  getLobbysByStates = async (email, states) => {
     try {
         let lobbys = [];
 

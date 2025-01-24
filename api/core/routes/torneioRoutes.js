@@ -10,7 +10,7 @@ const {
     saveFilter,
     applyFilter,
 } = require("../controllers/torneioController");
-const { getLobbysByState } = require("../repositories/lobbyRepository");
+const { getLobbysGeral } = require("../repositories/lobbyRepository");
 
 const router = express.Router();
 
@@ -46,13 +46,13 @@ router.get("/api/activeTournaments", async (req, res) => {
     };
 
     try {
-        const email = "emersin7x@gmail.com";
+        const email = "usuario@exemplo.com";
         const states = ["favourite", "registered", "skipped", "deleted", "alarm"];
 
         // Função para carregar lobbys por estados
         const loadLobbys = async () => {
             const lobbys = (
-                await Promise.all(states.map((state) => getLobbysByState(email, state)))
+                await Promise.all(states.map((state) => getLobbysGeral(email, state)))
             ).flat();
             return lobbys;
         };
@@ -107,16 +107,19 @@ router.get("/api/activeTournaments", async (req, res) => {
                     const hash = crypto.createHash("md5");
                     const idString = `${tournament["@name"]}-${tournament["@network"]}-${tournamentStart.toUTCString()}`;
                     const id = hash.update(idString).digest("hex");
+                    
+                    const teste = lobbys.find((lobby) => lobby.$id == "2ed8a0c12eddf41a6b8392b42adaa975");
+                    if (teste)
+                        console.log("Tem!")
 
-                    // Buscar o lobby correspondente e logar prioridade
-                    const matchedLobby = lobbys.find((lobby) => lobby.$id === id);
+                    const matchedLobby = lobbys.find((lobby) => lobby.$id == id);
                     if (matchedLobby) {
-                        console.log(matchedLobby.priority);
+                        console.log("PQ VC ESTÁ RINDO?", matchedLobby.priority);
                     }
                     return {
                         ID: id,
                         Site: tournament["@network"],
-                        Start: tournamentStart.toUTCString(), // Garantir UTC na data de início
+                        Start: tournamentStart.toUTCString(),
                         BuyIn: `${buyIn}`,
                         Name: tournament["@name"],
                         PrizePool: prizePool,
@@ -151,7 +154,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                 )
                 .map((lobby) => lobby.$id)
         );
-        const lobbysWithPriority = lobbys.filter((lobby) => lobby.priority != null);
+        const lobbysWithPriority = lobbys.filter((lobby) => lobby.priority > 0);
 
         console.log(`Número de lobbys com prioridade: ${lobbysWithPriority.length}`);
 

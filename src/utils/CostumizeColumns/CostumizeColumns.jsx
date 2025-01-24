@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import styles from "./CostumizeColumns.module.css";
 import exit from "../../assets/exit.svg";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import draggable from "../../assets/draggable.svg";
+import closeDraggable from "../../assets/closeDraggable.svg";
 
 const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
   const [modalIsOpen, setModalIsOpen] = useState(isOpen);
@@ -43,10 +45,8 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
 
   const handleCheckboxChange = (column) => {
     if (selectedColumns.includes(column)) {
-      // Se já está selecionado, remover do `selectedColumns` e adicionar em `unselectedColumns`
       setSelectedColumns(selectedColumns.filter((col) => col !== column));
     } else {
-      // Adicionar ao selecionado e remover do não-selecionado
       setSelectedColumns([...selectedColumns, column]);
     }
   };
@@ -64,6 +64,10 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
   const unselectedColumns = localColumns.filter(
     (column) => !selectedColumns.includes(column)
   );
+
+  const handleRemoveColumn = (column) => {
+    setSelectedColumns(selectedColumns.filter((col) => col !== column));
+  };  
 
   if (modalIsOpen) {
     return (
@@ -92,6 +96,7 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
             </div>
           </div>
           <div className={styles.selectedColumns}>
+            <span>Selected Columns</span>
             <DragDropContext onDragEnd={handleDragEnd}>
               <Droppable droppableId="columns">
                 {(provided) => (
@@ -104,13 +109,20 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
                       <Draggable key={column} draggableId={column} index={index}>
                         {(provided) => (
                           <div
-                            className={styles.checkboxColumns}
+                            className={styles.checkboxColumnsSelected}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <input type="checkbox" checked={true} disabled />
-                            {column}
+                            <div>
+                              <img src={draggable} alt="Drag" />
+                              {column}
+                            </div>
+                            <img
+                              src={closeDraggable}
+                              alt="Remove"
+                              onClick={() => handleRemoveColumn(column)}
+                            />
                           </div>
                         )}
                       </Draggable>

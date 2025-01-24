@@ -38,11 +38,12 @@ const saveFilterToDB = async (email, filters) => {
         );
         console.log("passei daqui")
         console.log(user.$id)
+        const updatedLobby = user.filters ? [...user.filters, filterDocument.$id] : [filterDocument.$id];
         const updatedUser = await databases.updateDocument(
             DATABASE_ID,
             USER_COLLECTION_ID,
             user.$id,
-            { filters: [filterDocument.$id] }
+            { filters: updatedLobby }
         );
         console.log("Deu certo")
         return updatedUser;
@@ -56,7 +57,7 @@ const getFiltersByEmail = async (email) => {
     try {
         // Busca o documento do usuário pelo e-mail
         const userList = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID, [
-            Query.equal("email", email) // Filtra pelo campo "email"
+            Query.equal("email", email)
         ]);
 
         if (userList.documents.length === 0) {

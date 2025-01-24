@@ -15,7 +15,6 @@ const getLobbysByState = async (email, state) => {
             sdk.Query.equal("email", email),
         ]);
 
-        console.log("Opaaaa", usersResponse)
 
         if (usersResponse.documents.length === 0) {
             throw new Error("Usuário não encontrado.");
@@ -24,12 +23,35 @@ const getLobbysByState = async (email, state) => {
         // 2. Obtém o primeiro usuário encontrado
         const user = usersResponse.documents[0];
 
-        console.log(user.lobby)
-        console.log(user.lobby.filter(lobby => lobby[state] === true))
+        const filteredLobbys = user.lobby
+            ? user.lobby.filter(lobby => lobby[state] === true)
+            : [];
+        return filteredLobbys;
+    } catch (error) {
+        throw new Error("Erro ao buscar lobbys pelo estado: " + error.message);
+    }
+};
+
+const getLobbysGeral = async (email, state) => {
+    try {
+        // 1. Busca o usuário pelo e-mail
+        console.log(email, state)
+        const usersResponse = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID, [
+            sdk.Query.equal("email", email),
+        ]);
+
+
+        if (usersResponse.documents.length === 0) {
+            throw new Error("Usuário não encontrado.");
+        }
+
+        // 2. Obtém o primeiro usuário encontrado
+        const user = usersResponse.documents[0];
+
+        console.log(user.lobby.map((lobby) => lobby.$id))
         const filteredLobbys = user.lobby
             ? user.lobby.filter(lobby => lobby[state] === true || lobby.priority) // Filtro baseado no estado (favourite, registered, skipped, deleted)
             : [];
-
         return filteredLobbys;
     } catch (error) {
         throw new Error("Erro ao buscar lobbys pelo estado: " + error.message);
@@ -133,7 +155,8 @@ const createLobby = async (
     priority
 ) => {
     try {
-        // Converte valores para os tipos corretos
+        // Converte valores para os tipos 
+        console.log("TESTE", ID);
         buyIn = parseFloat(buyIn);
         jogadoresInscritos = parseFloat(jogadoresInscritos);
         jogadoresJogando = parseFloat(jogadoresJogando);
@@ -261,4 +284,5 @@ module.exports = {
     findUserByEmail,
     linkLobbyToUser,
     getLobbysByState,
+    getLobbysGeral,
 };

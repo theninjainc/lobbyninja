@@ -1,18 +1,35 @@
 /* eslint-disable react/prop-types */
 import styles from "./selectSite.module.css";
 
-const SelectSite = ({ isOpen, setSelectedSite, siteData }) => {
+const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
+  const toggleSiteSelection = (site) => {
+    setSelectedSites((prev) => {
+      if (prev.some((selected) => selected.network === site.network)) {
+        // Se já estiver selecionado, remove
+        return prev.filter((selected) => selected.network !== site.network);
+      } else {
+        // Adiciona o site à seleção
+        return [...prev, site];
+      }
+    });
+  };
+
   if (isOpen) {
     return (
       <div className={styles.selectSiteModal}>
         {siteData.map((item, index) => {
+          const isSelected = selectedSites.some(
+            (selected) => selected.network === item.network
+          );
+
           return (
             <div
               key={index}
-              className={styles.card}
-              onClick={() => setSelectedSite(item)}
+              className={`${styles.card} ${isSelected ? styles.selected : ""
+                }`}
+              onClick={() => toggleSiteSelection(item)}
             >
-              <img src={item.image} alt={`Site ${item.Site}`} />
+              <img src={item.image} alt={`Site ${item.network}`} />
               <p>{item.network}</p>
             </div>
           );

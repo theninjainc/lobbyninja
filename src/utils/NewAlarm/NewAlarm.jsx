@@ -26,7 +26,7 @@ const NewAlarm = ({ isOpen, onClose }) => {
     const intervalId = setInterval(() => {
       setDate(getFormattedDate());
     }, 60000);
-    return () => clearInterval(intervalId); // Limpa o intervalo ao desmontar o componente
+    return () => clearInterval(intervalId);
   }, []);
 
   const [isToggled, setIsToggled] = useState(false);
@@ -129,10 +129,6 @@ const NewAlarm = ({ isOpen, onClose }) => {
         </div>
         {showMoreOptions && (
           <div className="more-options">
-            <div className={styles.priority}>
-              <label htmlFor="">Priority</label>
-              <button>Low</button>
-            </div>
             <div className={styles.comment}>
               <label>Comment</label>
               <textarea
