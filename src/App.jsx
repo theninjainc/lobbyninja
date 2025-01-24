@@ -32,7 +32,7 @@ function App() {
       console.log("Usuário autenticado:", user);
       setIsAuthenticated(true); // Atualiza o estado para indicar que o usuário está autenticado
     } catch (error) {
-      localStorage.setItem("cookieFallback", "")
+      localStorage.removeItem("cookieFallback");
       console.error("Erro na validação do token:", error);
       setIsAuthenticated(false); // Caso não esteja autenticado, indica no estado
       setToken(""); // Opcional: Limpa o token inválido do estado

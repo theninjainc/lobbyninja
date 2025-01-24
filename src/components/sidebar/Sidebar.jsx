@@ -21,7 +21,7 @@ const Sidebar = () => {
   const links = [
     { to: "/dashboard", icon: tournaments, label: "Tournaments" },
     //{ to: "/planner", icon: planner, label: "Planner" },
-    { to: "/favourites", icon: favourites, label: "Favourites" },
+    { to: "/favourites", icon: favourites, label: "Favorites" },
     { to: "/registered", icon: registered, label: "Registered" },
     { to: "/skipped", icon: skipped, label: "Skipped" },
     { to: "/alarm", icon: alarm, label: "Alarm" },

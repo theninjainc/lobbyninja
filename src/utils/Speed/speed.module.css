@@ -22,6 +22,11 @@
  cursor: pointer;
 }
 
+.cardSpeed.selected {
+    border-color: #0b0b21;
+    background-color: #0b0b21;
+  }
+
 .cardSpeed:hover{
     background: #0b0b21;
     border-radius: 3px;

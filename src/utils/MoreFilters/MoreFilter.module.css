@@ -195,7 +195,7 @@
   margin-right: 19px;
   margin-bottom: 35px;
 }
-.participants div {
+.participants div, .priority div {
   display: flex;
   justify-content: space-between;
 }

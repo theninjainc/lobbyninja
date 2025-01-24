@@ -166,7 +166,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
+        "http://localhost:3000/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -257,7 +257,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -290,20 +290,19 @@ const Main = () => {
   const getPaginatedOrders = () => {
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const endIndex = currentPage * PAGE_SIZE;
-    console.log(orderList[0]);
+    console.log(orderList.slice(startIndex, endIndex)); // Debug para verificar
     return orderList.slice(startIndex, endIndex);
   };
 
+  // Cálculo do total de páginas
   const totalPages = Math.ceil(orderList.length / PAGE_SIZE);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
+  // Função para trocar de página
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
 
+  // Função para gerar os números das páginas
   const getPageNumbers = () => {
     const pageNumbers = [];
     let start = Math.max(1, currentPage - 5);
@@ -318,6 +317,12 @@ const Main = () => {
 
     return pageNumbers;
   };
+
+  // Efeito para buscar os dados ao carregar o componente
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
 
   const allFilters = [
     "Site",
@@ -413,15 +418,17 @@ const Main = () => {
   const [allowedFilters, setAllowedFilters] = useState();
 
   const orderedListPrizePool = () => {
-    const newListPrizePool = [...orderList];
-    newListPrizePool.sort((a, b) =>
-      orderPrizePool === "asc"
-        ? a.PrizePool - b.PrizePool
-        : b.PrizePool - a.PrizePool
-    );
+    setOrderPrizePool((prevOrder) => {
+      const nextOrder = prevOrder === "asc" ? "desc" : "asc";
+      const newListPrizePool = [...orderList];
 
-    setOrderList(newListPrizePool);
-    setOrderPrizePool(orderPrizePool === "asc" ? "desc" : "asc");
+      newListPrizePool.sort((a, b) =>
+        nextOrder === "asc" ? a.PrizePool - b.PrizePool : b.PrizePool - a.PrizePool
+      );
+      console.log(newListPrizePool)
+      setOrderList(newListPrizePool);
+      return nextOrder;
+    });
   };
 
   const orderedListSpeed = () => {
@@ -460,17 +467,19 @@ const Main = () => {
     const newOrderStartFilter = orderStartFilter === "asc" ? "desc" : "asc";
 
     newListStart.sort((a, b) => {
-      const timeA = new Date(a.Start).getTime();
-      const timeB = new Date(b.Start).getTime();
+      const [hoursA, minutesA] = a.Start.split(":").map(Number);
+      const [hoursB, minutesB] = b.Start.split(":").map(Number);
+
+      const timeA = hoursA * 60 + minutesA;
+      const timeB = hoursB * 60 + minutesB;
 
       return newOrderStartFilter === "asc" ? timeA - timeB : timeB - timeA;
     });
 
-    console.log();
-
     setOrderStartFilter(newOrderStartFilter);
     setOrderList(newListStart);
   };
+
 
   const orderedListSite = () => {
     const newListSite = [...orderList];
@@ -640,8 +649,8 @@ const Main = () => {
       className: styles.filterPrizePoolBtn,
       isActive: activeFilter === "filterPrizePoolBtn",
       onClick: () => {
-        orderedListPrizePool();
         handleFilterClick("filterPrizePoolBtn");
+        orderedListPrizePool();
       },
     },
     {
@@ -721,9 +730,9 @@ const Main = () => {
   const [searchNameTournaments, setSearchNameTournaments] = useState("");
   const [minBuyIn, setMinBuyIn] = useState();
   const [maxBuyIn, setMaxBuyIn] = useState();
-  const [selectedSite, setSelectedSite] = useState();
-  const [selectedSpeed, setSelectedSpeed] = useState();
-  const [selectedSize, setSelectedSize] = useState();
+  const [selectedSites, setSelectedSites] = useState([]);
+  const [selectedSpeed, setSelectedSpeed] = useState([]);
+  const [selectedSize, setSelectedSize] = useState([]);
   const [isPriorityOpen, setIsPriorityOpen] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState(null);
   const sizeRef = useRef(null);
@@ -786,42 +795,39 @@ const Main = () => {
     }
 
     // Filtro por site
-    if (selectedSite) {
+    if (selectedSites.length > 0) {
       filteredList = filteredList.filter((item) =>
-        item.Site.includes(selectedSite.network)
+        selectedSites.some((site) => item.Site.includes(site.network))
       );
     }
 
     // Filtro por velocidade
-    if (selectedSpeed) {
-      filteredList = filteredList.filter(
-        (item) => item.Speed === selectedSpeed
+    if (selectedSpeed.length > 0) {
+      filteredList = filteredList.filter((item) =>
+        selectedSpeed.includes(item.Speed)
       );
     }
 
     // Filtro por tamanho da mesa
-    if (selectedSize) {
-      switch (selectedSize) {
-        case 1:
-          filteredList = filteredList.filter((item) => item.TableSize == 2);
-          break;
-        case 2:
-          filteredList = filteredList.filter(
-            (item) => item.TableSize >= 3 && item.TableSize <= 5
-          );
-          break;
-        case 3:
-          filteredList = filteredList.filter((item) => item.TableSize == 6);
-          break;
-        case 4:
-          filteredList = filteredList.filter(
-            (item) => item.TableSize >= 7 && item.TableSize <= 10
-          );
-          break;
-        default:
-          break;
-      }
+    if (selectedSize.length > 0) {
+      filteredList = filteredList.filter((item) => {
+        return selectedSize.some((size) => {
+          switch (size) {
+            case 1:
+              return item.TableSize === 2;
+            case 2:
+              return item.TableSize >= 3 && item.TableSize <= 5;
+            case 3:
+              return item.TableSize === 6;
+            case 4:
+              return item.TableSize >= 7 && item.TableSize <= 10;
+            default:
+              return false;
+          }
+        });
+      });
     }
+
 
     console.log("Lista final filtrada:", filteredList);
 
@@ -834,7 +840,7 @@ const Main = () => {
     searchNameTournaments,
     minBuyIn,
     maxBuyIn,
-    selectedSite,
+    selectedSites,
     selectedSpeed,
     selectedSize,
     activeFilter,
@@ -884,7 +890,7 @@ const Main = () => {
             searchNameTournaments,
             minBuyIn,
             maxBuyIn,
-            selectedSite,
+            selectedSites,
             selectedSpeed,
             selectedSize,
           }}
@@ -952,20 +958,26 @@ const Main = () => {
                 id="search"
               />
             </label>
-            <label htmlFor="site" className={styles.labelSelectSite} ref={siteRef}>
+            <label htmlFor="site" className={styles.labelSelectSite}>
               <button
                 name="site"
                 id="site"
                 className={styles.selectSite}
                 onClick={() => toggleOpen(true)}
               >
-                {selectedSite ? (
+                {selectedSites.length > 0 ? (
                   <div className={styles.selectedSite}>
-                    <img
-                      src={selectedSite.image}
-                      alt={`Site ${selectedSite.network}`}
-                    />
-                    <p>{selectedSite.network}</p>
+                    {selectedSites.length === 1 ? (
+                      <>
+                        <img
+                          src={selectedSites[0].image}
+                          alt={`Site ${selectedSites[0].network}`}
+                        />
+                        <p>{selectedSites[0].network}</p>
+                      </>
+                    ) : (
+                      `${selectedSites.length} sites selected`
+                    )}
                   </div>
                 ) : (
                   "Select Site"
@@ -973,8 +985,9 @@ const Main = () => {
               </button>
               <SelectSite
                 isOpen={isOpen}
-                setSelectedSite={setSelectedSite}
+                setSelectedSites={setSelectedSites}
                 siteData={siteData}
+                selectedSites={selectedSites}
               />
             </label>
             <div className={styles.maxMinSearch}>
@@ -984,7 +997,7 @@ const Main = () => {
                   type="number"
                   id="min-value"
                   name="min-value"
-                  placeholder="Type..."
+                  placeholder=""
                   onChange={(e) => {
                     setMinBuyIn(e.target.value);
                   }}
@@ -999,7 +1012,7 @@ const Main = () => {
                   type="number"
                   id="max-value"
                   name="max-value"
-                  placeholder="Type..."
+                  placeholder=""
                   onChange={(e) => {
                     setMaxBuyIn(e.target.value);
                   }}
@@ -1014,32 +1027,9 @@ const Main = () => {
                 className={styles.selectSpeed}
                 onClick={() => toggleOpenSpeed(true)}
               >
-                {selectedSpeed ? (
+                {selectedSpeed.length > 0 ? (
                   <div className={styles.selectedSpeed}>
-                    <img
-                      src={
-                        selectedSpeed === 1
-                          ? slow
-                          : selectedSpeed === 2
-                            ? regular
-                            : selectedSpeed === 3
-                              ? turbo
-                              : selectedSpeed === 4
-                                ? hyper
-                                : null
-                      }
-                    ></img>
-                    <p>
-                      {selectedSpeed === 1
-                        ? "Slow"
-                        : selectedSpeed === 2
-                          ? "Regular"
-                          : selectedSpeed === 3
-                            ? "Turbo"
-                            : selectedSpeed === 4
-                              ? "Hyper"
-                              : null}
-                    </p>
+                    <p>{`${selectedSpeed.length} speed selected`}</p>
                   </div>
                 ) : (
                   "Speed"
@@ -1048,6 +1038,7 @@ const Main = () => {
               <Speed
                 isOpenSpeed={isOpenSpeed}
                 setSelectedSpeed={setSelectedSpeed}
+                selectedSpeed={selectedSpeed}
               />
             </label>
             <label htmlFor="size" className={styles.labelSelectSize} ref={sizeRef}>
@@ -1057,24 +1048,21 @@ const Main = () => {
                 className={styles.selectSize}
                 onClick={() => toggleOpenSize(true)}
               >
-                {selectedSize ? (
+                {selectedSize.length > 0 ? (
                   <p className={styles.searchSizeBtn}>
-                    {selectedSize === 1
-                      ? "2"
-                      : selectedSize === 2
-                        ? "3-5"
-                        : selectedSize === 3
-                          ? "6"
-                          : selectedSize === 4
-                            ? "7 to 10"
-                            : null}
+                    {`${selectedSize.length} size selected`}
                   </p>
                 ) : (
                   "Size"
                 )}
               </button>
-              <Size isOpenSize={isOpenSize} setSelectedSize={setSelectedSize} />
+              <Size
+                isOpenSize={isOpenSize}
+                setSelectedSize={setSelectedSize}
+                selectedSize={selectedSize}
+              />
             </label>
+
             <button
               className={styles.searchBtn}
               onClick={() => {
@@ -1500,5 +1488,4 @@ const Main = () => {
     </body>
   );
 };
-
 export default Main;

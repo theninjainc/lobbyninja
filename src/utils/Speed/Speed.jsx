@@ -5,55 +5,36 @@ import hyper from "../../assets/hyper.svg";
 import turbo from "../../assets/turbo.svg";
 
 // eslint-disable-next-line react/prop-types
-const Speed = ({ isOpenSpeed, setSelectedSpeed }) => {
+const Speed = ({ isOpenSpeed, setSelectedSpeed, selectedSpeed }) => {
   if (isOpenSpeed) {
     const data = [
-      {
-        speed: 1,
-      },
-      {
-        speed: 2,
-      },
-      {
-        speed: 3,
-      },
-      {
-        speed: 4,
-      },
+      { speed: 1, label: "Slow", image: slow },
+      { speed: 2, label: "Regular", image: regular },
+      { speed: 3, label: "Turbo", image: turbo },
+      { speed: 4, label: "Hyper", image: hyper },
     ];
+
+    const toggleSpeedSelection = (speed) => {
+      setSelectedSpeed((prev) => {
+        // Se o speed já estiver selecionado, removemos, senão adicionamos
+        if (prev.includes(speed)) {
+          return prev.filter((item) => item !== speed);
+        } else {
+          return [...prev, speed];
+        }
+      });
+    };
 
     return (
       <div className={styles.speed}>
-        {data.map((item, index) => (
+        {data.map((item) => (
           <div
-            key={index}
-            className={styles.cardSpeed}
-            onClick={() => setSelectedSpeed(item.speed)}
+            key={item.speed}
+            className={`${styles.cardSpeed} ${selectedSpeed.includes(item.speed) ? styles.selected : ""}`}
+            onClick={() => toggleSpeedSelection(item.speed)}
           >
-            <img
-              src={
-                item.speed === 1
-                  ? slow
-                  : item.speed === 2
-                  ? regular
-                  : item.speed === 3
-                  ? turbo
-                  : item.speed === 4
-                  ? hyper
-                  : null
-              }
-            />
-            <p>
-              {item.speed === 1
-                ? "Slow"
-                : item.speed === 2
-                ? "Regular"
-                : item.speed === 3
-                ? "Turbo"
-                : item.speed === 4
-                ? "Hyper"
-                : null}
-            </p>
+            <img src={item.image} alt={item.label} />
+            <p>{item.label}</p>
           </div>
         ))}
       </div>
