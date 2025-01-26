@@ -80,11 +80,11 @@ router.get("/api/activeTournaments", async (req, res) => {
             const today = new Date();
             const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
 
+            console.log(tournamentsData)
             return tournamentsData
                 .map((tournament) => {
                     const tournamentStartTimestamp = parseInt(tournament["@scheduledStartDate"]) * 1000;
                     const tournamentStart = new Date(tournamentStartTimestamp);
-
                     // Criar a data UTC comparável para hoje e para o torneio
                     const tournamentStartUTC = new Date(Date.UTC(
                         tournamentStart.getUTCFullYear(),
@@ -100,8 +100,8 @@ router.get("/api/activeTournaments", async (req, res) => {
                     }
 
                     // Calcular Buy-In e Prize Pool
-                    const buyIn = parseInt(tournament["@stake"]) + parseInt(tournament["@rake"]);
-                    const prizePool = parseInt(tournament["@guarantee"]);
+                    const buyIn = parseFloat(tournament["@stake"]) + parseFloat(tournament["@rake"]);
+                    const prizePool = (tournament["@guarantee"]);
 
                     // Gerar hash para ID único
                     const hash = crypto.createHash("md5");
@@ -120,7 +120,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                         ID: id,
                         Site: tournament["@network"],
                         Start: tournamentStart.toUTCString(),
-                        BuyIn: `${buyIn}`,
+                        BuyIn: `${buyIn.toFixed(2)}`,
                         Name: tournament["@name"],
                         PrizePool: prizePool,
                         MaxReentry: tournament["@flags"]?.includes("R") ? "Yes" : "No",

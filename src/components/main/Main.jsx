@@ -37,10 +37,6 @@ import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
 import past from "../../assets/past.png";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-import slow from "../../assets/Slow.svg";
-import regular from "../../assets/regular.svg";
-import hyper from "../../assets/hyper.svg";
-import turbo from "../../assets/turbo.svg";
 
 const PAGE_SIZE = 20;
 
@@ -412,7 +408,6 @@ const Main = () => {
   const [orderFieldFilter, setOrderFieldFilter] = useState("asc");
   const [orderSiteFilter, setOrderSiteFilter] = useState("asc");
   const [orderStartFilter, setOrderStartFilter] = useState("asc");
-  const [orderEndFilter, setOrderEndFilter] = useState("asc");
   const [orderSpeedFilter, setOrderSpeedFilter] = useState("asc");
   const [orderPrizePool, setOrderPrizePool] = useState("asc");
   const [allowedFilters, setAllowedFilters] = useState();
@@ -440,26 +435,6 @@ const Main = () => {
 
     setOrderList(newListSpeed);
     setOrderSpeedFilter(orderSpeedFilter === "asc" ? "desc" : "asc");
-  };
-
-  const orderedListEnd = () => {
-    const newListEnd = [...orderList];
-    const newOrderEndFilter = orderEndFilter === "asc" ? "desc" : "asc";
-
-    newListEnd.sort((a, b) => {
-      const hoursA = a.end.split(":").map(Number);
-      const hoursB = b.end.split(":").map(Number);
-
-      const minutesA = hoursA[0] * 60 + hoursA[1];
-      const minutesB = hoursB[0] * 60 + hoursB[1];
-
-      return newOrderEndFilter === "asc"
-        ? minutesA - minutesB
-        : minutesB - minutesA;
-    });
-
-    setOrderEndFilter(newOrderEndFilter);
-    setOrderList(newListEnd);
   };
 
   const orderedListStart = () => {
@@ -687,15 +662,6 @@ const Main = () => {
       onClick: () => {
         orderedListField();
         handleFilterClick("filterFieldBtn");
-      },
-    },
-    {
-      label: "End",
-      className: styles.filterEndBtn,
-      isActive: activeFilter === "filterEndBtn",
-      onClick: () => {
-        orderedListEnd();
-        handleFilterClick("filterEndBtn");
       },
     },
     {
@@ -1227,8 +1193,6 @@ const Main = () => {
                           (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
 
                         {filter === "Field" && (item.Field ? item.Field : "-")}
-
-                        {filter === "End" && (item.End ? item.End : "-")}
 
                         {filter === "Mlr" &&
                           (item.Start ? (
