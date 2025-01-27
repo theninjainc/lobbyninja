@@ -17,7 +17,7 @@ import siteChico from "../../assets/siteChico.svg";
 import siteBodog from "../../assets/siteBodog.svg";
 
 const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email }) => {
-  const [network, setNetwork] = useState();
+  const [network, setNetwork] = useState([]);
   const [buyInMin, setBuyInMin] = useState();
   const [buyInMax, setBuyInMax] = useState();
   const [fromTime, setFromTime] = useState("");
@@ -31,20 +31,23 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
   const [excludeWords, setExcludeWords] = useState("");
   const [participantsMin, setParticipantsMin] = useState();
   const [participantsMax, setParticipantsMax] = useState();
-  const [tableSize, setTableSize] = useState();
+  const [tableSize, setTableSize] = useState([]);
   const [blindsMin, setBlindsMin] = useState();
   const [blindsMax, setBlindsMax] = useState();
   const [priority, setPriority] = useState();
   const [endTime, setEndTime] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("All");
   const [reEntry, setReEntry] = useState("");
-  const [speed, setSpeed] = useState(null);
+  const [speed, setSpeed] = useState([]);
   const [game, setGame] = useState("any");
   const [variant, setVariant] = useState("any");
   const [maxAbility, setMaxAbility] = useState("20");
   const [maxLate, setMaxLate] = useState(false);
   const [includeClosed, setIncludeClosed] = useState(false);
   const [saveFilterIsOpen, setSaveFilterIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+
   const siteData = [
     { network: "888Poker", image: poker888 },
     { network: "WPN", image: siteWpn },
@@ -93,8 +96,11 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
     let filteredList = orderList;
 
     //funcionando
-    if (network) {
-      filteredList = filteredList.filter((item) => item.Site === network);
+    {
+      network.length > 0 &&
+        (filteredList = filteredList.filter((item) =>
+          network.includes(item.Site)
+        ))
     }
 
     //funcionando errado
@@ -123,36 +129,27 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
       );
     }
     //Funcionando
-    if (tableSize) {
-      switch (tableSize) {
-        case 1:
-          filteredList = filteredList.filter((item) => item.TableSize === 2);
-          break;
-        case 2:
-          filteredList = filteredList.filter(
-            (item) => item.TableSize >= 3 && item.TableSize <= 5
-          );
-          break;
-        case 3:
-          filteredList = filteredList.filter((item) => item.TableSize >= 6);
-          break;
-        case 4:
-          filteredList = filteredList.filter(
-            (item) => item.TableSize >= 7 && item.TableSize <= 10
-          );
-          break;
-        default:
-          filteredList;
-      }
+    if (tableSize && tableSize.length > 0) {
+      filteredList = filteredList.filter((item) => {
+        return tableSize.some((size) => {
+          switch (size) {
+            case 1:
+              return item.TableSize === 2;
+            case 2:
+              return item.TableSize >= 3 && item.TableSize <= 5;
+            case 3:
+              return item.TableSize == 6;
+            case 4:
+              return item.TableSize >= 7 && item.TableSize <= 10;
+            default:
+              return false;
+          }
+        });
+      });
     }
-    if (blindsMin) {
-      filteredList = filteredList.filter((item) => item.Blinds >= blindsMin);
-    }
-    if (blindsMax) {
-      filteredList = filteredList.filter((item) => item.Blinds <= blindsMax);
-    }
+
     if (priority) {
-      filteredList = filteredList.filter((item) => item.priority === priority);
+      filteredList = filteredList.filter((item) => item.Priority === priority);
     }
     //Funcionando
     if (reEntry === "allowed") {
@@ -160,19 +157,36 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
     } else if (reEntry === "notAllowed") {
       filteredList = filteredList.filter((item) => item.MaxReentry === "No");
     }
-    if (speed) {
-      filteredList = filteredList.filter((item) => item.speed === speed);
+
+    if (speed && speed.length > 0) {
+      console.log(speed)
+      filteredList = filteredList.filter((item) => speed.includes(item.Speed));
     }
+
     if (excludeWords) {
       filteredList = filteredList.filter(
         (item) => !item.Name.toLowerCase().includes(excludeWords)
       );
     }
-    if (endTime) {
-      filteredList = filteredList.filter((item) => item.end === endTime);
-    }
+
     setOrderList(filteredList);
     closeModal();
+  };
+
+  const handleOptionChange = (value) => {
+    setNetwork((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value) // Remove se já está selecionado
+        : [...prev, value] // Adiciona se não está selecionado
+    );
+  };
+
+  const handleTableSizeSelection = (size) => {
+    setTableSize((prev) =>
+      prev.includes(size)
+        ? prev.filter((item) => item !== size) // Remove se já está selecionado
+        : [...prev, size] // Adiciona se não está selecionado
+    );
   };
 
   return (
@@ -224,22 +238,31 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
 
         <div className={styles.network}>
           <label htmlFor="">Network</label>
-          <select
-            name="Network"
-            id=""
-            onChange={(e) => {
-              setNetwork(e.target.value);
-            }}
+          <div
+            className={styles.selectContainer}
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <option value="">Network</option>
-            {siteData.map((item, index) => (
-              <option key={index} value={item.network}>
-                {item.network}
-              </option>
-            ))}
-          </select>
+            <div className={styles.select}>
+              {network.length > 0 ? `${network.length} sites selected` : "Select networks"}
+              <img src={select} alt="Select icon" />
+            </div>
+            {isDropdownOpen && (
+              <div className={styles.dropdown}>
+                {siteData.map((item, index) => (
+                  <label key={index} className={styles.option} onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      value={item.network}
+                      checked={network.includes(item.network)}
+                      onChange={() => handleOptionChange(item.network)}
+                    />
+                    {item.network}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
           {console.log(network)}
-          <img src={select} alt="Select icon" className={styles.selectIcon} />
         </div>
         <div className={styles.buyIn}>
           <label>Buy In</label>
@@ -355,23 +378,39 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
         <div className={styles.tableSize}>
           <label>Table Size</label>
           <div>
-            <button onClick={() => setTableSize()}
-              className={tableSize == null ? styles.active : ""}
-            >Any</button>
-            <button onClick={() => setTableSize(4)}
-              className={tableSize === 4 ? styles.active : ""}
-            >7to10(Full Ring)</button>
-            <button onClick={() => setTableSize(3)}
-              className={tableSize === 3 ? styles.active : ""}
-            >6-Max</button>
-            <button onClick={() => setTableSize(2)}
-              className={tableSize === 2 ? styles.active : ""}
-            >3-5</button>
-            <button onClick={() => setTableSize(1)}
-              className={tableSize === 1 ? styles.active : ""}
-            >2(HU)</button>
+            <button
+              onClick={() => setTableSize([])} // Limpa todas as seleções
+              className={tableSize.length === 0 ? styles.active : ""}
+            >
+              Any
+            </button>
+            <button
+              onClick={() => handleTableSizeSelection(4)}
+              className={tableSize.includes(4) ? styles.active : ""}
+            >
+              7to10(Full Ring)
+            </button>
+            <button
+              onClick={() => handleTableSizeSelection(3)}
+              className={tableSize.includes(3) ? styles.active : ""}
+            >
+              6-Max
+            </button>
+            <button
+              onClick={() => handleTableSizeSelection(2)}
+              className={tableSize.includes(2) ? styles.active : ""}
+            >
+              3-5
+            </button>
+            <button
+              onClick={() => handleTableSizeSelection(1)}
+              className={tableSize.includes(1) ? styles.active : ""}
+            >
+              2(HU)
+            </button>
           </div>
         </div>
+
 
         <div className={styles.priority}>
           <label>Priority</label>
@@ -391,46 +430,6 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
           </div>
         </div>
         {console.log(priority)}
-        <div className={styles.endTime}>
-          <label>End Time</label>
-          <input
-            type="time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-          />
-          <img src={relogio} alt="ClockIcon" className={styles.relogio} />
-        </div>
-
-        <div className={styles.dayOfWeek}>
-          <label>Day of the Week</label>
-          <div>
-            <button value={"All"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              All
-            </button>
-            <button value={"Mon"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Mon
-            </button>
-            <button value={"Tue"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Tue
-            </button>
-            <button value={"Wed"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Wed
-            </button>
-            <button value={"Thu"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Thu
-            </button>
-            <button value={"Fri"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Fri
-            </button>
-            <button value={"Sat"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Sat
-            </button>
-            <button value={"Sun"} onClick={(e) => setDayOfWeek(e.target.value)}>
-              Sun
-            </button>
-          </div>
-        </div>
-
         <div className={styles.reEntry}>
           <label>Re-entry</label>
           <div>
@@ -459,37 +458,54 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
           <label>Speed</label>
           <div>
             <button
-              onClick={() => setSpeed(null)}
-              className={speed === null ? styles.active : ""}
+              onClick={() => setSpeed([])} // Limpa a seleção
+              className={speed.length === 0 ? styles.active : ""}
             >
               Any
             </button>
             <button
-              onClick={() => setSpeed(1)}
-              className={speed === 1 ? styles.active : ""}
+              onClick={() =>
+                setSpeed((prev) =>
+                  prev.includes(1) ? prev.filter((s) => s !== 1) : [...prev, 1]
+                )
+              }
+              className={speed.includes(1) ? styles.active : ""}
             >
               Slow
             </button>
             <button
-              onClick={() => setSpeed(2)}
-              className={speed === 2 ? styles.active : ""}
+              onClick={() =>
+                setSpeed((prev) =>
+                  prev.includes(2) ? prev.filter((s) => s !== 2) : [...prev, 2]
+                )
+              }
+              className={speed.includes(2) ? styles.active : ""}
             >
               Regular
             </button>
             <button
-              onClick={() => setSpeed(3)}
-              className={speed === 3 ? styles.active : ""}
+              onClick={() =>
+                setSpeed((prev) =>
+                  prev.includes(3) ? prev.filter((s) => s !== 3) : [...prev, 3]
+                )
+              }
+              className={speed.includes(3) ? styles.active : ""}
             >
               Turbo
             </button>
             <button
-              onClick={() => setSpeed(4)}
-              className={speed === 4 ? styles.active : ""}
+              onClick={() =>
+                setSpeed((prev) =>
+                  prev.includes(4) ? prev.filter((s) => s !== 4) : [...prev, 4]
+                )
+              }
+              className={speed.includes(4) ? styles.active : ""}
             >
               Hyper Turbo
             </button>
           </div>
         </div>
+
 
         <div className={styles.variant}>
           <label>Variant</label>

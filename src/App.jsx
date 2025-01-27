@@ -11,43 +11,52 @@ import Favourites from "./components/favourites/favourites";
 import Deleted from "./components/deleted/deleted";
 import ConfigUser from "./components/configUser/configUser";
 import { Client, Account } from 'appwrite';
+import LoadingScreen from './components/loadingScreen/loadingScreen';
 import "./App.css";
 
 function App() {
   const [token, setToken] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null); // Inicializado como null
+  const [isLoading, setIsLoading] = useState(true); // Estado para controlar o tempo da tela de carregamento
   const client = new Client();
   const account = new Account(client);
   client.setProject('lobbyninja');
 
-  // Função para buscar o token no localStorage
   const checkToken = () => {
-    return localStorage.getItem("cookieFallback") || null; // Pegando o token do localStorage
+    return localStorage.getItem("cookieFallback") || null;
   };
 
-  // Função para validar o token com account.get()
   const validateToken = async () => {
     try {
-      const user = await account.get(); // Fazendo a chamada ao Appwrite para validar o token
+      const user = await account.get();
       console.log("Usuário autenticado:", user);
-      setIsAuthenticated(true); // Atualiza o estado para indicar que o usuário está autenticado
+      setIsAuthenticated(true);
     } catch (error) {
       localStorage.removeItem("cookieFallback");
       console.error("Erro na validação do token:", error);
-      setIsAuthenticated(false); // Caso não esteja autenticado, indica no estado
-      setToken(""); // Opcional: Limpa o token inválido do estado
+      setIsAuthenticated(false);
+      setToken("");
     }
   };
 
   useEffect(() => {
     const userToken = checkToken();
     if (userToken) {
-      setToken(userToken); // Atualiza o estado com o token
-      validateToken(); // Valida o token com o account.get()
+      setToken(userToken);
+      validateToken();
     } else {
       console.log("Nenhum token encontrado no localStorage.");
+      setIsAuthenticated(false);
     }
+
+    const loadingTimeout = setTimeout(() => setIsLoading(false), 2000);
+
+    return () => clearTimeout(loadingTimeout);
   }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   if (!isAuthenticated) {
     return (

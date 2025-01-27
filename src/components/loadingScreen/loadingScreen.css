@@ -1,0 +1,34 @@
+/* Estilo da tela de carregamento */
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+}
+
+/* Estilo da logo */
+.loading-logo {
+    width: 150px;
+    height: auto;
+}
+
+/* Animação de pulso */
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.pulse-animation {
+    animation: pulse 1.5s infinite;
+    /* Pulsa a cada 1.5 segundos */
+}
