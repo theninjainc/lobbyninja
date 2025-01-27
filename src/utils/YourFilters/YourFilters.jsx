@@ -11,7 +11,7 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const response = await fetch("https://ninja.lobby.ninja/api/api/torneios/apply", {
+        const response = await fetch("http://localhost:3000/api/torneios/apply", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -49,8 +49,10 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
 
     console.log(selectedFilters)
 
-    if (selectedFilters.Site) {
-      filteredList = filteredList.filter((item) => item.Site === selectedFilters.Site);
+    if (selectedFilters.Site && selectedFilters.Site.length > 0) {
+      filteredList = filteredList.filter((item) =>
+        selectedFilters.Site.includes(item.Site)
+      );
     }
 
     if (selectedFilters.SearchNameTournaments) {
@@ -73,27 +75,24 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
     if (selectedFilters.PrizePoolMax) {
       filteredList = filteredList.filter((item) => Number(item.PrizePool) <= selectedFilters.PrizePoolMax);
     }
-    if (selectedFilters.Size) {
-      switch (selectedFilters.Size) {
-        case 1:
-          filteredList = filteredList.filter((item) => item.TableSize === 2);
-          break;
-        case 2:
-          filteredList = filteredList.filter(
-            (item) => item.TableSize >= 3 && item.TableSize <= 5
-          );
-          break;
-        case 3:
-          filteredList = filteredList.filter((item) => item.TableSize >= 6);
-          break;
-        case 4:
-          filteredList = filteredList.filter(
-            (item) => item.TableSize >= 7 && item.TableSize <= 10
-          );
-          break;
-        default:
-          filteredList;
-      }
+    if (selectedFilters.Size && selectedFilters.Size.length > 0) {
+      filteredList = filteredList.filter((item) => {
+        // Verifica se o valor de TableSize do item está dentro dos intervalos especificados
+        return selectedFilters.Size.some((size) => {
+          switch (size) {
+            case 1:
+              return item.TableSize === 2;
+            case 2:
+              return item.TableSize >= 3 && item.TableSize <= 5;
+            case 3:
+              return item.TableSize >= 6;
+            case 4:
+              return item.TableSize >= 7 && item.TableSize <= 10;
+            default:
+              return false;
+          }
+        });
+      });
     }
     if (selectedFilters.BlindsMin) {
       filteredList = filteredList.filter((item) => item.Blinds >= selectedFilters.BlindsMin);
@@ -106,16 +105,15 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
     } else if (selectedFilters.ReEntry === "notAllowed") {
       filteredList = filteredList.filter((item) => item.MaxReentry === "No");
     }
-    if (selectedFilters.Speed) {
-      filteredList = filteredList.filter((item) => item.Speed === selectedFilters.Speed);
+    if (selectedFilters.Speed && selectedFilters.Speed.length > 0) {
+      filteredList = filteredList.filter((item) =>
+        selectedFilters.Speed.includes(item.Speed)
+      );
     }
     if (selectedFilters.ExcludeWords) {
       filteredList = filteredList.filter(
         (item) => !item.Name.toLowerCase().includes(selectedFilters.ExcludeWords.toLowerCase())
       );
-    }
-    if (selectedFilters.EndTime) {
-      filteredList = filteredList.filter((item) => item.end === selectedFilters.EndTime);
     }
     if (selectedFilters.Priority) {
       filteredList = filteredList.filter((item) => item.priority === selectedFilters.Priority);

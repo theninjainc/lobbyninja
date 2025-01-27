@@ -35,6 +35,7 @@ import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
 import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
 import past from "../../assets/past.png";
+import Order from '../../utils/Order/Order'
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
@@ -162,7 +163,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
+        "http://localhost:3000/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -253,7 +254,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -411,6 +412,7 @@ const Main = () => {
   const [orderSpeedFilter, setOrderSpeedFilter] = useState("asc");
   const [orderPrizePool, setOrderPrizePool] = useState("asc");
   const [allowedFilters, setAllowedFilters] = useState();
+  const [isLeftActive, setIsLeftActive] = useState(true); // Estado global para as setas
 
   const orderedListPrizePool = () => {
     setOrderPrizePool((prevOrder) => {
@@ -424,6 +426,7 @@ const Main = () => {
       setOrderList(newListPrizePool);
       return nextOrder;
     });
+    setIsLeftActive(orderPrizePool == "asc" ? false : true)
   };
 
   const orderedListSpeed = () => {
@@ -435,6 +438,7 @@ const Main = () => {
 
     setOrderList(newListSpeed);
     setOrderSpeedFilter(orderSpeedFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderSpeedFilter == "asc" ? false : true)
   };
 
   const orderedListStart = () => {
@@ -453,6 +457,7 @@ const Main = () => {
 
     setOrderStartFilter(newOrderStartFilter);
     setOrderList(newListStart);
+    setIsLeftActive(orderStartFilter == "asc" ? false : true)
   };
 
 
@@ -467,6 +472,7 @@ const Main = () => {
     });
     setOrderList(newListSite);
     setOrderSiteFilter(orderSiteFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderSiteFilter == "asc" ? false : true)
   };
 
   const orderedListField = () => {
@@ -476,6 +482,7 @@ const Main = () => {
     });
     setOrderList(newListField);
     setOrderFieldFilter(orderFieldFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderFieldFilter == "asc" ? false : true)
   };
 
   const orderedListTableSize = () => {
@@ -489,6 +496,7 @@ const Main = () => {
     });
     setOrderList(newListTableSize);
     setOrderTableSizeFilter(orderTableSizeFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderTableSizeFilter == "asc" ? false : true)
   };
 
   const orderedListPriority = () => {
@@ -502,6 +510,7 @@ const Main = () => {
     });
     setOrderList(newListPriority);
     setOrderPriorityFiter(orderPriorityFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderPriorityFilter == "asc" ? false : true)
   };
 
   const orderedListMaxReentry = () => {
@@ -523,6 +532,8 @@ const Main = () => {
 
     setOrderList(newListMaxReentry);
     setOrderMaxReentryFilter(newOrderMaxReentryFilter);
+
+    setIsLeftActive(orderMaxReentryFilter == "asc" ? false : true)
   };
 
   const orderedListName = () => {
@@ -543,6 +554,7 @@ const Main = () => {
     console.log("Depois de ordenar:", newList[0]);
     setOrderList(newList);
     setOrderNameFilter(orderNameFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderNameFilter == "asc" ? false : true)
   };
 
   const orderedListBuyIn = () => {
@@ -555,6 +567,7 @@ const Main = () => {
 
     setOrderList(newListBuyIn);
     setOrderBuyInFilter(orderBuyInFilter === "asc" ? "desc" : "asc");
+    setIsLeftActive(orderBuyInFilter == "asc" ? true : false)
   };
 
   const orderedBlinds = () => {
@@ -574,13 +587,17 @@ const Main = () => {
 
     setOrderList(newListBlinds);
     setOrderBlindsFilter(newOrderBlindsFilter);
+    setIsLeftActive(orderBlindsFilter == "asc" ? false : true)
   };
 
   //SelecionedFilters
   const [activeFilter, setActiveFilter] = useState(null);
+
+
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
   };
+
 
   const filterButtons = [
     {
@@ -1091,9 +1108,13 @@ const Main = () => {
                 key={index}
                 className={`${button.className} ${button.isActive ? styles.active : ""
                   }`}
-                onClick={button.onClick}
+                onClick={() => {
+                  button.onClick();
+                  toggleOrder();
+                }}
               >
                 {button.label}
+                <Order leftFilter={isLeftActive} activeFilter={activeFilter} currentFilter={button.className} />
               </button>
             ))}
         </div>

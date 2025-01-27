@@ -8,8 +8,8 @@ const USER_COLLECTION_ID = 'user';
 
 const saveFilterToDB = async (email, filters) => {
     try {
-        if (filters.Site) {
-            filters.Site = filters.Site.network || filters.Site;
+        if (filters.Site && Array.isArray(filters.Site)) {
+            filters.Site = filters.Site.map(site => site.network || site);
         }
 
         console.log(email, filters);

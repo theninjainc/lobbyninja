@@ -1,5 +1,7 @@
 import styles from "./SaveMoreFilters.module.css";
 import { useState } from "react";
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
 const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
   const stylesByOrigin = {
@@ -22,18 +24,30 @@ const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
 
   const handleSave = async () => {
     if (!nameFilter.trim()) {
-      alert("Por favor, insira um nome para o filtro.");
+      iziToast.error({
+        title: "Erro",
+        message: "Por favor, insira um nome para o filtro.",
+        position: "topRight",
+        timeout: 5000,
+      });
       return;
     }
 
     setIsSaving(true);
-    console.log(activeFilters);
+    iziToast.info({
+      title: "Aguarde",
+      message: "Estamos salvando o filtro...",
+      timeout: 5000,
+      position: "topRight",
+      id: "loading-toast",
+    });
+    console.log("tubaru", activeFilters);
     const filterData = {
       NameFilter: nameFilter,
       SearchNameTournaments: activeFilters.searchNameTournaments,
       MinBuyIn: Number(activeFilters.buyInMin) || Number(activeFilters.minBuyIn),
       MaxBuyIn: Number(activeFilters.buyInMax) || Number(activeFilters.maxBuyIn),
-      Site: activeFilters.selectedSite,
+      Site: activeFilters.selectedSites,
       Speed: activeFilters.selectedSpeed,
       Size: activeFilters.selectedSize,
       BlindsMin: activeFilters.blindsMin,
@@ -43,10 +57,10 @@ const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
       PrizePoolMin: activeFilters.prizePoolMin,
       PrizePoolMax: activeFilters.prizePoolMax,
     };
-    console.log(filterData)
+    console.log(filterData);
 
     try {
-      const response = await fetch("https://ninja.lobby.ninja/api/api/torneios/save", {
+      const response = await fetch("http://localhost:3000/api/torneios/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,18 +70,29 @@ const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
 
       if (!response.ok) throw new Error("Erro ao salvar o filtro.");
 
-      alert("Filtro salvo com sucesso!");
+      iziToast.success({
+        title: "Sucesso",
+        message: "Filtro salvo com sucesso!",
+        position: "topRight",
+        timeout: 5000,
+      });
+
       close();
     } catch (error) {
       console.error(error);
-      alert("Houve um erro ao salvar o filtro. Tente novamente.");
+      iziToast.error({
+        title: "Erro",
+        message: "Houve um erro ao salvar o filtro. Tente novamente.",
+        position: "topRight",
+        timeout: 5000,
+      });
     } finally {
       setIsSaving(false);
     }
   };
 
   return (
-    <div className={styles.saveMoreFilters}  style={modalStyle}>
+    <div className={styles.saveMoreFilters} style={modalStyle}>
       <div className={styles.head}>
         <span>Save Filter</span>
       </div>
