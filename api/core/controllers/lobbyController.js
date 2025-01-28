@@ -55,31 +55,34 @@ const createLobbyHandler = async (req, res) => {
     try {
         const { email, lobbies, priority } = req.body;
 
-        console.log(email, lobbies);
-
+        // Verificações de parâmetros
         if (!email) {
             return res.status(400).json({ error: "O email é obrigatório." });
         }
 
-        if (!lobbies || !Array.isArray(lobbies) || lobbies.length === 0) {
-            return res.status(400).json({ error: "A lista de lobbys é obrigatória e deve conter itens." });
+        if (!Array.isArray(lobbies) || lobbies.length === 0) {
+            return res.status(400).json({ error: "A lista de lobbies é obrigatória e deve conter itens." });
         }
 
+        // Chamada ao serviço para criar os lobbies
         const createdLobbies = await lobbyService.createNewLobby(email, lobbies, priority);
 
-        if (!createdLobbies) {
+        // Caso nenhum lobby tenha sido criado, retornar erro
+        if (!createdLobbies || createdLobbies.length === 0) {
             return res.status(500).json({ error: "Erro ao criar os lobbies." });
         }
 
-        // Retorna sucesso
+        // Resposta de sucesso
         res.status(201).json({
             message: `${createdLobbies.length} lobbies criados com sucesso!`,
             lobbies: createdLobbies,
         });
     } catch (error) {
+        // Retorna erro para falhas no processo
         res.status(500).json({ error: error.message });
     }
 };
+
 
 
 module.exports = {

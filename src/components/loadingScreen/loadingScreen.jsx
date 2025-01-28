@@ -1,6 +1,6 @@
 // src/components/loading/LoadingScreen.js
 import React from 'react';
-import './LoadingScreen.css';
+import './loadingScreen.module.css';
 import logo from '../../assets/logo.svg'
 
 const LoadingScreen = () => {
