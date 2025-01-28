@@ -301,6 +301,11 @@ const Main = () => {
     setCurrentPage(newPage);
   };
 
+  const handleTimerEnd = (id) => {
+    // Remove o item da lista quando o timer chegar a 0
+    setOrderList((prevList) => prevList.filter((item) => item.ID !== id));
+  };
+
   // Função para gerar os números das páginas
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -330,10 +335,8 @@ const Main = () => {
     "Name",
     "Prize Pool",
     "Max Reentry",
-    "Blinds",
     "Speed",
     "Field",
-    "End",
     "Mlr",
     "TableSize",
     "Priority",
@@ -654,15 +657,6 @@ const Main = () => {
       onClick: () => {
         orderedListMaxReentry();
         handleFilterClick("filterMaxReentryBtn");
-      },
-    },
-    {
-      label: "Blinds",
-      className: styles.filterBlindsBtn,
-      isActive: activeFilter === "filterBlindsBtn",
-      onClick: () => {
-        orderedBlinds();
-        handleFilterClick("filterBlindsBtn");
       },
     },
     {
@@ -1001,7 +995,7 @@ const Main = () => {
                     setMinBuyIn(e.target.value);
                   }}
                   className={styles.searchMaxMin}
-                  />
+                />
               </label>
             </div>
             <div className={styles.maxMinSearch}>
@@ -1227,9 +1221,6 @@ const Main = () => {
                         {filter === "Max Reentry" &&
                           (item.MaxReentry ? item.MaxReentry : "-")}
 
-                        {filter === "Blinds" &&
-                          (item.Blinds ? item.Blinds : "-")}
-
                         {filter === "Speed" &&
                           (item.Speed ? <SpeedMap speed={item.Speed} /> : "-")}
 
@@ -1237,7 +1228,10 @@ const Main = () => {
 
                         {filter === "Mlr" &&
                           (item.Start ? (
-                            <Timer startEvent={item.Start} />
+                            <Timer
+                              startEvent={item.Start}
+                              onTimerEnd={() => handleTimerEnd(item.ID)} // Passa o ID do item para a função
+                            />
                           ) : (
                             "-"
                           ))}
@@ -1417,6 +1411,7 @@ const Main = () => {
               >
                 Próxima
               </span>
+              <span style={{'marginLeft': 20}}>{orderList.length} resultados encontrados.</span>
             </div>
           </tbody>
         </table>

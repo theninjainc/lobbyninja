@@ -97,7 +97,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                         tournamentStart.getUTCSeconds()
                     ));
 
-                    // Criar o horário UTC atual para comparação precisa
+                    // Criar o horário UTC atual explicitamente
                     const nowUTC = new Date(Date.UTC(
                         today.getUTCFullYear(),
                         today.getUTCMonth(),
@@ -109,11 +109,12 @@ router.get("/api/activeTournaments", async (req, res) => {
 
                     // Comparação considerando o horário UTC
                     if (
-                        tournamentStartUTC.toDateString() !== todayUTC.toDateString() || // Data diferente de hoje (UTC)
+                        tournamentStartUTC.toDateString() !== nowUTC.toDateString() || // Data diferente de hoje (UTC)
                         tournamentStartUTC <= nowUTC // Horário do torneio é menor ou igual ao atual (UTC)
                     ) {
                         return null;
                     }
+
 
                     // Calcular Buy-In e Prize Pool
                     const buyIn = parseFloat(tournament["@stake"]) + parseFloat(tournament["@rake"]);
