@@ -158,6 +158,7 @@ const createLobby = async (
         // Converte valores para os tipos 
         console.log("TESTE", ID);
         buyIn = parseFloat(buyIn);
+        premiacaoGarantida = parseFloat(premiacaoGarantida);
         jogadoresInscritos = parseFloat(jogadoresInscritos);
         jogadoresJogando = parseFloat(jogadoresJogando);
         jogadoresMesa = jogadoresMesa ? parseFloat(jogadoresMesa) : 0;

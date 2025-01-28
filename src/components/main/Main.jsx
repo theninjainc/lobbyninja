@@ -35,6 +35,7 @@ import { useTheme } from "../../utils/ThemeContext/ThemeContext.jsx";
 import SaveMoreFilters from "../../utils/SaveMoreFilters/SaveMoreFilters.jsx";
 import YourFilters from "../../utils/YourFilters/YourFilters.jsx";
 import past from "../../assets/past.png";
+import resetIcon from "../../assets/borracha.png"
 import Order from '../../utils/Order/Order'
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
@@ -711,8 +712,8 @@ const Main = () => {
   ];
 
   const [searchNameTournaments, setSearchNameTournaments] = useState("");
-  const [minBuyIn, setMinBuyIn] = useState();
-  const [maxBuyIn, setMaxBuyIn] = useState();
+  const [minBuyIn, setMinBuyIn] = useState("");
+  const [maxBuyIn, setMaxBuyIn] = useState("");
   const [selectedSites, setSelectedSites] = useState([]);
   const [selectedSpeed, setSelectedSpeed] = useState([]);
   const [selectedSize, setSelectedSize] = useState([]);
@@ -721,6 +722,18 @@ const Main = () => {
   const sizeRef = useRef(null);
   const speedRef = useRef(null);
   const siteRef = useRef(null);
+
+  const resetFilters = () => {
+    setSearchNameTournaments(""); // Reseta o campo de busca
+    setMinBuyIn(""); // Reseta o valor mínimo
+    setMaxBuyIn(""); // Reseta o valor máximo
+    setSelectedSites([]); // Reseta sites selecionados
+    setSelectedSpeed([]); // Reseta velocidades
+    setSelectedSize([]); // Reseta tamanhos
+    setSelectedPriority(null); // Reseta prioridade
+    setIsPriorityOpen(false); // Fecha qualquer popup aberto
+  };
+
 
   const closeAllDropdowns = () => {
     setIsOpenSize(false);
@@ -935,6 +948,7 @@ const Main = () => {
               <img src={searchTournaments} alt="Search Tournaments" />
               <input
                 type="search"
+                value={searchNameTournaments || ""}
                 className={styles.search}
                 onChange={() => setSearchNameTournaments(event.target.value)}
                 placeholder="Search tournaments..."
@@ -980,12 +994,13 @@ const Main = () => {
                   type="number"
                   id="min-value"
                   name="min-value"
+                  value={minBuyIn || ""}
                   placeholder=""
                   onChange={(e) => {
                     setMinBuyIn(e.target.value);
                   }}
                   className={styles.searchMaxMin}
-                />
+                  />
               </label>
             </div>
             <div className={styles.maxMinSearch}>
@@ -995,6 +1010,7 @@ const Main = () => {
                   type="number"
                   id="max-value"
                   name="max-value"
+                  value={maxBuyIn || ""}
                   placeholder=""
                   onChange={(e) => {
                     setMaxBuyIn(e.target.value);
@@ -1059,6 +1075,9 @@ const Main = () => {
             </button>
             <button className={styles.saveBtn} onClick={toggleYourFiltersOpen}>
               <img src={past} alt="Past Icon" width="19px" />
+            </button>
+            <button className={styles.saveBtn} onClick={resetFilters}>
+              <img src={resetIcon} alt="Reset Filters" width="19px" />
             </button>
           </div>
 

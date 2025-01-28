@@ -80,21 +80,37 @@ router.get("/api/activeTournaments", async (req, res) => {
             const today = new Date();
             const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
 
-            console.log(tournamentsData)
+            console.log(tournamentsData);
+
             return tournamentsData
                 .map((tournament) => {
                     const tournamentStartTimestamp = parseInt(tournament["@scheduledStartDate"]) * 1000;
                     const tournamentStart = new Date(tournamentStartTimestamp);
-                    // Criar a data UTC comparável para hoje e para o torneio
+
+                    // Criar a data UTC para o torneio
                     const tournamentStartUTC = new Date(Date.UTC(
                         tournamentStart.getUTCFullYear(),
                         tournamentStart.getUTCMonth(),
-                        tournamentStart.getUTCDate()
+                        tournamentStart.getUTCDate(),
+                        tournamentStart.getUTCHours(),
+                        tournamentStart.getUTCMinutes(),
+                        tournamentStart.getUTCSeconds()
                     ));
 
+                    // Criar o horário UTC atual para comparação precisa
+                    const nowUTC = new Date(Date.UTC(
+                        today.getUTCFullYear(),
+                        today.getUTCMonth(),
+                        today.getUTCDate(),
+                        today.getUTCHours(),
+                        today.getUTCMinutes(),
+                        today.getUTCSeconds()
+                    ));
+
+                    // Comparação considerando o horário UTC
                     if (
-                        tournamentStartUTC.toDateString() != todayUTC.toDateString() ||
-                        tournamentStart <= today
+                        tournamentStartUTC.toDateString() !== todayUTC.toDateString() || // Data diferente de hoje (UTC)
+                        tournamentStartUTC <= nowUTC // Horário do torneio é menor ou igual ao atual (UTC)
                     ) {
                         return null;
                     }
@@ -107,7 +123,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                     const hash = crypto.createHash("md5");
                     const idString = `${tournament["@name"]}-${tournament["@network"]}-${tournamentStart.toUTCString()}`;
                     const id = hash.update(idString).digest("hex");
-                    
+
                     const teste = lobbys.find((lobby) => lobby.$id == "2ed8a0c12eddf41a6b8392b42adaa975");
                     if (teste)
                         console.log("Tem!")
@@ -124,14 +140,25 @@ router.get("/api/activeTournaments", async (req, res) => {
                         Name: tournament["@name"],
                         PrizePool: prizePool,
                         MaxReentry: tournament["@flags"]?.includes("R") ? "Yes" : "No",
-                        Blinds: tournament["@structure"],
-                        Speed: tournament["@filterString"]?.includes("ST")
-                            ? 4
-                            : tournament["@filterString"]?.includes("T")
-                                ? 3
-                                : tournament["@filterString"]?.includes("D")
-                                    ? 1
-                                    : 2,
+                        Speed: (() => {
+                            const filterString = tournament["@filterString"];
+                            const type = filterString?.match(/Type:([^;]+)/)?.[1]; // Extrai o valor após "Type:"
+
+                            if (type) {
+                                // Verifica o valor de "Type" e atribui o valor correspondente a Speed
+                                if (type.includes("ST")) {
+                                    return 4;
+                                } else if (type.includes("T")) {
+                                    return 3;
+                                } else if (type.includes("D")) {
+                                    return 1;
+                                } else {
+                                    return 2;
+                                }
+                            }
+
+                            return 2; // Valor padrão caso "Type" não esteja presente
+                        })(),
                         Field: tournament["@totalEntrants"],
                         End: null,
                         Mlr: null,

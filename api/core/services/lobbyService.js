@@ -10,7 +10,7 @@ const {
     linkLobbyToUser,
 } = require('../repositories/lobbyRepository');
 
-const  getLobbysByStates = async (email, states) => {
+const getLobbysByStates = async (email, states) => {
     try {
         let lobbys = [];
 
@@ -57,24 +57,22 @@ const createNewLobby = async (email, lobbies, priority) => {
         if (!userDocument) throw new Error("Usuário não encontrado.");
 
         const userId = userDocument.$id;
-        
-        console.log("OIIIIIIIIIIIIIIIIIIIIII", lobbies)
+
         const createdLobbyPromises = lobbies.map(async (lobby) => {
-            console.log("Lobby sendo processado:", lobby);
             try {
                 const {
                     ID,
-                    Site, // 'Site' é o campo do lobby
-                    Start: horarioInicio, // 'Start' do lobby é mapeado para 'horarioInicio'
-                    End: horarioFim, // 'End' do lobby é mapeado para 'horarioFim'
-                    Name: nome, // 'Name' do lobby é mapeado para 'nome'
-                    BuyIn: buyIn, // 'BuyIn' do lobby é mapeado para 'buyIn'
-                    PrizePool: premiacaoGarantida, // 'PrizePool' do lobby é mapeado para 'premiacaoGarantida'
-                    MaxReentry: reentrada, // 'MaxReentry' do lobby é mapeado para 'reentrada'
-                    Blinds: blindIntervalo, // 'Blinds' do lobby é mapeado para 'blindIntervalo'
-                    Field: jogadoresInscritos, // 'Field' do lobby é mapeado para 'jogadoresInscritos'
-                    TableSize: jogadoresMesa, // 'TableSize' do lobby é mapeado para 'jogadoresMesa'
-                    Mlr: jogadoresJogando, // 'Mlr' do lobby é mapeado para 'jogadoresJogando'
+                    Site,
+                    Start: horarioInicio,
+                    End: horarioFim,
+                    Name: nome,
+                    BuyIn: buyIn,
+                    PrizePool: premiacaoGarantida,
+                    MaxReentry: reentrada,
+                    Blinds: blindIntervalo,
+                    Field: jogadoresInscritos,
+                    TableSize: jogadoresMesa,
+                    Mlr: jogadoresJogando,
                     bounty,
                     fichasIniciais,
                     apostaForcada,
@@ -82,13 +80,10 @@ const createNewLobby = async (email, lobbies, priority) => {
                     deleted,
                     favourite,
                     registered,
-                    alarm,
-                    priority
+                    alarm
                 } = lobby;
 
-
-                console.log("OOOOOOOOOOadadadadaIIII", Site, horarioInicio, horarioFim, nome, buyIn, premiacaoGarantida, reentrada, blindIntervalo, jogadoresInscritos, jogadoresMesa, jogadoresJogando, bounty, fichasIniciais, apostaForcada, skipped, deleted, favourite, registered, alarm);
-
+                // Criar o lobby com os dados extraídos
                 const newLobby = await createLobby(
                     ID,
                     Site,
@@ -110,27 +105,29 @@ const createNewLobby = async (email, lobbies, priority) => {
                     favourite,
                     registered,
                     alarm,
-                    priority
+                    priority // Certifique-se de que o priority está sendo passado corretamente
                 );
-                console.log(userId, newLobby.$id)
+
+                // Vincula o novo lobby ao usuário
                 await linkLobbyToUser(userId, newLobby.$id);
 
-                return newLobby.$id;
+                return newLobby.$id; // Retorna o ID do lobby criado
             } catch (error) {
-                console.error(`Erro ao processar o lobby: ${lobby.nome}`, error);
-                return null;
+                console.error(`Erro ao processar o lobby com ID ${lobby.ID}:`, error);
+                return null; // Retorna null para lobbies que falharem
             }
         });
 
         const createdLobbyIds = await Promise.all(createdLobbyPromises);
-        console.log("Lobbies criados e vinculados com sucesso:", createdLobbyIds.filter(id => id));
+        const filteredLobbyIds = createdLobbyIds.filter(id => id); // Filtra valores nulos ou inválidos
 
-        return createdLobbyIds.filter(id => id); // Filtra IDs nulos ou inválidos
+        return filteredLobbyIds; // Retorna os IDs dos lobbies criados
     } catch (error) {
         console.error("Erro geral ao criar e vincular lobbies:", error);
         throw new Error("Erro ao criar e vincular lobbies: " + error.message);
     }
 };
+
 
 
 
