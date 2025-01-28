@@ -273,6 +273,7 @@ const Main = () => {
         return {
           ...tournament,
           Start: formattedStartTime,
+          Horario: tournament.Start
         };
       });
 
@@ -1213,7 +1214,7 @@ const Main = () => {
                           />
                         )}
 
-                        {filter === "Start" && (item.Start ? item.Start : "-")}
+                        {filter === "Start" && (item.Horario ? item.Horario : "-")}
 
                         {filter === "Buy In" &&
                           (item.BuyIn ? `$${item.BuyIn}` : "-")}
