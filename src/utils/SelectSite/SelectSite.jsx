@@ -2,6 +2,7 @@
 import styles from "./selectSite.module.css";
 
 const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
+  if (isOpen) {
   const toggleSiteSelection = (site) => {
     setSelectedSites((prev) => {
       if (prev.some((selected) => selected.network === site.network)) {
@@ -14,7 +15,6 @@ const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
     });
   };
 
-  if (isOpen) {
     return (
       <div className={styles.selectSiteModal}>
         {siteData.map((item, index) => {

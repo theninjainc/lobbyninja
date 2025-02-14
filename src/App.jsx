@@ -77,10 +77,10 @@ function App() {
             <Route path="/dashboard" element={<Main />} />
             <Route path="/login" element={<Navigate to="/dashboard" />} />
             <Route path="/alarm" element={<Alarm />} />
-            <Route path="/registered" element={<Registered />} />
-            <Route path="/skipped" element={<Skipped />} />
-            <Route path="/favourites" element={<Favourites />} />
-            <Route path="/deleted" element={<Deleted />} />
+            <Route path="/registered" element={<Main />} />
+            <Route path="/skipped" element={<Main />} />
+            <Route path="/favorites" element={<Main />} />
+            <Route path="/deleted" element={<Main />} />
             <Route path="/config" element={<ConfigUser />} />
           </Routes>
         </div>

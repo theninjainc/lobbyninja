@@ -28,14 +28,14 @@ const Speed = ({ isOpenSpeed, setSelectedSpeed, selectedSpeed }) => {
     return (
       <div className={styles.speed}>
         {data.map((item) => (
-          <div
+          <button
             key={item.speed}
             className={`${styles.cardSpeed} ${selectedSpeed.includes(item.speed) ? styles.selected : ""}`}
             onClick={() => toggleSpeedSelection(item.speed)}
           >
             <img src={item.image} alt={item.label} />
             <p>{item.label}</p>
-          </div>
+          </button>
         ))}
       </div>
     );

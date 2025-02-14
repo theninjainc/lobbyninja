@@ -118,7 +118,7 @@ router.get("/api/activeTournaments", async (req, res) => {
 
                     // Calcular Buy-In e Prize Pool
                     const buyIn = parseFloat(tournament["@stake"]) + parseFloat(tournament["@rake"]);
-                    const prizePool = (tournament["@guarantee"]);
+                    const prizePool = tournament["@guarantee"];
 
                     // Gerar hash para ID único
                     const hash = crypto.createHash("md5");

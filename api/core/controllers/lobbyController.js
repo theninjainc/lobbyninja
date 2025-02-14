@@ -53,8 +53,7 @@ const updateStateHandler = async (req, res) => {
 
 const createLobbyHandler = async (req, res) => {
     try {
-        const { email, lobbies, priority } = req.body;
-
+        const { email, lobbies } = req.body;
         // Verificações de parâmetros
         if (!email) {
             return res.status(400).json({ error: "O email é obrigatório." });
@@ -65,7 +64,7 @@ const createLobbyHandler = async (req, res) => {
         }
 
         // Chamada ao serviço para criar os lobbies
-        const createdLobbies = await lobbyService.createNewLobby(email, lobbies, priority);
+        const createdLobbies = await lobbyService.createNewLobby(email, lobbies);
 
         // Caso nenhum lobby tenha sido criado, retornar erro
         if (!createdLobbies || createdLobbies.length === 0) {

@@ -48,7 +48,7 @@ const getLobbysByStates = async (email, states) => {
 };
 
 
-const createNewLobby = async (email, lobbies, priority) => {
+const createNewLobby = async (email, lobbies) => {
     try {
         if (!email) throw new Error("Email é obrigatório.");
         if (!Array.isArray(lobbies) || lobbies.length === 0) throw new Error("Lobbies inválidos.");
@@ -59,6 +59,7 @@ const createNewLobby = async (email, lobbies, priority) => {
         const userId = userDocument.$id;
 
         const createdLobbyPromises = lobbies.map(async (lobby) => {
+            console.log(lobby.priority)
             try {
                 const {
                     ID,
@@ -80,7 +81,8 @@ const createNewLobby = async (email, lobbies, priority) => {
                     deleted,
                     favourite,
                     registered,
-                    alarm
+                    alarm,
+                    Priority: priority
                 } = lobby;
 
                 // Criar o lobby com os dados extraídos
@@ -105,7 +107,7 @@ const createNewLobby = async (email, lobbies, priority) => {
                     favourite,
                     registered,
                     alarm,
-                    priority // Certifique-se de que o priority está sendo passado corretamente
+                    lobby.priority
                 );
 
                 // Vincula o novo lobby ao usuário
