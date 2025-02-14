@@ -1,4 +1,4 @@
-.speed{
+.speed {
     width: 121px;
     height: 220px;
     position: fixed;
@@ -11,28 +11,35 @@
     top: 150px;
 }
 
-.cardSpeed{
- width: 91px;
- height: 36px;
- margin-top: 5px;
- gap: 10px;
- display: inline-flex;
- margin-left: 16px;
- margin-right: 16px;
- cursor: pointer;
+.cardSpeed {
+    width: 91px;
+    height: 36px;
+    margin-top: 9px;
+    gap: 10px;
+    display: inline-flex;
+    margin-left: 16px;
+    margin-right: 16px;
+    cursor: pointer;
+    background: none;
+    font-size: 14px;
+    color: #ffff;
+    border: none;
+    outline: none;
+    /* Remove o contorno */
+
 }
 
 .cardSpeed.selected {
     border-color: #0b0b21;
     background-color: #0b0b21;
-  }
+}
 
-.cardSpeed:hover{
+.cardSpeed:hover {
     background: #0b0b21;
     border-radius: 3px;
 }
 
-.cardSpeed img{
+.cardSpeed img {
     max-height: 14px;
     margin-left: 5px;
     margin-top: 18px;
@@ -40,9 +47,9 @@
 
 .cardSpeed:not(:last-child) {
     border-bottom: 2px solid rgba(255, 255, 255, 0.10);
-    padding-bottom: 10px;
-  }
-  
-.cardSpeed:last-child{
+    padding-bottom: 40px;
+}
+
+.cardSpeed:last-child {
     height: 46.5px;
 }

@@ -156,7 +156,7 @@ const createLobby = async (
 ) => {
     try {
         // Converte valores para os tipos 
-        console.log("TESTE", ID);
+        console.log("TESTE", priority);
         buyIn = parseFloat(buyIn);
         premiacaoGarantida = parseFloat(premiacaoGarantida);
         jogadoresInscritos = parseFloat(jogadoresInscritos);

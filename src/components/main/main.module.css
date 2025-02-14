@@ -877,7 +877,7 @@ table {
 .bottomMenuLateral {
   width: 90%;
   max-width: 300px;
-  height: 10px;
+  height: 1px;
   background-color: #191934;
   border-radius: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
