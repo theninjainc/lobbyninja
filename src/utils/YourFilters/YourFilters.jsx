@@ -3,7 +3,7 @@ import styles from "./YourFilters.module.css";
 import select from "../../assets/selectSite.svg";
 
 // eslint-disable-next-line react/prop-types
-const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
+const YourFilters = ({ closeModal, email, orderList, setOrderList, setSelectedSites, setMinBuyIn, setMaxBuyIn, setSearchNameTournaments, setSelectedSize, setSelectedSpeed, siteData }) => {
   const [filters, setFilters] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [error, setError] = useState("");
@@ -41,6 +41,18 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList }) => {
 
     if (selectedFilter) {
       setSelectedFilters(selectedFilter);
+
+      const formattedSites = siteData.filter((site) =>
+        selectedFilter.Site.includes(site.network)
+      );
+
+      console.log("Teste", formattedSites)
+      setSelectedSites(formattedSites || []);
+      setMinBuyIn(selectedFilter.MinBuyIn || "");
+      setMaxBuyIn(selectedFilter.MaxBuyIn || "");
+      setSelectedSpeed(selectedFilter.Speed || []);
+      setSelectedSize(selectedFilter.Size || []);
+      setSearchNameTournaments(selectedFilter.SearchNameTournaments || "");
     }
   };
 

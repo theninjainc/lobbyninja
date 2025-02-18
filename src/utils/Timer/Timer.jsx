@@ -3,7 +3,7 @@ import alert from "../../assets/alert.svg"; // Certifique-se de importar o ícon
 
 // eslint-disable-next-line react/prop-types
 function Timer({ startEvent, onTimerEnd }) {
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(1);
   const [isAlert, setIsAlert] = useState(false); // Estado para controlar o alerta
 
   useEffect(() => {
@@ -15,6 +15,7 @@ function Timer({ startEvent, onTimerEnd }) {
     const diffInMilliseconds = eventTime - now;
     const diffInSeconds = Math.max(0, Math.floor(diffInMilliseconds / 1000));
     setTime(diffInSeconds);
+    console.log("será", diffInSeconds)
   }, [startEvent]);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ function Timer({ startEvent, onTimerEnd }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [time, onTimerEnd]);
+  }, [time]);
 
   // Função para converter segundos em formato HH:MM:SS ou MM:SS
   function convertToHoursMinutesSeconds(seconds) {

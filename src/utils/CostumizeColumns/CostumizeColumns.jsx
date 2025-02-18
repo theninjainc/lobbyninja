@@ -16,9 +16,7 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
     "Buy In",
     "Prize Pool",
     "Max Reentry",
-    "Blinds",
     "Field",
-    "End",
     "Mlr",
     "TableSize",
     "Priority",
@@ -51,14 +49,13 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
     }
   };
 
-
-  // Aplicar as mudanças ao estado principal
   const handleApplyColumns = () => {
-    onColumnsChange(selectedColumns);
+    const columnsToApply = selectedColumns.length > 0 ? selectedColumns : initialColumns;
 
-    console.log(selectedColumns)
+    onColumnsChange(columnsToApply);
     closeModal();
   };
+
 
   // Filtrar colunas não selecionadas para o lado esquerdo
   const unselectedColumns = localColumns.filter(
@@ -67,7 +64,7 @@ const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
 
   const handleRemoveColumn = (column) => {
     setSelectedColumns(selectedColumns.filter((col) => col !== column));
-  };  
+  };
 
   if (modalIsOpen) {
     return (

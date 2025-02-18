@@ -2,6 +2,7 @@
 import styles from "./selectSite.module.css";
 
 const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
+  console.log("Lindo", selectedSites)
   if (isOpen) {
   const toggleSiteSelection = (site) => {
     setSelectedSites((prev) => {
