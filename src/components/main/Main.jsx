@@ -91,7 +91,10 @@ const Main = () => {
   };
 
   const [orderList, setOrderList] = useState([]);
+  const previousFilteredList = useRef([]);
+  const [isFirstRun, setIsFirstRun] = useState(true);
   const [orderDate, setOrderDate] = useState([]);
+  const [dadosGerais, setDadosGerais] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -138,6 +141,7 @@ const Main = () => {
             ...item,
             index,
             priority: undefined,
+            alarm: false
           };
 
           if (state === 3) baseLobby.registered = true;
@@ -160,7 +164,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
+        "http://localhost:3000/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -195,7 +199,7 @@ const Main = () => {
           })
         );
         setOrderDate(
-          orderList.map((item) => {
+          orderDate.map((item) => {
             const updatedItem = lobbyData.lobbies.find(
               (lobby) => lobby.ID === item.ID
             );
@@ -207,7 +211,33 @@ const Main = () => {
             return item;
           })
         );
-        
+
+        setDadosGerais(
+          dadosGerais.map((item) => {
+            const updatedItem = lobbyData.lobbies.find(
+              (lobby) => lobby.ID === item.ID
+            );
+
+            if (updatedItem) {
+              return { ...item, Priority: priority };
+            }
+
+            return item;
+          })
+        );
+        previousFilteredList.current = dadosGerais.map((item) => {
+          const updatedItem = lobbyData.lobbies.find(
+            (lobby) => lobby.ID === item.ID
+          );
+
+          if (updatedItem) {
+            return { ...item, Priority: priority };
+          }
+
+          return item;
+        });
+
+
 
       } else {
         iziToast.error({
@@ -265,7 +295,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -286,10 +316,13 @@ const Main = () => {
           Horario: tournament.Start
         };
       });
+      setDadosGerais(formattedData)
+      previousFilteredList.current = formattedData;
 
       setOrderList(formattedData);
       setOrderDate(formattedData);
       setIsLoading(false);
+      setActiveFilter(null);
     } catch (error) {
       setIsLoading(false);
       setError(error.message);
@@ -300,7 +333,7 @@ const Main = () => {
     try {
       const updatedState = state === "favorites" ? "favourite" : state;
       console.log(state);
-      const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
+      const response = await fetch('http://localhost:3000/api/lobbys/lobbyAllOptions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -339,7 +372,11 @@ const Main = () => {
 
       setOrderList(updatedData);
       setOrderDate(updatedData);
+      setDadosGerais(updatedData);
+      previousFilteredList.current = updatedData;
+
       setIsLoading(false);
+      setActiveFilter(null);
     } catch (error) {
       console.error("Erro ao fazer requisição:", error);
     }
@@ -357,7 +394,7 @@ const Main = () => {
 
   // Função para trocar de página
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+    setCurrentPage(Math.max(1, Math.min(newPage, totalPages)));
   };
 
   const handleTimerEnd = (id) => {
@@ -551,8 +588,8 @@ const Main = () => {
 
     newListStart.sort((a, b) => {
       // Verifica se o horário está no formato "HH:mm"
-      const [hoursA, minutesA] = a.Horario ? a.Horario.split(":").map(Number) : [0, 0];
-      const [hoursB, minutesB] = b.Horario ? b.Horario.split(":").map(Number) : [0, 0];
+      const [hoursA, minutesA] = a.Start ? a.Start.split(":").map(Number) : [0, 0];
+      const [hoursB, minutesB] = b.Start ? b.Start.split(":").map(Number) : [0, 0];
 
       // Converte as horas e minutos para minutos totais
       const timeA = hoursA * 60 + minutesA;
@@ -835,9 +872,7 @@ const Main = () => {
 
 
   const handleFilter = () => {
-    let filteredList = orderDate;
-
-    console.log(filteredList);
+    let filteredList = dadosGerais;
 
     // Filtro por nome do torneio
     if (searchNameTournaments) {
@@ -882,11 +917,11 @@ const Main = () => {
         return selectedSize.some((size) => {
           switch (size) {
             case 1:
-              return item.TableSize === 2;
+              return item.TableSize == 2;
             case 2:
               return item.TableSize >= 3 && item.TableSize <= 5;
             case 3:
-              return item.TableSize === 6;
+              return item.TableSize == 6;
             case 4:
               return item.TableSize >= 7 && item.TableSize <= 10;
             default:
@@ -898,12 +933,23 @@ const Main = () => {
 
 
     console.log("Lista final filtrada:", filteredList);
-
-    setOrderList(filteredList);
+    if (
+      JSON.stringify(filteredList) != JSON.stringify(previousFilteredList.current)
+    ) {
+      if (!isFirstRun) {
+        console.log("piada")
+        setActiveFilter(null);
+      } else {
+        setIsFirstRun(false);
+      }
+      setOrderList(filteredList);
+      previousFilteredList.current = filteredList;
+    }
   };
 
   useEffect(() => {
     handleFilter();
+
   }, [
     searchNameTournaments,
     minBuyIn,
@@ -943,7 +989,7 @@ const Main = () => {
       {moreFiltersisOpen && (
         <MoreFilters
           closeModal={() => setMoreFiltersisOpen(false)}
-          orderList={orderDate}
+          orderList={dadosGerais}
           setOrderList={setOrderList}
           siteData={siteData}
           applyFilters={applyFilters}
@@ -980,6 +1026,12 @@ const Main = () => {
           setOrderList={setOrderList}
           siteData={siteData}
           applyFilters={applyFilters}
+          setSelectedSites={setSelectedSites}
+          setMinBuyIn={setMinBuyIn}
+          setMaxBuyIn={setMaxBuyIn}
+          setSelectedSize={setSelectedSize}
+          setSelectedSpeed={setSelectedSpeed}
+          setSearchNameTournaments={setSearchNameTournaments}
         />
       )}
       <div
@@ -1550,6 +1602,17 @@ const Main = () => {
             </tr>
             <div className="pagination">
               <span
+                onClick={() => handlePageChange(1)}
+                style={{
+                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                  color: currentPage === 1 ? "#ccc" : "white",
+                  marginRight: "10px",
+                }}
+              >
+                ⏮️ Primeiro
+              </span>
+
+              <span
                 onClick={() => {
                   if (currentPage > 1) {
                     handlePageChange(currentPage - 1);
@@ -1560,7 +1623,7 @@ const Main = () => {
                   color: currentPage === 1 ? "#ccc" : "white",
                 }}
               >
-                Anterior
+                ◀ Anterior
               </span>
 
               {getPageNumbers().map((page, index) => (
@@ -1579,17 +1642,33 @@ const Main = () => {
               ))}
 
               <span
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => {
+                  if (currentPage < totalPages) {
+                    handlePageChange(currentPage + 1);
+                  }
+                }}
                 style={{
-                  cursor:
-                    currentPage === totalPages ? "not-allowed" : "pointer",
+                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
                   color: currentPage === totalPages ? "#ccc" : "white",
                 }}
               >
-                Próxima
+                Próxima ▶
               </span>
-              <span style={{ 'marginLeft': 20 }}>{orderList.length} resultados encontrados.</span>
+
+              <span
+                onClick={() => handlePageChange(totalPages)}
+                style={{
+                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                  color: currentPage === totalPages ? "#ccc" : "white",
+                  marginLeft: "10px",
+                }}
+              >
+                Último ⏭️
+              </span>
+
+              <span style={{ marginLeft: 20 }}>{orderList.length} resultados encontrados.</span>
             </div>
+
           </tbody>
         </table>
         {isMenuVisible && (
@@ -1673,7 +1752,6 @@ const Main = () => {
                 });
               }}
               onMouseLeave={(e) => {
-                // Restaura a cor original dos paths
                 const paths = e.currentTarget.querySelectorAll('g path');
                 paths.forEach(path => {
                   path.style.transition = "stroke 0.3s ease";
