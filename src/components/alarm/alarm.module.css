@@ -70,8 +70,10 @@
   margin-left: 35px;
 }
 
-.filterStartBtn {
-  width: 95px;
+
+
+.filterDaysBtn {
+  width: 105px;
   height: 38px;
   border: none;
   background-color: var(--bg-filterbar);
@@ -82,10 +84,11 @@
   justify-content: first baseline;
   font-size: 12px;
   cursor: pointer;
+  margin-left: 35px;
 }
 
-.filterBuyInBtn {
-  width: 115px;
+.filterCommentBtn {
+  width: 1142px;
   height: 38px;
   border: none;
   background-color: var(--bg-filterbar);
@@ -96,33 +99,41 @@
   justify-content: first baseline;
   font-size: 12px;
   cursor: pointer;
-  margin-left: 1%;
-}
 
-.filterNameBtn {
-  height: 38px;
-  border: none;
-  background-color: var(--bg-filterbar);
-  color: #ffff;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: first baseline;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.NameBtn,
-.BuyInBtn,
-.SiteBtn,
-.StartBtn {
-  width: 95px;
-  height: 38px;
-  font-size: 12px;
 }
 
 .linha {
   width: 87%;
+}
+
+.siteTable {
+  height: 38px;
+  width: 90px;
+}
+
+.initialTable {
+  position: relative;
+  top: 10px;
+  left: 7.7px;
+  height: 38px;
+  width: 45px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nameTable {
+  height: 38px;
+  width: 105px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+
+.commentTable {
+  height: 38px;
+  width: 1169px;
 }
 
 .deleteButton {

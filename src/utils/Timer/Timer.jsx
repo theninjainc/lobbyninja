@@ -21,7 +21,7 @@ function Timer({ startEvent, onTimerEnd }) {
   useEffect(() => {
     if (time <= 0) {
       onTimerEnd && onTimerEnd();
-      return;
+      return; // Evita que o intervalo continue depois que o tempo chega a zero
     }
 
     // Verificar se faltam menos de 3 minutos
@@ -35,7 +35,7 @@ function Timer({ startEvent, onTimerEnd }) {
       setTime((prevTime) => Math.max(0, prevTime - 1));
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Limpa o intervalo quando o tempo for 0
   }, [time]);
 
   // Função para converter segundos em formato HH:MM:SS ou MM:SS
@@ -62,7 +62,7 @@ function Timer({ startEvent, onTimerEnd }) {
           style={{ width: "20px", marginRight: "5px" }}
         />
       )}
-      {convertToHoursMinutesSeconds(time)}
+      {time > 0 ? convertToHoursMinutesSeconds(time) : "00:00"}
     </div>
   );
 }

@@ -2,19 +2,18 @@
 import styles from "./selectSite.module.css";
 
 const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
-  console.log("Lindo", selectedSites)
   if (isOpen) {
-  const toggleSiteSelection = (site) => {
-    setSelectedSites((prev) => {
-      if (prev.some((selected) => selected.network === site.network)) {
-        // Se já estiver selecionado, remove
-        return prev.filter((selected) => selected.network !== site.network);
-      } else {
-        // Adiciona o site à seleção
-        return [...prev, site];
-      }
-    });
-  };
+    const toggleSiteSelection = (site) => {
+      setSelectedSites((prev) => {
+        if (prev.some((selected) => selected.network === site.network)) {
+          // Se já estiver selecionado, remove
+          return prev.filter((selected) => selected.network !== site.network);
+        } else {
+          // Adiciona o site à seleção
+          return [...prev, site];
+        }
+      });
+    };
 
     return (
       <div className={styles.selectSiteModal}>
@@ -24,7 +23,7 @@ const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
           );
 
           return (
-            <div
+            <button
               key={index}
               className={`${styles.card} ${isSelected ? styles.selected : ""
                 }`}
@@ -32,7 +31,7 @@ const SelectSite = ({ isOpen, setSelectedSites, siteData, selectedSites }) => {
             >
               <img src={item.image} alt={`Site ${item.network}`} />
               <p>{item.network}</p>
-            </div>
+            </button>
           );
         })}
       </div>

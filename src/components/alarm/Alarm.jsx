@@ -13,16 +13,8 @@ const NotificationWithSound = () => {
     const fetchAlarms = async (email, state) => {
         try {
             console.log(state);
-            const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    states: state,
-                }),
-            });
+            const response = await fetch('https://ninja.lobby.ninja/api/api/alarmes/');
+
 
             if (!response.ok) {
                 throw new Error('Erro ao buscar os alarmes.');
@@ -190,19 +182,30 @@ const NotificationWithSound = () => {
                     className={styles.filterSiteBtn}
                     onClick={() => orderedList("site")}
                 >
-                    Site
+                    Name Alarm
                 </button>
                 <button
-                    className={styles.filterStartBtn}
-                    onClick={() => orderedList("name")}
-                >
-                    Nome do campeonato
-                </button>
-                <button
-                    className={styles.filterNameBtn}
+                    className={styles.filterSiteBtn}
                     onClick={() => orderedList("time")}
                 >
-                    Horário
+                    Hour
+                </button>
+                <button
+                    className={styles.filterDaysBtn}
+                    onClick={() => orderedList("time")}
+                >
+                    Days
+                </button>
+                <button
+                    className={styles.filterCommentBtn}
+                    onClick={() => orderedList("name")}
+                >
+                    Comment
+                </button>
+                <button
+                    className={styles.filterSiteBtn}
+                >
+                    Actions
                 </button>
             </div>
             <table>
@@ -219,9 +222,13 @@ const NotificationWithSound = () => {
                                             : "rgba(255, 255, 255, 0.05)",
                                 }}
                             >
-                                <td className={styles.SiteBtn}>{item.site}</td>
-                                <td className={styles.StartBtn}>{item.nome}</td>
-                                <td className={styles.NameBtn}>{item.horarioInicio}</td>
+                                <td className={styles.initialTable}></td>
+                                <td className={styles.siteTable}>{item.nome}</td>
+                                <td className={styles.nameTable}>{new Date(item.horaAlarme).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                                <td className={styles.siteTable}>
+                                    {item.dias.join(', ')}
+                                </td>
+                                <td className={styles.commentTable}>{item.comentario}</td>
                                 <td className={styles.deleteLinha}>
                                     <button
                                         className={styles.deleteButton}

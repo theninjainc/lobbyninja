@@ -40,6 +40,7 @@ import resetIcon from "../../assets/borracha.png"
 import Order from '../../utils/Order/Order'
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
+import NewAlarm from "../../utils/NewAlarm/NewAlarm.jsx";
 
 const PAGE_SIZE = 20;
 
@@ -511,7 +512,6 @@ const Main = () => {
 
   const [orderNameFilter, setOrderNameFilter] = useState("asc");
   const [orderBuyInFilter, setOrderBuyInFilter] = useState("asc");
-  const [orderBlindsFilter, setOrderBlindsFilter] = useState("asc");
   const [orderMaxReentryFilter, setOrderMaxReentryFilter] = useState("asc");
   const [orderPriorityFilter, setOrderPriorityFiter] = useState("asc");
   const [orderTableSizeFilter, setOrderTableSizeFilter] = useState("asc");
@@ -1018,11 +1018,12 @@ const Main = () => {
         closeModal={() => setIsOpenCostumizeColumns(false)}
         onColumnsChange={(updatedColumns) => setAllowedFilters(updatedColumns)}
       />
+      {isOpenNewAlarm && (<NewAlarm isOpen={() => openNewAlarm()} onClose={() => closeNewAlarm()} />)}
       {yourFiltersIsOpen && (
         <YourFilters
           closeModal={() => setYourFiltersIsOpen(false)}
           email={email}
-          orderList={orderDate}
+          orderList={dadosGerais}
           setOrderList={setOrderList}
           siteData={siteData}
           applyFilters={applyFilters}
@@ -1036,10 +1037,11 @@ const Main = () => {
       )}
       <div
         className={`${styles.main} ${isDarkMode ? "dark-theme" : "light-theme"
-          } ${moreFiltersisOpen === true ||
-            isOpenCostumizeColumns === true ||
-            yourFiltersIsOpen === true ||
-            saveFilterIsOpen
+          } ${moreFiltersisOpen ||
+            isOpenCostumizeColumns ||
+            yourFiltersIsOpen ||
+            saveFilterIsOpen ||
+            isOpenNewAlarm
             ? styles.blur
             : styles.noBlur
           }`}
@@ -1359,7 +1361,7 @@ const Main = () => {
                           (item.Start ? (
                             <Timer
                               startEvent={item.Start}
-                              onTimerEnd={() => handleTimerEnd(item.ID)} // Passa o ID do item para a função
+                              onTimerEnd={() => handleTimerEnd(item.ID)}
                             />
                           ) : (
                             "-"
@@ -1446,12 +1448,13 @@ const Main = () => {
                           </svg>
 
                           <div className={styles.separator}></div>
+                          {/* alarme */}
                           <svg
                             width="21"
                             height="20"
                             viewBox="0 0 21 20"
                             xmlns="http://www.w3.org/2000/svg"
-                            onClick={() => handleCreateLobby(4, null, null)}
+                            onClick={() => openNewAlarm()}
                             style={{
                               cursor: "pointer",
                               transition: "fill 0.3s ease",
