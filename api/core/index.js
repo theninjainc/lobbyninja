@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const torneioRoutes = require('./routes/torneioRoutes');
 const alarmeRoutes = require('./routes/alarmeRoutes');
 const lobbyRoutes = require('./routes/lobbyRoutes');
+const columnsRoutes = require("./routes/customizeColumnsRoutes");
 const cors = require('cors');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/torneios', torneioRoutes);
 app.use('/api/alarmes', alarmeRoutes);
 app.use('/api/lobbys', lobbyRoutes);
+app.use("/api/costumizecolumns", columnsRoutes);
 
 // Configuração para rodar localmente ou no Serverless
 // if (process.env.NODE_ENV !== 'production') {
