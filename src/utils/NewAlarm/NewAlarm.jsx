@@ -71,7 +71,7 @@ const NewAlarm = ({ isOpen, onClose }) => {
       console.log(alarmData)
 
       console.log("Oi")
-      const response = await fetch("https://ninja.lobby.ninja/api/api/alarmes/", {
+      const response = await fetch("http://localhost:3000/api/alarmes/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

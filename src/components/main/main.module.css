@@ -77,6 +77,25 @@ body {
   justify-content: space-between;
 }
 
+.inputWrapper {
+  position: relative;
+}
+
+.clearIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 10px;
+  color: #035fc1;
+}
+
+.clearIcon:hover {
+  color: #035fc1;
+}
+
+
 .searchleft {
   display: flex;
   gap: 10px;
@@ -165,7 +184,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.labelMaxMinValue > div {
+.labelMaxMinValue>div {
   width: 50px;
   height: 44px;
   font-size: 12px;
@@ -280,12 +299,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .searchBtn {
   width: 44px;
   height: 44px;
-  background: radial-gradient(
-    ellipse at 60% 10%,
-    #ffdead -10%,
-    #fa6e49 40%,
-    #c314d4 110%
-  );
+  background: radial-gradient(ellipse at 60% 10%,
+      #ffdead -10%,
+      #fa6e49 40%,
+      #c314d4 110%);
   border-radius: 50px;
   border: none;
   cursor: pointer;
@@ -591,6 +608,7 @@ table {
   left: 7.7px;
   width: 75px;
 }
+
 .stylesCheckboxTable div:first-child {
   float: left;
   margin-right: 2px;
@@ -811,12 +829,10 @@ table {
 
 .active {
   color: transparent;
-  background-image: radial-gradient(
-    ellipse at 30% 30%,
-    #ffdead 0%,
-    #fa6e49 27%,
-    #c314d4 90%
-  );
+  background-image: radial-gradient(ellipse at 30% 30%,
+      #ffdead 0%,
+      #fa6e49 27%,
+      #c314d4 90%);
   background-clip: text;
   -webkit-background-clip: text;
 }

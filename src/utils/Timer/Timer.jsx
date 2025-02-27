@@ -20,7 +20,8 @@ function Timer({ startEvent, onTimerEnd }) {
 
   useEffect(() => {
     if (time <= 0) {
-      onTimerEnd && onTimerEnd();
+      onTimerEnd;
+      onTimerEnd();
       return; // Evita que o intervalo continue depois que o tempo chega a zero
     }
 
@@ -62,7 +63,7 @@ function Timer({ startEvent, onTimerEnd }) {
           style={{ width: "20px", marginRight: "5px" }}
         />
       )}
-      {time > 0 ? convertToHoursMinutesSeconds(time) : "00:00"}
+      {time > 0 ? convertToHoursMinutesSeconds(time) : onTimerEnd && onTimerEnd()}
     </div>
   );
 }

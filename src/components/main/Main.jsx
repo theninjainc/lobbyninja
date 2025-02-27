@@ -165,7 +165,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
+        "http://localhost:3000/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -296,7 +296,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "http://localhost:3000/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -334,7 +334,7 @@ const Main = () => {
     try {
       const updatedState = state === "favorites" ? "favourite" : state;
       console.log(state);
-      const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
+      const response = await fetch('http://localhost:3000/api/lobbys/lobbyAllOptions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -517,12 +517,12 @@ const Main = () => {
   const [orderTableSizeFilter, setOrderTableSizeFilter] = useState("asc");
   const [orderFieldFilter, setOrderFieldFilter] = useState("asc");
   const [orderSiteFilter, setOrderSiteFilter] = useState("asc");
-  const [orderStartFilter, setOrderStartFilter] = useState("asc");
+  const [orderStartFilter, setOrderStartFilter] = useState("desc");
   const [orderSpeedFilter, setOrderSpeedFilter] = useState("asc");
   const [orderPrizePoolFilter, setOrderPrizePoolFilter] = useState("asc");
   const [allowedFilters, setAllowedFilters] = useState();
   const [isLeftActive, setIsLeftActive] = useState(true); // Estado global para as setas
-
+  const [filters, setFilters] = useState({})
   const orderedListPrizePool = () => {
     const newListPrizePool = [...orderList];
 
@@ -870,6 +870,41 @@ const Main = () => {
   }, [isOpenSize, isOpenSpeed, isOpen]);
 
 
+  useEffect(() => {
+    if (!activeFilter) {
+      const newListStart = [...orderList];
+      const newOrderStartFilter = "asc";
+
+      newListStart.sort((a, b) => {
+        // Verifica se o horário está no formato "HH:mm"
+        const [hoursA, minutesA] = a.Start ? a.Start.split(":").map(Number) : [0, 0];
+        const [hoursB, minutesB] = b.Start ? b.Start.split(":").map(Number) : [0, 0];
+
+        // Converte as horas e minutos para minutos totais
+        const timeA = hoursA * 60 + minutesA;
+        const timeB = hoursB * 60 + minutesB;
+        // Ordena com base no filtro ascendente ou descendente
+        return newOrderStartFilter === "asc" ? timeA - timeB : timeB - timeA;
+      });
+
+      // Atualiza os estados conforme o filtro
+      setOrderStartFilter(newOrderStartFilter);
+      setOrderList(newListStart);
+      setOrderDate(newListStart);
+      setIsLeftActive(true);
+      handleFilterClick("filterMlrBtn");
+    }
+  }, [
+    dadosGerais,
+    searchNameTournaments,
+    minBuyIn,
+    maxBuyIn,
+    selectedSites,
+    selectedSpeed,
+    selectedSize,
+    activeFilter,
+    selectedPriority]);
+
 
   const handleFilter = () => {
     let filteredList = dadosGerais;
@@ -949,6 +984,7 @@ const Main = () => {
 
   useEffect(() => {
     handleFilter();
+    handlePageChange(1)
 
   }, [
     searchNameTournaments,
@@ -964,7 +1000,32 @@ const Main = () => {
   const isAllSelected =
     getPaginatedOrders().length > 0 &&
     selectedItems.length === getPaginatedOrders().length;
-  const applyFilters = () => { };
+  const applyFilters = () => {
+    handlePageChange(1)
+    if (!isLoading) {
+      const newListStart = [...orderList];
+      const newOrderStartFilter = "asc";
+
+      newListStart.sort((a, b) => {
+        // Verifica se o horário está no formato "HH:mm"
+        const [hoursA, minutesA] = a.Start ? a.Start.split(":").map(Number) : [0, 0];
+        const [hoursB, minutesB] = b.Start ? b.Start.split(":").map(Number) : [0, 0];
+
+        // Converte as horas e minutos para minutos totais
+        const timeA = hoursA * 60 + minutesA;
+        const timeB = hoursB * 60 + minutesB;
+        // Ordena com base no filtro ascendente ou descendente
+        return newOrderStartFilter === "asc" ? timeA - timeB : timeB - timeA;
+      });
+
+      // Atualiza os estados conforme o filtro
+      setOrderStartFilter(newOrderStartFilter);
+      setOrderList(newListStart);
+      setOrderDate(newListStart);
+      setIsLeftActive(true);
+      handleFilterClick("filterMlrBtn");
+    }
+  };
 
   if (isDarkMode) {
     document.body.style.backgroundColor = "#02061e";
@@ -994,6 +1055,8 @@ const Main = () => {
           siteData={siteData}
           applyFilters={applyFilters}
           email={email}
+          filters={filters}
+          setFilters={setFilters}
         />
       )}
 
@@ -1116,35 +1179,57 @@ const Main = () => {
             <div className={styles.maxMinSearch}>
               <label htmlFor="min-value" className={styles.labelMaxMinValue}>
                 <div>Min $</div>
-                <input
-                  type="number"
-                  id="min-value"
-                  name="min-value"
-                  value={minBuyIn || ""}
-                  placeholder=""
-                  onChange={(e) => {
-                    setMinBuyIn(e.target.value);
-                  }}
-                  className={styles.searchMaxMin}
-                />
+                <div className={styles.inputWrapper}>
+                  <input
+                    type="number"
+                    id="min-value"
+                    name="min-value"
+                    value={minBuyIn || ""}
+                    placeholder=""
+                    onChange={(e) => {
+                      setMinBuyIn(e.target.value);
+                    }}
+                    className={styles.searchMaxMin}
+                  />
+                  {(minBuyIn || "").length > 0 && (
+                    <span
+                      className={styles.clearIcon}
+                      onClick={() => setMinBuyIn("")}
+                    >
+                      ✕
+                    </span>
+                  )}
+                </div>
               </label>
             </div>
+
             <div className={styles.maxMinSearch}>
               <label htmlFor="max-value" className={styles.labelMaxMinValue}>
                 <div>Max $</div>
-                <input
-                  type="number"
-                  id="max-value"
-                  name="max-value"
-                  value={maxBuyIn || ""}
-                  placeholder=""
-                  onChange={(e) => {
-                    setMaxBuyIn(e.target.value);
-                  }}
-                  className={styles.searchMaxMin}
-                />
+                <div className={styles.inputWrapper}>
+                  <input
+                    type="number"
+                    id="max-value"
+                    name="max-value"
+                    value={maxBuyIn || ""}
+                    placeholder=""
+                    onChange={(e) => {
+                      setMaxBuyIn(e.target.value);
+                    }}
+                    className={styles.searchMaxMin}
+                  />
+                  {(maxBuyIn || "").length > 0 && (
+                    <span
+                      className={styles.clearIcon}
+                      onClick={() => setMaxBuyIn("")}
+                    >
+                      ✕
+                    </span>
+                  )}
+                </div>
               </label>
             </div>
+
             <label htmlFor="speed" className={styles.labelSelectSpeed} ref={speedRef}>
               <button
                 name="speed"
@@ -1339,15 +1424,22 @@ const Main = () => {
                           />
                         )}
 
-                        {filter === "Start" && (item.Horario ? item.Horario : "-")}
+                        {filter === "Start" && (item.Start ? item.Start : "-")}
 
                         {filter === "Buy In" &&
-                          (item.BuyIn ? `$${item.BuyIn}` : "-")}
+                          (item.BuyIn
+                            ? `$${Number(item.BuyIn).toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2
+                            })}`
+                            : "-")}
+
 
                         {filter === "Name" && (item.Name ? item.Name : "-")}
 
                         {filter === "Prize Pool" &&
-                          (item.PrizePool ? `$${item.PrizePool}` : "-")}
+                          (item.PrizePool ? `$${Number(item.PrizePool).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}` : "-")}
+
 
                         {filter === "Max Reentry" &&
                           (item.MaxReentry ? item.MaxReentry : "-")}
@@ -1432,7 +1524,7 @@ const Main = () => {
                               transition: "fill 0.3s ease",
                               fill: "white", // Cor inicial
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.fill = "red")}
+                            onMouseEnter={(e) => (e.currentTarget.style.fill = "#3C88EA")}
                             onMouseLeave={(e) => (e.currentTarget.style.fill = "white")}
                           >
                             <path
@@ -1460,7 +1552,7 @@ const Main = () => {
                               transition: "fill 0.3s ease",
                               fill: "white", // Cor inicial
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.fill = "red")}
+                            onMouseEnter={(e) => (e.currentTarget.style.fill = "#FF9C40")}
                             onMouseLeave={(e) => (e.currentTarget.style.fill = "white")}
                           >
                             <g clipPath="url(#clip0_10033_160)">
@@ -1495,7 +1587,7 @@ const Main = () => {
                               const paths = e.currentTarget.querySelectorAll('g path');
                               paths.forEach(path => {
                                 path.style.transition = "stroke 0.3s ease";
-                                path.style.stroke = "red"; // Muda a cor para vermelha
+                                path.style.stroke = "#52AE4C"; // Muda a cor para vermelha
                               });
                             }}
                             onMouseLeave={(e) => {
@@ -1531,7 +1623,7 @@ const Main = () => {
                               transition: "fill 0.3s ease",
                               fill: "white", // Cor inicial
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.fill = "red")}
+                            onMouseEnter={(e) => (e.currentTarget.style.fill = "#00FFFF")}
                             onMouseLeave={(e) => (e.currentTarget.style.fill = "white")}>
                             <path d="M10.5046 6.40436C10.5046 6.57723 10.3644 6.71742 10.1915 6.71742H5.18262V8.2827H10.1915C10.3644 8.2827 10.5046 8.42288 10.5046 8.59576V8.87719L12.1995 7.50007L10.5046 6.12292V6.40436Z" />
                             <path d="M0.800293 9.22185H4.557V8.59573V6.40431V5.7782H0.800293V9.22185Z" />
@@ -1603,7 +1695,7 @@ const Main = () => {
                 <p>Nenhum item encontrado.</p>
               )}
             </tr>
-            <div className="pagination">
+            {!isLoading && <div className="pagination">
               <span
                 onClick={() => handlePageChange(1)}
                 style={{
@@ -1671,7 +1763,7 @@ const Main = () => {
 
               <span style={{ marginLeft: 20 }}>{orderList.length} resultados encontrados.</span>
             </div>
-
+            }
           </tbody>
         </table>
         {isMenuVisible && (

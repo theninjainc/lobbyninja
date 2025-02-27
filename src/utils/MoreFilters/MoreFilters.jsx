@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./MoreFilter.module.css";
 import exit from "../../assets/exit.svg";
 import relogio from "../../assets/relogio.svg";
@@ -16,7 +16,7 @@ import siteGGNetwork from "../../assets/siteGGNetwork.svg";
 import siteChico from "../../assets/siteChico.svg";
 import siteBodog from "../../assets/siteBodog.svg";
 
-const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email }) => {
+const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email, filters, setFilters }) => {
   const [network, setNetwork] = useState([]);
   const [buyInMin, setBuyInMin] = useState();
   const [buyInMax, setBuyInMax] = useState();
@@ -46,7 +46,39 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
   const [includeClosed, setIncludeClosed] = useState(false);
   const [saveFilterIsOpen, setSaveFilterIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const selectRef = useRef(null);
 
+  useEffect(() => {
+    if (filters) {
+      setNetwork(filters.network || []);
+      setBuyInMin(filters.buyInMin ?? "");
+      setBuyInMax(filters.buyInMax ?? "");
+      setFromTime(filters.fromTime || "");
+      setToTime(filters.toTime || "");
+      setRegisteringFromTime(filters.registeringFromTime || "");
+      setRegisteringToTime(filters.registeringToTime || "");
+      setPrizePoolMin(filters.prizePoolMin ?? "");
+      setPrizePoolMax(filters.prizePoolMax ?? "");
+      setPriorityMin(filters.priorityMin ?? "");
+      setPriorityMax(filters.priorityMax ?? "");
+      setExcludeWords(filters.excludeWords || "");
+      setParticipantsMin(filters.participantsMin ?? "");
+      setParticipantsMax(filters.participantsMax ?? "");
+      setTableSize(filters.tableSize || []);
+      setBlindsMin(filters.blindsMin ?? "");
+      setBlindsMax(filters.blindsMax ?? "");
+      setPriority(filters.priority ?? "");
+      setEndTime(filters.endTime || "");
+      setDayOfWeek(filters.dayOfWeek || "All");
+      setReEntry(filters.reEntry || "");
+      setSpeed(filters.speed || []);
+      setGame(filters.game || "any");
+      setVariant(filters.variant || "any");
+      setMaxAbility(filters.maxAbility ?? "20");
+      setMaxLate(filters.maxLate ?? false);
+      setIncludeClosed(filters.includeClosed ?? false);
+    }
+  }, [filters]);
 
   const siteData = [
     { network: "888Poker", image: poker888 },
@@ -65,6 +97,34 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
     setSaveFilterIsOpen((prevState) => !prevState);
   };
   const handleApplyFilters = () => {
+    const newFilters = {
+      network,
+      buyInMin,
+      buyInMax,
+      fromTime,
+      toTime,
+      registeringFromTime,
+      registeringToTime,
+      prizePoolMin,
+      prizePoolMax,
+      excludeWords,
+      participantsMin,
+      participantsMax,
+      tableSize,
+      blindsMin,
+      blindsMax,
+      priority,
+      endTime,
+      dayOfWeek,
+      reEntry,
+      speed,
+      game,
+      variant,
+      maxAbility,
+      maxLate,
+      includeClosed,
+    };
+    setFilters(newFilters);
     applyFilters({
       network,
       buyInMin,
@@ -148,9 +208,17 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
       });
     }
 
-    if (priority) {
-      filteredList = filteredList.filter((item) => item.Priority === priority);
+    if (priorityMin || priorityMax) {
+      filteredList = filteredList.filter((item) => {
+        const itemPriority = item.Priority;
+        const isWithinRange =
+          (priorityMin ? itemPriority >= priorityMin : true) &&
+          (priorityMax ? itemPriority <= priorityMax : true);
+
+        return isWithinRange;
+      });
     }
+
     //Funcionando
     if (reEntry === "allowed") {
       filteredList = filteredList.filter((item) => item.MaxReentry === "Yes");
@@ -188,6 +256,21 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
         : [...prev, size] // Adiciona se não está selecionado
     );
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    // Cleanup listener when the component is unmounted
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -240,6 +323,7 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email 
           <label htmlFor="">Network</label>
           <div
             className={styles.selectContainer}
+            ref={selectRef}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <div className={styles.select}>

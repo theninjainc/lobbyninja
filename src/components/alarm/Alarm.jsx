@@ -13,7 +13,7 @@ const NotificationWithSound = () => {
     const fetchAlarms = async (email, state) => {
         try {
             console.log(state);
-            const response = await fetch('https://ninja.lobby.ninja/api/api/alarmes/');
+            const response = await fetch('http://localhost:3000/api/alarmes/');
 
 
             if (!response.ok) {
@@ -45,7 +45,7 @@ const NotificationWithSound = () => {
         try {
             console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
 
-            const apiUrl = 'https://ninja.lobby.ninja/api/api/lobbys/lobbyUpdateOptions';
+            const apiUrl = 'http://localhost:3000/api/lobbys/lobbyUpdateOptions';
             const requestBody = JSON.stringify({
                 email,
                 id,

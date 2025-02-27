@@ -7,7 +7,7 @@ const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
   const stylesByOrigin = {
     MoreFilters: {
       position: "absolute",
-      top: "1800px",
+      top: "1000px",
       left: "490px",
     },
     Main: {
@@ -60,7 +60,7 @@ const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
     console.log(filterData);
 
     try {
-      const response = await fetch("https://ninja.lobby.ninja/api/api/torneios/save", {
+      const response = await fetch("http://localhost:3000/api/torneios/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
