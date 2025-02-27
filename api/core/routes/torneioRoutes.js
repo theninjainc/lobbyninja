@@ -143,10 +143,9 @@ router.get("/api/activeTournaments", async (req, res) => {
                         MaxReentry: tournament["@filterString"]?.includes("ME") ? "Yes" : "No",
                         Speed: (() => {
                             const filterString = tournament["@filterString"];
-                            const type = filterString?.match(/Type:([^;]+)/)?.[1]; // Extrai o valor após "Type:"
+                            const type = filterString?.match(/Type:([^;]+)/)?.[1];
 
                             if (type) {
-                                // Verifica o valor de "Type" e atribui o valor correspondente a Speed
                                 if (type.includes("ST")) {
                                     return 4;
                                 } else if (type.includes("T")) {
@@ -174,11 +173,9 @@ router.get("/api/activeTournaments", async (req, res) => {
         const lobbyIds = new Set(
             lobbys
                 .filter((lobby) =>
-                    lobby.favourite ||
                     lobby.registered ||
                     lobby.skipped ||
-                    lobby.deleted ||
-                    lobby.alarm
+                    lobby.deleted
                 )
                 .map((lobby) => lobby.$id)
         );
@@ -192,7 +189,7 @@ router.get("/api/activeTournaments", async (req, res) => {
         });
 
         const allTournaments = (await Promise.all(tournamentsPromises)).flat();
-
+        console.log("Todos Torneios", allTournaments);
         const filteredTournaments = allTournaments.filter(
             (tournament) => !lobbyIds.has(tournament.ID)
         );
