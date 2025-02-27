@@ -7,7 +7,7 @@ const SaveMoreFilters = ({ close, activeFilters, email, origin }) => {
   const stylesByOrigin = {
     MoreFilters: {
       position: "absolute",
-      top: "1800px",
+      top: "1000px",
       left: "490px",
     },
     Main: {
