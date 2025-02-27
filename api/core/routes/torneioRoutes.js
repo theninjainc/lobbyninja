@@ -140,7 +140,7 @@ router.get("/api/activeTournaments", async (req, res) => {
                         BuyIn: `${buyIn.toFixed(2)}`,
                         Name: tournament["@name"],
                         PrizePool: prizePool,
-                        MaxReentry: tournament["@flags"]?.includes("R") ? "Yes" : "No",
+                        MaxReentry: tournament["@filterString"]?.includes("ME") ? "Yes" : "No",
                         Speed: (() => {
                             const filterString = tournament["@filterString"];
                             const type = filterString?.match(/Type:([^;]+)/)?.[1]; // Extrai o valor após "Type:"
