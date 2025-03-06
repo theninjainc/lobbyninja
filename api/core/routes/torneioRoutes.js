@@ -164,7 +164,19 @@ router.get("/api/activeTournaments", async (req, res) => {
                         Mlr: null,
                         TableSize: tournament["@playersPerTable"],
                         Priority: matchedLobby?.priority || null,
+                        StakePlusRakeCurrency: (() => {
+                            const filterString = tournament["@filterString"];
+                            const stakeMatch = filterString?.match(/StakePlusRake:([A-Za-z]+)/);
+
+                            if (stakeMatch) {
+                                const currency = stakeMatch[1];  // Moeda (ex: USD, EUR)
+                                return currency;
+                            }
+
+                            return null; // Caso não encontre o padrão esperado
+                        })(),
                     };
+
                 })
                 .filter(Boolean);
         };

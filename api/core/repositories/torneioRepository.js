@@ -18,7 +18,7 @@ const saveFilterToDB = async (email, filters) => {
         const userList = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID, [
             sdk.Query.equal("email", email)
         ]);
-        console.log(userList)
+        console.log(userList);
 
         // Verifica se o usuário foi encontrado
         if (userList.documents.length === 0) {
@@ -26,32 +26,49 @@ const saveFilterToDB = async (email, filters) => {
         }
 
         const user = userList.documents[0];
-        console.log(filters.Site)
+        console.log(filters.Site);
 
-        console.log("cheguei daqui")
-        // Criação do documento de filtro na coleção apropriada
-        const filterDocument = await databases.createDocument(
-            DATABASE_ID,
-            'filters',
-            'unique()',
-            filters
-        );
-        console.log("passei daqui")
-        console.log(user.$id)
-        const updatedLobby = user.filters ? [...user.filters, filterDocument.$id] : [filterDocument.$id];
+        console.log("cheguei daqui");
+
+        // Verificar se já existe um filtro com o mesmo nameFilter no array user.filters
+        const existingFilterIndex = user.filters.findIndex(filter => {
+            console.log('Comparando:', filters.NameFilter, filter.NameFilter);
+            return filter.NameFilter === filters.NameFilter;
+        });
+
+        if (existingFilterIndex !== -1) {
+            // Se o filtro já existe, substituímos o filtro específico dentro de user.filters
+            user.filters[existingFilterIndex] = { ...user.filters[existingFilterIndex], ...filters }; // Atualiza o filtro específico
+            console.log("Filtro atualizado no array do usuário:", user.filters[existingFilterIndex]);
+        } else {
+            console.log("Filtro não encontrado, criando novo...");
+            const filterDocument = await databases.createDocument(
+                DATABASE_ID,
+                'filters',
+                'unique()',
+                filters
+            );
+            console.log("Novo filtro criado:", filterDocument);
+            user.filters.push(filterDocument.$id); // Adiciona o novo filtro ao array de filtros do usuário
+        }
+
+
+        // Atualiza o documento do usuário com o array de filtros atualizado
+        console.log("Foi??", user.filters[existingFilterIndex])
         const updatedUser = await databases.updateDocument(
             DATABASE_ID,
             USER_COLLECTION_ID,
             user.$id,
-            { filters: updatedLobby }
+            { filters: user.filters }
         );
-        console.log("Deu certo")
+
+        console.log("Deu certo");
+
         return updatedUser;
     } catch (error) {
         throw new Error("Erro ao salvar os filtros no banco: " + error.message);
     }
 };
-
 
 const getFiltersByEmail = async (email) => {
     try {

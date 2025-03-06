@@ -82,6 +82,9 @@ function App() {
             <Route path="/favorites" element={<Main />} />
             <Route path="/deleted" element={<Main />} />
             <Route path="/config" element={<ConfigUser />} />
+
+            {/* Rota coringa para redirecionar para /dashboard se o usuário estiver logado e acessar uma URL inválida */}
+            <Route path="*" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
           </Routes>
         </div>
       </div>

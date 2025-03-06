@@ -96,6 +96,12 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email,
   const toggleOpenSaveFilter = () => {
     setSaveFilterIsOpen((prevState) => !prevState);
   };
+
+  const convertTimeToMinutes = (time) => {
+    const [hours, minutes] = time.split(":").map(Number); // Divide e converte as horas e minutos para números
+    return hours * 60 + minutes; // Converte tudo para minutos
+  };
+
   const handleApplyFilters = () => {
     const newFilters = {
       network,
@@ -176,6 +182,19 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email,
         (item) => Number(item.BuyIn) <= buyInMax
       );
     }
+
+    if (participantsMin) {
+      filteredList = filteredList.filter((item) => {
+        return Number(item.Field) >= participantsMin;
+      });
+    }
+
+    if (participantsMax) {
+      filteredList = filteredList.filter((item) => {
+        return Number(item.Field) <= participantsMax;
+      });
+    }
+
     //Funcionando
     if (prizePoolMin) {
       filteredList = filteredList.filter(
@@ -236,6 +255,23 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email,
         (item) => !item.Name.toLowerCase().includes(excludeWords)
       );
     }
+
+    if (fromTime) {
+      const fromTimeInMinutes = convertTimeToMinutes(fromTime); // Converte fromTime para minutos
+      filteredList = filteredList.filter((item) => {
+        const startTimeInMinutes = convertTimeToMinutes(item.Start); // Converte Start para minutos
+        return startTimeInMinutes >= fromTimeInMinutes; // Compara os minutos
+      });
+    }
+
+    if (toTime) {
+      const toTimeInMinutes = convertTimeToMinutes(toTime); // Converte toTime para minutos
+      filteredList = filteredList.filter((item) => {
+        const startTimeInMinutes = convertTimeToMinutes(item.Start); // Converte Start para minutos
+        return startTimeInMinutes <= toTimeInMinutes; // Compara os minutos
+      });
+    }
+
 
     setOrderList(filteredList);
     closeModal();
@@ -384,30 +420,6 @@ const MoreFilters = ({ applyFilters, closeModal, orderList, setOrderList, email,
               onChange={(e) => setToTime(e.target.value)}
             />
             <img src={relogio} alt="Clock icon" className={styles.relogio} />
-          </div>
-        </div>
-
-        <div className={styles.registering}>
-          <label>Registering</label>
-          <div className={styles.orderInputs}>
-            <div className={styles.registeringFromTime}>
-              <span>From</span>
-              <input
-                type="time"
-                value={registeringFromTime}
-                onChange={(e) => setRegisteringFromTime(e.target.value)}
-              />
-              <img src={relogio} alt="Clock icon" className={styles.relogio} />
-            </div>
-            <div className={styles.registeringToTime}>
-              <span>To</span>
-              <input
-                type="time"
-                value={registeringToTime}
-                onChange={(e) => setRegisteringToTime(e.target.value)}
-              />
-              <img src={relogio} alt="Clock icon" className={styles.relogio} />
-            </div>
           </div>
         </div>
 

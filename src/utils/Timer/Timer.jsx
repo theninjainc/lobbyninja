@@ -4,7 +4,7 @@ import alert from "../../assets/alert.svg"; // Certifique-se de importar o ícon
 // eslint-disable-next-line react/prop-types
 function Timer({ startEvent, onTimerEnd }) {
   const [time, setTime] = useState(1);
-  const [isAlert, setIsAlert] = useState(false); // Estado para controlar o alerta
+  const [isAlert, setIsAlert] = useState(false);
 
   useEffect(() => {
     const now = new Date();
@@ -39,7 +39,6 @@ function Timer({ startEvent, onTimerEnd }) {
     return () => clearInterval(interval); // Limpa o intervalo quando o tempo for 0
   }, [time]);
 
-  // Função para converter segundos em formato HH:MM:SS ou MM:SS
   function convertToHoursMinutesSeconds(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
