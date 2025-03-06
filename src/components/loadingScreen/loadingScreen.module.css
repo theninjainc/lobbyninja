@@ -1,5 +1,5 @@
 /* Estilo da tela de carregamento */
-.loading-screen {
+main {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
 }
 
 /* Estilo da logo */
-.loading-logo {
+main img {
     width: 150px;
     height: auto;
 }

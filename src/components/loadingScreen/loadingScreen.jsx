@@ -5,9 +5,11 @@ import logo from '../../assets/logo.svg'
 
 const LoadingScreen = () => {
   return (
-    <div className="loading-screen">
-      <img src={logo} alt="Logo" className="loading-logo" />
-    </div>
+    <main>
+      <div className="loading-screen">
+        <img src={logo} alt="Logo" className="loading-logo" />
+      </div>
+    </main>
   );
 };
 

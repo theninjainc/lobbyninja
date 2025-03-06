@@ -317,6 +317,7 @@ const Main = () => {
           Horario: tournament.Start
         };
       });
+      console.log(formattedData)
       setDadosGerais(formattedData)
       previousFilteredList.current = formattedData;
 
@@ -1426,19 +1427,30 @@ const Main = () => {
 
                         {filter === "Start" && (item.Start ? item.Start : "-")}
 
-                        {filter === "Buy In" &&
-                          (item.BuyIn
-                            ? `$${Number(item.BuyIn).toLocaleString("en-US", {
+                        {filter === "Buy In" && (
+                          item.BuyIn
+                            ? new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: item.StakePlusRakeCurrency || 'USD', // Usa a moeda extraída ou 'USD' como padrão
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 2
-                            })}`
-                            : "-")}
-
+                            }).format(Number(item.BuyIn))
+                            : "-"
+                        )}
 
                         {filter === "Name" && (item.Name ? item.Name : "-")}
 
                         {filter === "Prize Pool" &&
-                          (item.PrizePool ? `$${Number(item.PrizePool).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}` : "-")}
+                          (item.PrizePool
+                            ? new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: item.StakePlusRakeCurrency || 'USD', // Usa a moeda extraída ou 'USD' como padrão
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }).format(Number(item.PrizePool))
+                            : "-"
+                          )
+                        }
 
 
                         {filter === "Max Reentry" &&
