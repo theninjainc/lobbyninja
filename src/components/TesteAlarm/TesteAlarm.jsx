@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Notifications, store } from 'react-push-notification'; 
 
 const TesteAlarm = () => {
   // Função para verificar e registrar o service worker
@@ -33,15 +32,10 @@ const TesteAlarm = () => {
           console.error('Erro ao mostrar a notificação com o service worker:', error);
         });
       } else {
-        // Se o service worker não for suportado, usamos a solução fallback com a biblioteca react-push-notification
-        store.addNotification({
-          title: 'Alerta!',
-          subtitle: 'Subtítulo opcional',
-          message: 'Esta é uma notificação simples de teste!',
-          theme: 'darkblue',
-          native: true, 
+        // Se o service worker não for suportado, usa a notificação padrão
+        new Notification('Alerta de Teste!', {
+          body: 'Esta é uma notificação simples de teste!',
           icon: 'https://example.com/icon.png',
-          duration: 5000, 
           vibrate: [100, 200, 100],
         });
       }
@@ -62,8 +56,7 @@ const TesteAlarm = () => {
 
   return (
     <div>
-      <button onClick={showNotification} >Testar Alarme</button>
-      <Notifications />
+      <button onClick={showNotification}>Testar Alarme</button>
     </div>
   );
 };
