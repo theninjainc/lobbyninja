@@ -5,14 +5,11 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Main from "./components/main/Main";
 import Alarm from "./components/alarm/Alarm";
 import Login from "./components/login/login";
-import Registered from "./components/registered/registered";
-import Skipped from "./components/skipped/Skipped";
-import Favourites from "./components/favourites/favourites";
-import Deleted from "./components/deleted/deleted";
 import ConfigUser from "./components/configUser/configUser";
 import { Client, Account } from 'appwrite';
 import LoadingScreen from './components/loadingScreen/loadingScreen';
 import "./App.css";
+import TesteAlarm from "./components/TesteAlarm/TesteAlarm";
 
 function App() {
   const [token, setToken] = useState("");
@@ -58,15 +55,15 @@ function App() {
     return <LoadingScreen />;
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="app-container">
-        <Routes>
-          <Route path="*" element={<Login />} />
-        </Routes>
-      </div>
-    );
-  }
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="app-container">
+  //       <Routes>
+  //         <Route path="*" element={<Login />} />
+  //       </Routes>
+  //     </div>
+  //   );
+  // }
 
   return (
     <ThemeProvider>
@@ -76,7 +73,7 @@ function App() {
           <Routes>
             <Route path="/dashboard" element={<Main />} />
             <Route path="/login" element={<Navigate to="/dashboard" />} />
-            <Route path="/alarm" element={<Alarm />} />
+            <Route path="/alarm" element={<TesteAlarm />} />
             <Route path="/registered" element={<Main />} />
             <Route path="/skipped" element={<Main />} />
             <Route path="/favorites" element={<Main />} />
