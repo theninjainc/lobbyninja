@@ -1,58 +1,39 @@
 import React, { useEffect } from 'react';
 
 const TesteAlarm = () => {
-  // Função para verificar e registrar o service worker
-  const registerServiceWorker = () => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then((registration) => {
-          console.log('Service Worker registrado com sucesso!', registration);
-        })
-        .catch((error) => {
-          console.error('Erro ao registrar o Service Worker:', error);
-        });
-    } else {
-      console.log('Service Worker não suportado neste navegador.');
+  // Solicitar permissão para notificações ao carregar a página
+  useEffect(() => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then((permission) => {
+        console.log('Permissão para notificações:', permission);
+      });
     }
-  };
+  }, []);
 
   // Função para disparar a notificação
   const showNotification = () => {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      // Tenta exibir uma notificação push com service worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then((registration) => {
-          registration.showNotification('Alerta de Teste!', {
-            body: 'Esta é uma notificação push com service worker!',
-            icon: 'https://example.com/icon.png',
-            vibrate: [100, 200, 100],
-            tag: 'test-notification',
-          });
-        }).catch((error) => {
-          console.error('Erro ao mostrar a notificação com o service worker:', error);
-        });
-      } else {
-        // Se o service worker não for suportado, usa a notificação padrão
-        new Notification('Alerta de Teste!', {
-          body: 'Esta é uma notificação simples de teste!',
-          icon: 'https://example.com/icon.png',
-          vibrate: [100, 200, 100],
-        });
-      }
-    } else {
-      // Solicitar permissão para notificações
+    if (!('Notification' in window)) {
+      console.error('O navegador não suporta notificações.');
+      return;
+    }
+
+    if (Notification.permission === 'granted') {
+      // Teste primeiro sem Service Worker
+      new Notification('Alerta de Teste!', {
+        body: 'Esta é uma notificação simples de teste!',
+        icon: 'https://example.com/icon.png',
+        vibrate: [100, 200, 100],
+      });
+    } else if (Notification.permission !== 'denied') {
       Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
           showNotification();
+        } else {
+          console.warn('Usuário negou as notificações.');
         }
       });
     }
   };
-
-  // Chama a função de registro do service worker ao montar o componente
-  useEffect(() => {
-    registerServiceWorker();
-  }, []);
 
   return (
     <div>
