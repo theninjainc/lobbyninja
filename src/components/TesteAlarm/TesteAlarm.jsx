@@ -1,41 +1,33 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Notifications } from 'react-push-notification';
+import addNotification from 'react-push-notification';
 
-function TesteAlarm() {
-    // Função para solicitar permissão e mostrar notificação
-    const showNotification = () => {
-        if (Notification.permission === "granted") {
-            setTimeout(() => {
-                new Notification("Aqui está sua notificação no navegador!");
-            }, 1000);
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    console.log("Mostrando notificação após permissão...");
-                    new Notification("Aqui está sua notificação!", {
-                        body: "Mensagem adicional para o usuário.",
-                        icon: "",
-                    });
-                }
-            });
-        }
+const App = () => {
+    // Função para mostrar a notificação
+    const handleButtonClick = () => {
+        addNotification({
+            title: 'Alerta!',
+            subtitle: 'Subtítulo opcional',
+            message: 'Esta é uma notificação personalizada com tema e ícone.',
+            theme: 'darkblue',
+            native: true,
+            icon: 'https://example.com/icon.png', // Substitua pelo seu ícone
+            duration: 5000,
+            vibrate: [100, 200, 100], // Vibração para dispositivos móveis
+            onClick: (e) => {
+                console.log('Notificação clicada!', e);
+            },
+        });
     };
 
-
-    useEffect(() => {
-        // Ao carregar, verificar se o navegador já tem permissão para enviar notificações
-        if (Notification.permission === "granted") {
-            console.log("Permissão para notificações já foi concedida");
-        } else if (Notification.permission === "denied") {
-            console.log("Permissão para notificações negada");
-        }
-    }, []);
-
     return (
-        <div>
-            <h1>Meu site com Notificação no Navegador</h1>
-            <button onClick={showNotification}>Mostrar Notificação</button>
+        <div className="app">
+            <Notifications />
+            <div className="content">
+                <button onClick={handleButtonClick}>Mostrar Notificação</button>
+            </div>
         </div>
     );
-}
+};
 
-export default TesteAlarm;
+export default App;
