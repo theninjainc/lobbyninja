@@ -55,15 +55,15 @@ function App() {
     return <LoadingScreen />;
   }
 
-  // if (!isAuthenticated) {
-  //   return (
-  //     <div className="app-container">
-  //       <Routes>
-  //         <Route path="*" element={<Login />} />
-  //       </Routes>
-  //     </div>
-  //   );
-  // }
+  if (!isAuthenticated) {
+    return (
+      <div className="app-container">
+        <Routes>
+          <Route path="*" element={<Login />} />
+        </Routes>
+      </div>
+    );
+  }
 
   return (
     <ThemeProvider>
