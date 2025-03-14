@@ -165,7 +165,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
+        "https://ninja.lobby.ninja/apia/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -261,6 +261,58 @@ const Main = () => {
     }
   };
 
+  const handleDelete = async (id, state, index) => {
+    try {
+      iziToast.info({
+        title: "Aguarde",
+        message: "Estamos criando o lobby...",
+        timeout: 5000,
+        position: "topRight",
+        id: "loading-toast",
+      });
+      console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
+      setOrderList((prevOrderList) =>
+        prevOrderList.filter((_, i) => i !== index)
+      );
+
+      const apiUrl = 'https://ninja.lobby.ninja/apia/api/lobbys/lobbyUpdateOptions';
+      const requestBody = {
+        email,   // E-mail do usuário
+        id,      // ID do lobby a ser atualizado
+        state,   // Estado que está sendo removido
+        value: false, // Define como não-favorito
+      };
+
+      const response = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody), // Corpo da requisição
+      });
+
+      if (response.ok) {
+        iziToast.success({
+          title: "Sucesso",
+          message: "Lobby criado com sucesso!",
+          position: "topRight",
+          timeout: 5000,
+        });
+      }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro desconhecido');
+      }
+
+      console.log(`Lobby com ID: ${id} foi atualizado com sucesso.`);
+
+      // Remove o item localmente da lista após confirmação do sucesso
+    } catch (error) {
+      console.error("Erro ao atualizar lobby:", error);
+      alert(`Erro ao atualizar lobby: ${error.message}`);
+    }
+  };
+
   const toggleItem = (item) => {
     setSelectedItems((prev) => {
       if (prev.includes(item)) {
@@ -296,7 +348,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
+        "https://ninja.lobby.ninja/apia/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -325,9 +377,11 @@ const Main = () => {
       setOrderDate(formattedData);
       setIsLoading(false);
       setActiveFilter(null);
+      setSelectedItems([]);
     } catch (error) {
       setIsLoading(false);
       setError(error.message);
+      setSelectedItems([]);
     }
   };
 
@@ -335,7 +389,7 @@ const Main = () => {
     try {
       const updatedState = state === "favorites" ? "favourite" : state;
       console.log(state);
-      const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
+      const response = await fetch('https://ninja.lobby.ninja/apia/api/lobbys/lobbyAllOptions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -379,8 +433,10 @@ const Main = () => {
 
       setIsLoading(false);
       setActiveFilter(null);
+      setSelectedItems([]);
     } catch (error) {
       console.error("Erro ao fazer requisição:", error);
+      setSelectedItems([]);
     }
   };
 
@@ -397,6 +453,7 @@ const Main = () => {
   // Função para trocar de página
   const handlePageChange = (newPage) => {
     setCurrentPage(Math.max(1, Math.min(newPage, totalPages)));
+    setSelectedItems([]);
   };
 
   const handleTimerEnd = (id) => {
@@ -433,6 +490,14 @@ const Main = () => {
       fetchOrders();
     }
   }, [location.pathname, email]);
+
+  // First, add the path detection logic
+  const getCurrentPage = () => {
+    const path = location.pathname.split("/")[1];
+    const validPaths = ["registered", "skipped", "favorites", "deleted"];
+    return validPaths.includes(path) ? path : "default";
+  };
+
 
   const allFilters = [
     "Site",
@@ -1393,7 +1458,13 @@ const Main = () => {
                     }}
                   >
                     <td className={styles.stylesCheckboxTable}>
-                      <div onClick={() => handleCreateLobby(5, null, item)}>
+                      <div
+                        onClick={() =>
+                          item.favourite
+                            ? handleDelete(item.$id, 'favourite', index)
+                            : handleCreateLobby(5, null, item)
+                        }
+                      >
                         <FavouriteStar favourites={item.favourite == true} className={styles.favouriteStar} />
                       </div>
                       <div>
@@ -1530,7 +1601,16 @@ const Main = () => {
                             viewBox="0 0 19 20"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            onClick={() => handleCreateLobby(1, null, null)}
+                            onClick={() => {
+                              const currentPage = getCurrentPage();
+                              if (currentPage === "skipped") {
+                                // If we're already on the skipped page, remove the item
+                                handleDelete(item.ID, "skipped", index);
+                              } else {
+                                // Otherwise, add it to skipped
+                                handleCreateLobby(1, null, null);
+                              }
+                            }}
                             style={{
                               cursor: "pointer",
                               transition: "fill 0.3s ease",
@@ -1552,13 +1632,20 @@ const Main = () => {
                           </svg>
 
                           <div className={styles.separator}></div>
-                          {/* alarme */}
+                          {/* Complete SVG for Alarm button (state 4) */}
                           <svg
                             width="21"
                             height="20"
                             viewBox="0 0 21 20"
                             xmlns="http://www.w3.org/2000/svg"
-                            onClick={() => openNewAlarm()}
+                            onClick={() => {
+                              const currentPage = getCurrentPage();
+                              if (currentPage === "alarm") { // If you have an alarms page
+                                handleDelete(item.ID, "alarm", index);
+                              } else {
+                                openNewAlarm();
+                              }
+                            }}
                             style={{
                               cursor: "pointer",
                               transition: "fill 0.3s ease",
@@ -1580,16 +1667,22 @@ const Main = () => {
                             </defs>
                           </svg>
 
-
-
                           <div className={styles.separator}></div>
+                          {/* Complete SVG for Register button (state 3) */}
                           <svg
                             width="21"
                             height="20"
                             viewBox="0 0 21 20"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            onClick={() => handleCreateLobby(3, null, null)}
+                            onClick={() => {
+                              const currentPage = getCurrentPage();
+                              if (currentPage === "registered") {
+                                handleDelete(item.ID, "registered", index);
+                              } else {
+                                handleCreateLobby(3, null, null);
+                              }
+                            }}
                             style={{
                               cursor: "pointer",
                               transition: "fill 0.3s ease",
@@ -1599,7 +1692,7 @@ const Main = () => {
                               const paths = e.currentTarget.querySelectorAll('g path');
                               paths.forEach(path => {
                                 path.style.transition = "stroke 0.3s ease";
-                                path.style.stroke = "#52AE4C"; // Muda a cor para vermelha
+                                path.style.stroke = "#52AE4C"; // Muda a cor para verde
                               });
                             }}
                             onMouseLeave={(e) => {
@@ -1688,7 +1781,14 @@ const Main = () => {
                           <div className={styles.separator}></div>
                           <svg width="18" height="18" viewBox="0 0 18 18" fill="white"
                             xmlns="http://www.w3.org/2000/svg"
-                            onClick={() => handleCreateLobby(2, null, null)}
+                            onClick={() => {
+                              const currentPage = getCurrentPage();
+                              if (currentPage === "deleted") {
+                                handleDelete(item.ID, "deleted", index);
+                              } else {
+                                handleCreateLobby(3, null, null);
+                              }
+                            }}
                             style={{
                               cursor: "pointer",
                               transition: "fill 0.3s ease",

@@ -13,7 +13,7 @@ const NotificationWithSound = () => {
     const fetchAlarms = async (email, state) => {
         try {
             console.log(state);
-            const response = await fetch('https://ninja.lobby.ninja/api/api/alarmes/');
+            const response = await fetch('https://ninja.lobby.ninja/apia/api/alarmes/');
 
 
             if (!response.ok) {
@@ -41,42 +41,32 @@ const NotificationWithSound = () => {
         }
     };
 
-    const handleDelete = async (id, state, index) => {
+    const handleDelete = async (id, index) => {
+        const removedAlarm = alarms[index];
         try {
-            console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
+            console.log(`Deletando alarme ID: ${id}`);
 
-            const apiUrl = 'https://ninja.lobby.ninja/api/api/lobbys/lobbyUpdateOptions';
-            const requestBody = JSON.stringify({
-                email,
-                id,
-                state: state,
-                value: false,
-            });
+            // Remove visualmente o alarme antes da confirmação da API
+            removeAlarm(index);
 
-            const response = await fetch(apiUrl, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: requestBody,
+            const response = await fetch(`https://ninja.lobby.ninja/apia/api/alarmes/${id}`, {
+                method: 'DELETE',
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Erro ao atualizar lobby: ${errorData.message || 'Erro desconhecido'}`);
+                throw new Error(`Erro ao deletar alarme: ${response.statusText}`);
             }
 
-            console.log(`Lobby com ID: ${id} foi atualizado com sucesso.`);
-
-            const data = await response.json();
-            if (index)
-                removeAlarm(index);
-            console.log('Resposta da API:', data);
+            console.log(`Alarme com ID: ${id} deletado com sucesso.`);
         } catch (error) {
-            console.error("Erro ao atualizar lobby:", error);
-            alert(`Erro ao atualizar lobby: ${error.message}`);
+            console.error("Erro ao deletar alarme:", error);
+            alert(`Erro ao deletar alarme: ${error.message}`);
+
+            // Re-adiciona o alarme à lista caso a API falhe
+            alarms.splice(index, 0, removedAlarm);
         }
     };
+
 
     const removeAlarm = (index) => {
         const updatedAlarms = alarms.filter((_, i) => i !== index);
@@ -224,7 +214,9 @@ const NotificationWithSound = () => {
                             >
                                 <td className={styles.initialTable}></td>
                                 <td className={styles.siteTable}>{item.nome}</td>
-                                <td className={styles.nameTable}>{new Date(item.horaAlarme).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                                <td className={styles.nameTable}>
+                                    {new Date(item.horaAlarme).toUTCString().slice(17, 22)}
+                                </td>
                                 <td className={styles.siteTable}>
                                     {item.dias.join(', ')}
                                 </td>
@@ -232,7 +224,7 @@ const NotificationWithSound = () => {
                                 <td className={styles.deleteLinha}>
                                     <button
                                         className={styles.deleteButton}
-                                        onClick={() => handleDelete(item.$id, 'alarm', index)}
+                                        onClick={() => handleDelete(item.$id, index)}
                                     >
                                         <i className="fas fa-trash-alt"></i>
                                     </button>
