@@ -20,6 +20,7 @@ const getLobbysHandler = async (req, res) => {
 
 const updateStateHandler = async (req, res) => {
     try {
+        console.log("teste")
         const { email, id, state, value } = req.body;
         console.log(email, id, state, value)
         // Validações básicas

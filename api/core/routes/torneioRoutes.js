@@ -78,10 +78,7 @@ router.get("/api/activeTournaments", async (req, res) => {
 
         const processTournaments = (tournamentsData, lobbys) => {
             const today = new Date();
-            const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
-
-            console.log(tournamentsData);
-
+            
             return tournamentsData
                 .map((tournament) => {
                     const tournamentStartTimestamp = parseInt(tournament["@scheduledStartDate"]) * 1000;
@@ -125,14 +122,8 @@ router.get("/api/activeTournaments", async (req, res) => {
                     const idString = `${tournament["@name"]}-${tournament["@network"]}-${tournamentStart.toUTCString()}`;
                     const id = hash.update(idString).digest("hex");
 
-                    const teste = lobbys.find((lobby) => lobby.$id == "2ed8a0c12eddf41a6b8392b42adaa975");
-                    if (teste)
-                        console.log("Tem!")
-
                     const matchedLobby = lobbys.find((lobby) => lobby.$id == id);
-                    if (matchedLobby) {
-                        console.log("PQ VC ESTÁ RINDO?", matchedLobby.priority);
-                    }
+
                     return {
                         ID: id,
                         Site: tournament["@network"],
@@ -173,8 +164,9 @@ router.get("/api/activeTournaments", async (req, res) => {
                                 return currency;
                             }
 
-                            return null; // Caso não encontre o padrão esperado
+                            return null;
                         })(),
+                        favourite: matchedLobby?.favourite || false
                     };
 
                 })
@@ -201,17 +193,9 @@ router.get("/api/activeTournaments", async (req, res) => {
         });
 
         const allTournaments = (await Promise.all(tournamentsPromises)).flat();
-        console.log("Todos Torneios", allTournaments);
+        
         const filteredTournaments = allTournaments.filter(
             (tournament) => !lobbyIds.has(tournament.ID)
-        );
-
-        const tournamentsWithPriority = filteredTournaments.filter(
-            (tournament) => tournament.Priority != null
-        );
-
-        console.log(
-            `Torneios com prioridade encontrados: ${tournamentsWithPriority.length}`
         );
 
         filteredTournaments.sort((a, b) => (a.Priority || Infinity) - (b.Priority || Infinity));

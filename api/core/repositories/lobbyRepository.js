@@ -81,12 +81,12 @@ const getAlarmLobbys = async (email) => {
 
 const updateLobbyState = async (email, id, state, value) => {
     try {
+
+        console.log("teste")
         // 1. Busca o documento do usuário pelo e-mail
         const usersResponse = await databases.listDocuments(DATABASE_ID, USER_COLLECTION_ID, [
             sdk.Query.equal("email", email),
         ]);
-
-        console.log(usersResponse)
 
         if (usersResponse.documents.length === 0) {
             throw new Error("Usuário não encontrado.");

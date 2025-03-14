@@ -7,7 +7,7 @@ import draggable from "../../assets/draggable.svg";
 import closeDraggable from "../../assets/closeDraggable.svg";
 
 // URL da API
-const API_URL = "https://ninja.lobby.ninja/api/api/costumizecolumns";
+const API_URL = "https://ninja.lobby.ninja/apia/api/costumizecolumns";
 
 const CostumizeColumns = ({ isOpen, closeModal, onColumnsChange }) => {
   const initialColumns = [
