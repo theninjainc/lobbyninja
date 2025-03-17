@@ -11,7 +11,7 @@ const YourFilters = ({ closeModal, email, orderList, setOrderList, setSelectedSi
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const response = await fetch("https://ninja.lobby.ninja/apia/api/torneios/apply", {
+        const response = await fetch("https://ninja.lobby.ninja/api/api/torneios/apply", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

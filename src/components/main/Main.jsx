@@ -165,7 +165,7 @@ const Main = () => {
       console.log("Enviando lobbyData:", lobbyData);
 
       const response = await fetch(
-        "https://ninja.lobby.ninja/apia/api/lobbys/lobbyCreate",
+        "https://ninja.lobby.ninja/api/api/lobbys/lobbyCreate",
         {
           method: "POST",
           headers: {
@@ -275,7 +275,7 @@ const Main = () => {
         prevOrderList.filter((_, i) => i !== index)
       );
 
-      const apiUrl = 'https://ninja.lobby.ninja/apia/api/lobbys/lobbyUpdateOptions';
+      const apiUrl = 'https://ninja.lobby.ninja/api/api/lobbys/lobbyUpdateOptions';
       const requestBody = {
         email,   // E-mail do usuário
         id,      // ID do lobby a ser atualizado
@@ -348,7 +348,7 @@ const Main = () => {
   const fetchOrders = async () => {
     try {
       const response = await fetch(
-        "https://ninja.lobby.ninja/apia/api/torneios/api/activeTournaments"
+        "https://ninja.lobby.ninja/api/api/torneios/api/activeTournaments"
       );
       if (!response.ok) {
         setIsLoading(false);
@@ -389,7 +389,7 @@ const Main = () => {
     try {
       const updatedState = state === "favorites" ? "favourite" : state;
       console.log(state);
-      const response = await fetch('https://ninja.lobby.ninja/apia/api/lobbys/lobbyAllOptions', {
+      const response = await fetch('https://ninja.lobby.ninja/api/api/lobbys/lobbyAllOptions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

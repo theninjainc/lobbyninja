@@ -39,7 +39,7 @@ router.get("/api/activeTournaments", async (req, res) => {
         url: "https://pt.sharkscope.com/api/roots/networks",
         headers: {
             Username: "jmarcel@live.com",
-            Password: "5ef3ffc6a7eea165133636e1999c0b66",
+            Password: "903fb6db729dd7fa2de30c982baf4d15",
             Accept: "application/json",
             "User-Agent": "Mozilla/5.0",
         },
