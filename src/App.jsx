@@ -51,7 +51,7 @@ function App() {
     // Função para buscar alarmes
     const fetchAlarms = async (email) => {
         try {
-            const response = await fetch('https://ninja.lobby.ninja/api/api/alarmes/');
+            const response = await fetch('https://lobby.ninja/api/api/alarmes/');
 
             if (!response.ok) {
                 throw new Error('Erro ao buscar os alarmes.');

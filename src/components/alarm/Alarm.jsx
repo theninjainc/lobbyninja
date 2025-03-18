@@ -13,7 +13,7 @@ const NotificationWithSound = () => {
     const fetchAlarms = async (email, state) => {
         try {
             console.log(state);
-            const response = await fetch('https://ninja.lobby.ninja/api/api/alarmes/');
+            const response = await fetch('https://lobby.ninja/api/api/alarmes/');
 
 
             if (!response.ok) {
@@ -49,7 +49,7 @@ const NotificationWithSound = () => {
             // Remove visualmente o alarme antes da confirmação da API
             removeAlarm(index);
 
-            const response = await fetch(`https://ninja.lobby.ninja/api/api/alarmes/${id}`, {
+            const response = await fetch(`https://lobby.ninja/api/api/alarmes/${id}`, {
                 method: 'DELETE',
             });
 
