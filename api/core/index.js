@@ -20,12 +20,12 @@ app.use('/api/lobbys', lobbyRoutes);
 app.use("/api/costumizecolumns", columnsRoutes);
 
 // Configuração para rodar localmente ou no Serverless
-// if (process.env.NODE_ENV !== 'production') {
-//     const PORT = 3000;
-//     app.listen(PORT, () => {
-//         console.log(`Server running locally at http://localhost:${PORT}`);
-//     });
-// }
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running locally at http://localhost:${PORT}`);
+    });
+}
 
 // Exporta para o Serverless
 module.exports.handler = serverless(app);
