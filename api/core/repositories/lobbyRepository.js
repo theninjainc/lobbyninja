@@ -193,7 +193,7 @@ const createLobby = async (
         let existingLobby;
 
         try {
-            // Tenta buscar o lobby existente
+console.log("cachorrinho", ID)
             existingLobby = await databases.getDocument(DATABASE_ID, LOBBY_COLLECTION_ID, ID);
         } catch (err) {
             // Se o erro for porque o documento não existe, isso é esperado, e continuamos com a criação
