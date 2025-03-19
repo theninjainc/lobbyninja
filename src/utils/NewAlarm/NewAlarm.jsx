@@ -44,8 +44,11 @@ const NewAlarm = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const saveAlarmsToStorage = (alarmsData) => {
+    localStorage.setItem('userAlarms', JSON.stringify(alarmsData));
+  };
 
+  const handleSubmit = async () => {
     try {
       iziToast.info({
         title: "Aguarde",
@@ -68,9 +71,8 @@ const NewAlarm = ({ isOpen, onClose }) => {
         dias: Object.keys(days).filter((day) => days[day]),
       };
 
-      console.log(alarmData)
+      console.log(alarmData);
 
-      console.log("Oi")
       const response = await fetch("https://lobby.ninja/api/api/alarmes/", {
         method: "POST",
         headers: {
@@ -82,16 +84,23 @@ const NewAlarm = ({ isOpen, onClose }) => {
       if (response.ok) {
         iziToast.success({
           title: "Sucesso",
-          message: "Lobby criado com sucesso!",
+          message: "Alarme criado com sucesso!",
           position: "topRight",
           timeout: 5000,
         });
         console.log("Alarme criado com sucesso!");
+
+        // Adicionar o novo alarme ao localStorage
+        const alarmsFromStorage = JSON.parse(localStorage.getItem('userAlarms')) || [];
+        alarmsFromStorage.push(alarmData); // Adiciona o novo alarme à lista
+        saveAlarmsToStorage(alarmsFromStorage); // Salva a lista atualizada
+
         onClose();
       } else {
+        const data = await response.json();
         iziToast.error({
           title: "Erro",
-          message: data.error || "Não foi possível criar o lobby.",
+          message: data.error || "Não foi possível criar o alarme.",
           position: "topRight",
           timeout: 5000,
         });
@@ -100,7 +109,7 @@ const NewAlarm = ({ isOpen, onClose }) => {
     } catch (error) {
       iziToast.error({
         title: "Erro",
-        message: data.error || "Não foi possível criar o lobby.",
+        message: error.message || "Não foi possível criar o alarme.",
         position: "topRight",
         timeout: 5000,
       });
