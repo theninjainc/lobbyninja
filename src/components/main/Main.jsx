@@ -137,12 +137,14 @@ const Main = () => {
       const lobbyData = {
         email,
         lobbies: itemsToUse.map((item, index) => {
-          console.log(item)
           const baseLobby = {
             ...item,
             index,
             priority: undefined,
-            alarm: false
+            alarm: false,
+            registered: false,
+            skipped: false,
+            deleted: false
           };
 
           if (state === 3) baseLobby.registered = true;
@@ -263,13 +265,6 @@ const Main = () => {
 
   const handleDelete = async (id, state, index) => {
     try {
-      iziToast.info({
-        title: "Aguarde",
-        message: "Estamos criando o lobby...",
-        timeout: 5000,
-        position: "topRight",
-        id: "loading-toast",
-      });
       console.log(`Atualizando lobby para email: ${email}, ID: ${id}`);
       setOrderList((prevOrderList) =>
         prevOrderList.filter((_, i) => i !== index)
@@ -291,14 +286,6 @@ const Main = () => {
         body: JSON.stringify(requestBody), // Corpo da requisição
       });
 
-      if (response.ok) {
-        iziToast.success({
-          title: "Sucesso",
-          message: "Lobby criado com sucesso!",
-          position: "topRight",
-          timeout: 5000,
-        });
-      }
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Erro desconhecido');
